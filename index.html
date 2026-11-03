@@ -944,8 +944,8 @@ async function startReel(){
   say('Načítavam hlas…');
   const SCRIPT=params.get('script')||'1';
   const SC={
-    '1':{voice:'voice',out:'reel',chips:'colors',caps:[['Toto je *náš svah*'],['Zatiaľ tu jazdí','iba *1 lyžiar*'],['Daj *follow*','a dostaneš vlastného','lyžiara na svahu'],['Do komentu napíš','*farbu bundy*','a čím jazdíš'],['Zmeniť si to môžeš','*kedykoľvek*','novým komentom'],['Svojho lyžiara','nájdeš cez *odkaz v bio*']]},
-    '2':{voice:'voice2',out:'reel2',chips:'upgrades',caps:[['Svah followerov','*už beží*'],['Zatiaľ jazdíme','na *pume*'],['Daj *follow*','a dostaneš vlastného','lyžiara na svahu'],['Viac followerov =','*lanovka*','a *nové zjazdovky*'],['Čo pridáme ďalej?','Napíš *nápad*','do komentu 👇'],['Noví lyžiari','pribudnú *zajtra*']]}
+    '1':{voice:'voice',out:'reel',chips:'colors',lens:[17,37,96,77,53,44,21],caps:[['Toto je *náš svah*'],['Zatiaľ tu jazdí','iba *1 lyžiar*'],['Daj *follow*','a dostaneš vlastného','lyžiara na svahu'],['Do komentu napíš','*farbu bundy*','a čím jazdíš'],['Zmeniť si to môžeš','*kedykoľvek*','novým komentom'],['Svojho lyžiara','nájdeš cez *odkaz v bio*']]},
+    '2':{voice:'voice2',out:'reel2',chips:'upgrades',lens:[24,63,75,82,59,34,21],caps:[['Svah followerov','*už beží*'],['Zatiaľ jazdíme','na *pume*'],['Daj *follow*','a dostaneš vlastného','lyžiara na svahu'],['Viac followerov =','*lanovka*','a *nové zjazdovky*'],['Čo pridáme ďalej?','Napíš *nápad*','do komentu 👇'],['Noví lyžiari','pribudnú *zajtra*']]}
   }[SCRIPT]||null;
   if(!SC){ say('Neznámy scenár '+SCRIPT); return; }
   const voiceBlob=await dbGet(SC.voice);
@@ -965,10 +965,14 @@ async function startReel(){
     let first=0; while(first<rms.length&&rms[first]<thr) first++;
     let last=rms.length-1; while(last>0&&rms[last]<thr) last--;
     const fT=first*0.02, lT=last*0.02;
-    const inner=gaps.filter(g=>g.t>fT+0.4&&g.t<lT-0.4).sort((a,b)=>b.len-a.len).slice(0,NS-1).sort((a,b)=>a.t-b.t);
-    if(inner.length===NS-1) bounds=[fT].concat(inner.map(g=>g.t),[lT+0.3]);
+    const L=SC.lens; let tot=0; for(const l of L) tot+=l;
+    const cand=gaps.filter(g=>g.t>fT+0.4&&g.t<lT-0.4); const pick=[]; let acc=0, prev=fT;
+    for(let k=0;k<NS-1;k++){ acc+=L[k]; const e=fT+(lT-fT)*acc/tot; let best=null, bs=1e9;
+      for(const g of cand){ if(g.t<=prev+0.3) continue; const sc=Math.abs(g.t-e)-0.6*g.len*0.02; if(sc<bs){ bs=sc; best=g; } }
+      if(!best||Math.abs(best.t-e)>2.5){ pick.length=0; break; } pick.push(best.t); prev=best.t; }
+    if(pick.length===NS-1) bounds=[fT].concat(pick,[lT+0.3]);
   }
-  if(!bounds){ const L=[17,37,96,77,53,44,21]; let tot=0; for(const l of L) tot+=l; let acc=0.1; bounds=[acc]; for(const l of L){ acc+=l/tot*(vDur-0.3); bounds.push(acc); } }
+  if(!bounds){ const L=SC.lens; let tot=0; for(const l of L) tot+=l; let acc=0.1; bounds=[acc]; for(const l of L){ acc+=l/tot*(vDur-0.3); bounds.push(acc); } }
   bounds=bounds.map(b=>b+VO);
   window.__reelBounds=bounds;
 
