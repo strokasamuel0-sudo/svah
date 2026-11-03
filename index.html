@@ -1604,14 +1604,14 @@ async function startReel2(SC){
     fs:(t,T,k)=>follow(fsP,T,4,15,6,3),
     cust:(t,T,k)=>follow(custP,T,7,2.5,2.6,6),
     custSide:(t,T,k)=>follow(custP,T,-1,9,2.2,0),
-    liftRide:(t,T,k)=>follow(liftP,T,10,-7,4,6),
+    liftRide:(t,T,k)=>follow(liftP,T,3,-13,3.5,2),
     ratrak:(t,T,k)=>{ const r=WORLD.ratrak.position; const d=V(0,0,1).applyQuaternion(WORLD.ratrak.quaternion); const sd=V(-d.z,0,d.x); return { p:r.clone().addScaledVector(d,16).addScaledVector(sd,12).add(V(0,9,0)), q:r.clone().add(V(0,2,0)) }; },
     heliHotel:(t,T,k)=>{ if(k<0.5){ const h=WORLD.heli.position; const d=V(0,0,1).applyAxisAngle(V(0,1,0),WORLD.heli.rotation.y); return { p:h.clone().addScaledVector(d,-28).add(V(10,8,0)), q:h.clone() }; }
       const th=Math.atan2(SPOT.hotel.z,SPOT.hotel.x), c=V(1035*Math.cos(th-.035),0,1035*Math.sin(th-.035)); c.y=groundAt(c.x,c.z)+22; return { p:c, q:V(SPOT.hotel.x,SPOT.hotel.y+6,SPOT.hotel.z).lerp(V(SPOT.mascot.x,SPOT.mascot.y+4,SPOT.mascot.z),.3) }; },
     crowdWide:(t,T,k)=>orbit(SPOT.crowd,crowdR+48,26,thC+.6,.08,t,2),
-    crowdClose:(t,T,k)=>orbit(SPOT.crowd,crowdR*0.55,6,thC+2.2,.05,t,3),
+    crowdClose:(t,T,k)=>orbit(SPOT.crowd,crowdR*0.8,11,thC+2.2,.05,t,2),
     crowdLow:(t,T,k)=>{ const st=WORLD.stage; const C=SPOT.crowd; const d=V(st.x-C.x,0,st.z-C.z).normalize(); const sd=V(-d.z,0,d.x); return { p:V(C.x,0,C.z).addScaledVector(d,-crowdR-4).addScaledVector(sd,8-6*k).setY(C.y+4), q:V(st.x,st.y+5,st.z) }; },
-    liftBottom:(t,T,k)=>({ p:Pr(R0r,1.04,4,5.5), q:Pr(R0r,.72,30,8) }),
+    liftBottom:(t,T,k)=>({ p:Pr(R0r,1.0,-16,7), q:Pr(R0r,.78,34,7) }),
     liftLine:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R0r,.9-.2*e,62,30), q:Pr(R0r,.25-.1*e,30,10) }; },
   };
   const BL=.9;
