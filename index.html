@@ -506,7 +506,7 @@ const U = {
 const GLSL_COMMON = `
 uniform float uTime; uniform float uJumpId; uniform float uJumpT;
 uniform float uAmp[6]; uniform float uPer[6]; uniform float uUp[6];
-const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.5; const float PI2=6.28318530718; const float TSP=50.0; const float SK=1.9;
+const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.5; const float TAU_=6.28318530718; const float TSP=50.0; const float SK=1.9;
 float hgt(float r,float th){ float k=max(0.0,1.0-r/R_); float ridge=1.0+0.06*sin(3.0*th+0.4)+0.045*sin(7.0*th+1.3)+0.025*sin(13.0*th); return H_*pow(max(k,1e-6),1.35)*ridge+6.0*k*sin(r*0.012+th*5.0); }
 vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float t=run.x+lat/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
 float cabY(vec4 run,float d,float lat,float th){ float d0=floor(d/TSP)*TSP; float d1=min(run.z,d0+TSP); float f=d1>d0?(d-d0)/(d1-d0):0.0; float a=runPt(run,d0/run.z,lat).y; float b=runPt(run,d1/run.z,lat).y; return mix(a,b,f)+th-0.8*4.0*f*(1.0-f); }
@@ -521,7 +521,7 @@ float len=aRun.z; float upd=len/LIFT_V; float dn=aP.z; float cyc=dn+upd;
 float u=mod(uTime+aP.y*cyc,cyc);
 bool chair=aRun.w>0.5; float LL=chair?36.0:34.0; float TH=chair?12.0:7.5;
 float s; float lat; bool onLift=false; float dir=1.0; float swayV=0.0;
-if(u<dn){ s=u/dn; float ph=(u/per)*PI2+aP.y*6.28; swayV=cos(ph); lat=clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
+if(u<dn){ s=u/dn; float ph=(u/per)*TAU_+aP.y*6.28; swayV=cos(ph); lat=clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
 else { s=1.0-(u-dn)/upd; dir=-1.0; if(hasLift>0.5){ lat=LL; onLift=true; } else { lat=-17.5; } }
 vec3 org=runPt(aRun,s,lat); org.y+=0.25;
 float groundY=org.y;
