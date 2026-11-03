@@ -242,7 +242,8 @@ function skierOrg(p, t, out){
 /* ---------- renderer ---------- */
 const canvas=$('c');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
-let PR = Math.min(devicePixelRatio, innerWidth<700?1.5:1.75);
+const prFor=()=>Math.max(.75,Math.min(devicePixelRatio, innerWidth<700?1.5:1.75, Math.sqrt(3.2e6/(innerWidth*innerHeight))));
+let PR = prFor();
 renderer.setPixelRatio(PR);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
@@ -461,7 +462,7 @@ function inCorridor(rr,th,extra){
     new THREE.ConeGeometry(2.2,5,7).translate(0,15,0),
     new THREE.CylinderGeometry(.5,.7,4,5).translate(0,2,0)]);
   const cg=mergeGeometries([ new THREE.ConeGeometry(1.6,2.4,7).translate(0,16.4,0), new THREE.ConeGeometry(3.4,1.2,7).translate(0,10.9,0) ]);
-  const r=rng(42), COUNT=6500;
+  const r=rng(42), COUNT=5000;
   const trees=new THREE.InstancedMesh(tg,new THREE.MeshLambertMaterial({color:'#ffffff'}),COUNT);
   const caps=new THREE.InstancedMesh(cg,new THREE.MeshLambertMaterial({color:'#ffffff'}),COUNT);
   const tint=['#2f5d46','#2a5240','#365f4a','#284a3b'].map(h=>new THREE.Color(h)), sc=new THREE.Vector3();
@@ -848,7 +849,7 @@ let slowFrames=0, lastNow=performance.now();
 const nearRuns=new Set();
 function loop(now){
   const dt=now-lastNow; lastNow=now;
-  if(dt>32){ if(++slowFrames>90 && PR>1){ PR=Math.max(1,PR-.25); renderer.setPixelRatio(PR); resize(); slowFrames=0; } } else slowFrames=Math.max(0,slowFrames-1);
+  if(dt>30){ if(++slowFrames>45 && PR>.75){ PR=Math.max(.75,PR-.2); renderer.setPixelRatio(PR); resize(); slowFrames=0; } } else slowFrames=Math.max(0,slowFrames-1);
   const t=simT(); U.uTime.value=t;
   // detailné postavy len pre blízke zjazdovky
   nearRuns.clear();
