@@ -1,0 +1,7 @@
+<!doctype html><meta charset="utf-8"><title>recv</title><body style="font:16px system-ui;padding:20px">Prijímam…<script>
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open("svah",1);r.onupgradeneeded=()=>r.result.createObjectStore("f");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});
+const put=async(k,v)=>{const d=await idb();return new Promise((res,rej)=>{const t=d.transaction("f","readwrite");t.objectStore("f").put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error);});};
+const get=async k=>{const d=await idb();return new Promise((res,rej)=>{const r=d.transaction("f").objectStore("f").get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});};
+addEventListener("message",async e=>{const m=e.data||{};try{ if(m.op==="put"){ for(const [k,b] of m.items) await put(k,b); e.source.postMessage({op:"done",keys:m.items.map(x=>x[0])},"*"); document.body.textContent="Uložené: "+m.items.map(x=>x[0]).join(", "); } else if(m.op==="get"){ const out=[]; for(const k of m.keys) out.push([k,await get(k)]); e.source.postMessage({op:"got",items:out},"*"); document.body.textContent="Odoslané: "+m.keys.join(", "); } }catch(err){ e.source.postMessage({op:"err",msg:String(err)},"*"); }});
+if(window.opener) window.opener.postMessage({op:"ready"},"*");
+</script>
