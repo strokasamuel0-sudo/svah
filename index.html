@@ -1601,7 +1601,7 @@ async function startReel2(SC){
     crane:(t,T,k)=>{ const e=ease(Math.min(1,k)); const a=Pr(R0r,1.02,-40,12), b=V(1900*Math.cos(midTh-.12),0,1900*Math.sin(midTh-.12)); b.y=groundAt(b.x,b.z)+330; const q=Pr(R0r,.85,0,0).lerp(V(400*Math.cos(midTh),groundAt(400*Math.cos(midTh),400*Math.sin(midTh)),400*Math.sin(midTh)),e); return {p:a.lerp(b,e), q}; },
     slope:(t,T,k)=>({ p:Pr(R0r,.52-.03*k,-34,9), q:Pr(R0r,.6,4,0) }),
     slope2:(t,T,k)=>({ p:Pr(R0r,.78,30,7+3*k), q:Pr(R0r,.7,-4,0) }),
-    fs:(t,T,k)=>follow(fsP,T,14,4,5,12),
+    fs:(t,T,k)=>follow(fsP,T,4,15,6,3),
     cust:(t,T,k)=>follow(custP,T,7,2.5,2.6,6),
     custSide:(t,T,k)=>follow(custP,T,-1,9,2.2,0),
     liftRide:(t,T,k)=>follow(liftP,T,10,-7,4,6),
