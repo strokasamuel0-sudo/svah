@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Svah followerov – nájdi svojho lyžiara</title>
+<meta name="description" content="Každý follower @svah.followerov má na svahu svojho lyžiara. Nájdi sa a povzbuď ho!">
+<meta property="og:title" content="Svah followerov">
+<meta property="og:description" content="Nájdi svojho lyžiara na svahu a povzbuď ho kravskými zvoncami.">
+<meta name="theme-color" content="#1E5AA8">
+<style>
+  :root{
+    --dark:#2B2D31; --blue:#1E5AA8; --white:#F4F4F2; --red:#C8102E;
+    --glass:rgba(255,255,255,.92); --line:rgba(43,45,49,.12);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;overflow:hidden;background:#cfe3f5;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--dark)}
+  #c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  .lbl{position:absolute;transform:translate(-50%,-100%);font-size:11px;font-weight:700;
+    background:rgba(43,45,49,.78);color:#fff;padding:2px 6px;border-radius:6px;white-space:nowrap}
+  .lbl.sel{background:var(--blue);font-size:13px;padding:4px 9px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .lbl.vip{background:var(--red)}
+
+  #top{position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top));
+    max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:8px;z-index:5}
+  .board{display:flex;align-items:center;gap:10px;background:var(--blue);color:#fff;
+    border-radius:14px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,.18);border:2px solid #fff}
+  .board .ic{width:38px;height:38px;border-radius:9px;background:#fff;color:var(--blue);
+    display:grid;place-items:center;flex:none}
+  .board .t{flex:1;line-height:1.1}
+  .board .t b{display:block;font-size:16px;font-weight:800}
+  .board .t span{font-size:12px;opacity:.85}
+  .board .cnt{text-align:right;line-height:1}
+  .board .cnt small{display:block;font-size:9px;letter-spacing:.12em;font-weight:700;opacity:.85}
+  .board .cnt b{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+
+  .search{position:relative}
+  .search input{width:100%;font-size:16px;padding:11px 12px 11px 38px;border-radius:12px;
+    border:1px solid var(--line);background:var(--glass);color:var(--dark);outline:none;
+    box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  .search input:focus{border-color:var(--blue)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.55}
+  #sug{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);overflow:hidden;display:none;max-height:50vh;overflow-y:auto}
+  #sug button{display:flex;width:100%;align-items:center;gap:10px;border:0;background:none;
+    padding:10px 12px;font-size:15px;text-align:left;cursor:pointer;color:var(--dark)}
+  #sug button:hover,#sug button.on{background:#eef3fa}
+  .dot{width:14px;height:14px;border-radius:4px;flex:none;border:1px solid rgba(0,0,0,.15)}
+  #sug .n{margin-left:auto;font-size:12px;opacity:.6}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{border:0;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;
+    background:var(--dark);color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .chip.light{background:var(--glass);color:var(--dark)}
+
+  #card{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));
+    max-width:480px;margin:0 auto;background:#fff;border-radius:16px;padding:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);display:none;z-index:6}
+  #card .row{display:flex;align-items:center;gap:10px}
+  .bib{width:52px;height:52px;border-radius:10px;background:var(--white);border:2px solid var(--dark);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;line-height:1}
+  .bib small{font-size:8px;font-weight:800;letter-spacing:.1em;opacity:.7}
+  .bib b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+  #card .who{flex:1;min-width:0}
+  #card .who b{display:block;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #card .who span{font-size:12px;opacity:.75}
+  #cheer{border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:800;
+    font-size:14px;padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  #cheer:active{transform:scale(.96)}
+  #close{position:absolute;right:8px;top:-12px;width:28px;height:28px;border-radius:50%;
+    border:0;background:var(--dark);color:#fff;font-size:16px;cursor:pointer}
+  .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;font-size:12px}
+  .meta span{background:#f0f2f5;border-radius:8px;padding:4px 8px}
+  .comment{margin-top:8px;font-size:13px;background:#eef3fa;border-radius:10px;padding:8px 10px}
+  .comment:empty{display:none}
+
+  #cta{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));
+    max-width:480px;margin:0 auto;background:var(--dark);color:#fff;border-radius:14px;
+    padding:10px 14px;font-size:13px;line-height:1.35;z-index:4;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  #cta b{color:#fff}
+  #cta a{color:#9cc3ff;font-weight:700}
+  #demo{position:fixed;right:10px;top:50%;writing-mode:vertical-rl;background:var(--red);color:#fff;
+    font-size:11px;font-weight:800;padding:8px 4px;border-radius:6px;display:none;z-index:7}
+  #loading{position:fixed;inset:0;display:grid;place-items:center;background:#cfe3f5;z-index:20;
+    font-weight:800;color:var(--blue);font-size:18px;transition:opacity .5s}
+  #err{display:none;position:fixed;inset:auto 12px 12px;background:#fff;padding:12px;border-radius:12px;z-index:30}
+  @media (min-width:900px){ #top{left:20px;right:auto;width:420px;margin:0} #card,#cta{left:20px;right:auto;width:420px;margin:0} }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<div id="loading">Upravujem svah…</div>
+
+<div id="top">
+  <div class="board">
+    <div class="ic">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 L10 8 L14 14 L17 10 L21 20 Z"/><path d="M8.5 10.5 L10 8 L11.6 10.6"/></svg>
+    </div>
+    <div class="t"><b>Svah followerov</b><span id="runsInfo">1 zjazdovka</span></div>
+    <div class="cnt"><small>NA SVAHU</small><b id="count">0</b></div>
+  </div>
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="q" type="search" placeholder="Nájdi sa: @tvoje_meno" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div id="sug"></div>
+  </div>
+  <div class="chips">
+    <button class="chip" id="bAll">Celé stredisko</button>
+    <button class="chip light" id="bRand">Náhodný lyžiar</button>
+  </div>
+</div>
+
+<div id="cta">Nie si na svahu? Daj follow <a id="igLink" href="https://www.instagram.com/svah.followerov/" target="_blank" rel="noopener">@svah.followerov</a> a pod reel napíš <b>farbu bundy</b> a <b>lyže / snowboard / sánky</b>. Do pár dní tu jazdíš.</div>
+
+<div id="card">
+  <button id="close" aria-label="Zavrieť">×</button>
+  <div class="row">
+    <div class="bib"><small>ŠTART</small><b id="cNum">1</b></div>
+    <div class="who"><b id="cName">@meno</b><span id="cType">lyžiar</span></div>
+    <button id="cheer">🔔 Povzbuď</button>
+  </div>
+  <div class="meta">
+    <span id="cRun">Zjazdovka 1</span><span><i class="dot" id="cDot" style="display:inline-block;vertical-align:-2px"></i> <span id="cColor"></span></span><span id="cZone"></span><span id="cCheers"></span>
+  </div>
+  <div class="comment" id="cComment"></div>
+</div>
+<div id="demo">UKÁŽKA · vymyslené mená</div>
+<div id="err"></div>
+
+<script>
+/* ===== DÁTA: followeri, ktorí sa sami prihlásili komentom (opt-in) =====
+   Poradie = poradie príchodu = štartovné číslo.
+   u = meno na Instagrame, t = typ, c = farba bundy (hex, prázdne = podľa mena), k = ich komentár */
+window.FOLLOWERS = [
+  { u: "svah.followerov", t: "lyziar", c: "#1E5AA8", k: "Prvá stopa je moja. Kto ide so mnou?" }
+];
+window.IG = "svah.followerov";
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ---------- pomocné ---------- */
+const $ = id => document.getElementById(id);
+function hash(s){ let h=2166136261>>>0; for(const ch of s){ h^=ch.codePointAt(0); h=Math.imul(h,16777619)>>>0 } return h }
+function rng(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296 } }
+const ease = x => x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2;
+const fmt = n => n.toLocaleString('sk-SK');
+
+const TYPES = {
+  lyziar:       { name:'lyžiar',        amp:.62, period:3.2, down:80,  up:true,  bell:880 },
+  snowboardista:{ name:'snowboardista', amp:.80, period:4.4, down:85,  up:true,  bell:740 },
+  sankar:       { name:'sánkar',        amp:.18, period:7.0, down:120, up:true,  bell:620 },
+  skialpinista: { name:'skialpinista',  amp:.30, period:5.0, down:75,  up:false, bell:990 },
+  bobista:      { name:'bobista',       amp:.55, period:1.7, down:60,  up:true,  bell:1100 },
+  telemark:     { name:'telemarkár',    amp:.85, period:5.5, down:95,  up:true,  bell:660 },
+};
+const TYPE_KEYS = Object.keys(TYPES);
+const PALETTE = ['#1E5AA8','#C8102E','#F2B705','#2E9E5B','#7A3FB8','#F26B21','#0FA3B1','#E84A8A','#2B2D31','#8BC34A','#FFFFFF','#6D4C41'];
+const COLOR_NAMES = {'#1E5AA8':'modrá','#C8102E':'červená','#F2B705':'žltá','#2E9E5B':'zelená','#7A3FB8':'fialová','#F26B21':'oranžová','#0FA3B1':'tyrkysová','#E84A8A':'ružová','#2B2D31':'čierna','#8BC34A':'svetlozelená','#FFFFFF':'biela','#6D4C41':'hnedá'};
+
+/* ---------- dáta ---------- */
+const params = new URLSearchParams(location.search);
+let people = window.FOLLOWERS.slice();
+const demoN = Math.min(60000, parseInt(params.get('demo')||'0',10)||0);
+if (demoN > people.length){
+  const r = rng(7);
+  for (let i=people.length; i<demoN; i++)
+    people.push({ u:`ukazka_${String(i+1).padStart(5,'0')}`, t:TYPE_KEYS[Math.floor(r()*TYPE_KEYS.length)], c:'', k:'' });
+  $('demo').style.display='block';
+}
+people = people.map((p,i)=>{
+  const h = hash(p.u);
+  const t = TYPES[p.t] ? p.t : TYPE_KEYS[h % TYPE_KEYS.length];
+  const c = (p.c && /^#[0-9a-f]{6}$/i.test(p.c)) ? p.c.toUpperCase() : PALETTE[h % PALETTE.length];
+  return { ...p, i, num:i+1, t, c, h, vip:i<100 };
+});
+const N = people.length;
+
+/* ---------- svet: hora a zjazdovky ---------- */
+const CAP = 250, H = 420, R = 1550;
+function height(r, th){
+  const k = Math.max(0, 1 - r/R);
+  const ridge = 1 + .07*Math.sin(3*th+.4) + .05*Math.sin(7*th+1.3) + .03*Math.sin(13*th);
+  return H*Math.pow(k,1.35)*ridge + 4*Math.sin(r*.012+th*5)*k;
+}
+// sloty zjazdoviek: krúžky okolo hory
+const RINGS = [ {n:12,start:80,off:0}, {n:12,start:230,off:.5}, {n:24,start:390,off:.25}, {n:48,start:560,off:.125}, {n:96,start:720,off:.0625} ];
+const SLOTS = [];
+RINGS.forEach((rg,ri)=>{ for(let j=0;j<rg.n;j++){
+  const th = (j+rg.off)/rg.n*Math.PI*2 - Math.PI/2;
+  const len = Math.min(800, 1480-rg.start);
+  SLOTS.push({ th, r0:rg.start, len, ring:ri });
+}});
+// poradie otvárania: v smere hodinových ručičiek v rámci krúžku
+const runsNeeded = Math.max(1, Math.ceil(N/CAP));
+const RUNS = SLOTS.slice(0, Math.min(SLOTS.length, runsNeeded)).map((s,k)=>({ ...s, k, color:['#1E5AA8','#C8102E','#2B2D31'][k%3] }));
+const runOf = i => RUNS[Math.min(RUNS.length-1, Math.floor(i/CAP))];
+$('count').textContent = fmt(N);
+$('runsInfo').textContent = RUNS.length===1 ? '1 zjazdovka' : `${RUNS.length} zjazdovky`.replace(/^(\d+) zjazdovky$/, (m,n)=> n>=5? `${n} zjazdoviek` : m);
+
+/* ---------- three.js ---------- */
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#bfd9f2');
+scene.fog = new THREE.Fog('#d6e7f6', 2400, 7000);
+const camera = new THREE.PerspectiveCamera(45, 1, 1, 9000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = .08;
+controls.maxPolarAngle = Math.PI*.47; controls.minDistance = 25; controls.maxDistance = 3800;
+controls.target.set(0,140,0);
+
+scene.add(new THREE.HemisphereLight('#eaf4ff','#8a9bb0',1.15));
+const sun = new THREE.DirectionalLight('#fff3df',2.0); sun.position.set(-900,1200,700); scene.add(sun);
+
+// obloha – jemný gradient
+{
+  const g = new THREE.SphereGeometry(8000,32,16);
+  const m = new THREE.ShaderMaterial({ side:THREE.BackSide, depthWrite:false, fog:false,
+    uniforms:{ top:{value:new THREE.Color('#5b9be0')}, bot:{value:new THREE.Color('#e9f2fb')} },
+    vertexShader:`varying float h; void main(){ h=normalize(position).y; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`uniform vec3 top; uniform vec3 bot; varying float h; void main(){ gl_FragColor=vec4(mix(bot,top,smoothstep(-.05,.45,h)),1.); }` });
+  scene.add(new THREE.Mesh(g,m));
+}
+
+// terén (polárna sieť)
+{
+  const RS=120, TS=180, Rmax=3200;
+  const pos=[], col=[], idx=[];
+  const cSnow=new THREE.Color('#f7fbff'), cShade=new THREE.Color('#c9d8ea'), cLow=new THREE.Color('#e3ecf5');
+  for(let i=0;i<=RS;i++){
+    const r = Math.pow(i/RS,1.6)*Rmax;
+    for(let j=0;j<TS;j++){
+      const th=j/TS*Math.PI*2;
+      const y=height(r,th);
+      pos.push(r*Math.cos(th), y, r*Math.sin(th));
+      const shade = .5+.5*Math.sin(th*9+r*.01);
+      const c = cSnow.clone().lerp(cShade, (1-Math.min(1,y/H))*.35*shade).lerp(cLow, r>R?.6:0);
+      col.push(c.r,c.g,c.b);
+    }
+  }
+  for(let i=0;i<RS;i++) for(let j=0;j<TS;j++){
+    const a=i*TS+j, b=i*TS+(j+1)%TS, c=(i+1)*TS+j, d=(i+1)*TS+(j+1)%TS;
+    idx.push(a,c,b, b,c,d);
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  g.setIndex(idx); g.computeVertexNormals();
+  scene.add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true})));
+}
+
+// pozícia bodu na zjazdovke: s = 0 hore, 1 dole; lat = metre od osi
+function runPoint(run, s, lat, out){
+  const r = run.r0 + s*run.len;
+  const th = run.th + lat/r;
+  out.set(r*Math.cos(th), height(r,th), r*Math.sin(th));
+  return out;
+}
+
+// zjazdovky – pásy, tyče, vleky, chaty, tabule
+function makeSign(lines, bg, fg, w=256, h=128){
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  const x=cv.getContext('2d');
+  x.fillStyle=bg; x.beginPath(); x.roundRect(4,4,w-8,h-8,18); x.fill();
+  x.strokeStyle='#fff'; x.lineWidth=6; x.stroke();
+  x.fillStyle=fg; x.textAlign='center'; x.textBaseline='middle';
+  const fs = lines.length===1 ? h*.55 : h*.3;
+  x.font=`800 ${fs}px system-ui,Arial`;
+  lines.forEach((l,i)=> x.fillText(l, w/2, h/2 + (i-(lines.length-1)/2)*fs*1.1));
+  const t=new THREE.CanvasTexture(cv); t.colorSpace=THREE.SRGBColorSpace;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthWrite:false}));
+  sp.scale.set(w/8,h/8,1); return sp;
+}
+{
+  const pisteMat = new THREE.MeshLambertMaterial({ color:'#ffffff', polygonOffset:true, polygonOffsetFactor:-2, polygonOffsetUnits:-2 });
+  const poleGeo = new THREE.CylinderGeometry(.35,.35,5,5); poleGeo.translate(0,2.5,0);
+  const towerGeo = new THREE.CylinderGeometry(.9,1.2,14,6); towerGeo.translate(0,7,0);
+  const P = new THREE.Vector3(), Q = new THREE.Vector3();
+  const lineMat = new THREE.LineBasicMaterial({ color:'#3a3f47' });
+  RUNS.forEach(run=>{
+    // pás
+    const seg=60, pos=[], idx=[];
+    for(let i=0;i<=seg;i++){
+      const s=i/seg;
+      for(const lat of [-20,20]){ runPoint(run,s,lat,P); pos.push(P.x,P.y+.4,P.z); }
+    }
+    for(let i=0;i<seg;i++){ const a=i*2; idx.push(a,a+2,a+1, a+1,a+2,a+3); }
+    const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setIndex(idx); g.computeVertexNormals();
+    scene.add(new THREE.Mesh(g,pisteMat));
+    // tyče po okrajoch
+    const poles=new THREE.InstancedMesh(poleGeo,new THREE.MeshLambertMaterial({color:run.color}),Math.floor(run.len/40)*2+2);
+    const m=new THREE.Matrix4(); let n=0;
+    for(let d=0; d<=run.len; d+=40) for(const lat of [-21,21]){ runPoint(run,d/run.len,lat,P); m.makeTranslation(P.x,P.y,P.z); poles.setMatrixAt(n++,m); }
+    poles.count=n; scene.add(poles);
+    // vlek / lanovka popri zjazdovke
+    const LAT=34, pts=[];
+    const tow=new THREE.InstancedMesh(towerGeo,new THREE.MeshLambertMaterial({color:'#5d6673'}),Math.ceil(run.len/90)+2); let tn=0;
+    for(let d=0; d<=run.len; d+=90){ runPoint(run,d/run.len,LAT,P); m.makeTranslation(P.x,P.y,P.z); tow.setMatrixAt(tn++,m); }
+    tow.count=tn; scene.add(tow);
+    for(let i=0;i<=40;i++){ runPoint(run,i/40,LAT,P); pts.push(P.x,P.y+13,P.z); }
+    const lg=new THREE.BufferGeometry(); lg.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+    scene.add(new THREE.Line(lg,lineMat));
+    // dolná chata
+    runPoint(run,1,-48,P);
+    const hut=new THREE.Group();
+    const body=new THREE.Mesh(new THREE.BoxGeometry(16,8,12),new THREE.MeshLambertMaterial({color:'#8a5a3b'})); body.position.y=4;
+    const roof=new THREE.Mesh(new THREE.ConeGeometry(12,6,4),new THREE.MeshLambertMaterial({color:'#f4f8fc'})); roof.position.y=11; roof.rotation.y=Math.PI/4;
+    hut.add(body,roof); hut.position.copy(P); hut.rotation.y=-run.th; scene.add(hut);
+    // tabuľa s číslom trate
+    runPoint(run,0,-30,P);
+    const sg=makeSign([String(run.k+1)], run.color, '#fff', 128,128); sg.position.set(P.x,P.y+16,P.z); scene.add(sg);
+    if (run.k===0){ runPoint(run,.02,0,Q); const vs=makeSign(['PRVÁ STOPA'],'#C8102E','#fff',384,96); vs.position.set(Q.x,Q.y+28,Q.z); scene.add(vs); }
+  });
+  // otvárajúca sa trať: posledná zjazdovka, ak nie je plná
+  const last = RUNS[RUNS.length-1], filled = N - last.k*CAP;
+  if (filled < CAP){
+    runPoint(last, Math.min(.95, filled/CAP+.06), 0, P);
+    const op=makeSign(['TRAŤ SA','OTVÁRA'],'#F2B705','#2B2D31',256,128); op.position.set(P.x,P.y+14,P.z); scene.add(op);
+  }
+  // chata na vrchole
+  const top=new THREE.Group();
+  const tb=new THREE.Mesh(new THREE.BoxGeometry(26,10,18),new THREE.MeshLambertMaterial({color:'#6f4a32'})); tb.position.y=5;
+  const tr=new THREE.Mesh(new THREE.ConeGeometry(19,8,4),new THREE.MeshLambertMaterial({color:'#ffffff'})); tr.position.y=14; tr.rotation.y=Math.PI/4;
+  top.add(tb,tr); top.position.set(0,height(0,0),0); scene.add(top);
+}
+
+// stromy (smreky) mimo zjazdoviek
+{
+  const tg = mergeGeometries([
+    new THREE.ConeGeometry(4,9,6).translate(0,9,0),
+    new THREE.ConeGeometry(3,7,6).translate(0,14,0),
+    new THREE.CylinderGeometry(.6,.8,4,5).translate(0,2,0)
+  ]);
+  const r=rng(42), COUNT=4500;
+  const trees=new THREE.InstancedMesh(tg,new THREE.MeshLambertMaterial({color:'#2f5d46'}),COUNT);
+  const snowCaps=new THREE.InstancedMesh(new THREE.ConeGeometry(2.2,3,6).translate(0,16.5,0),new THREE.MeshLambertMaterial({color:'#ffffff'}),COUNT);
+  const m=new THREE.Matrix4(), q=new THREE.Quaternion(), sc=new THREE.Vector3(), p=new THREE.Vector3();
+  let n=0, guard=0;
+  while(n<COUNT && guard++<COUNT*8){
+    const rr = 450 + Math.pow(r(),.8)*2300, th=r()*Math.PI*2;
+    let ok=true;
+    for(const run of RUNS){
+      if (rr < run.r0-30 || rr > run.r0+run.len+70) continue;
+      let d=Math.abs(((th-run.th+Math.PI*3)%(Math.PI*2))-Math.PI)*rr;
+      if (d < 62){ ok=false; break; }
+    }
+    if(!ok) continue;
+    const s=.7+r()*.8;
+    p.set(rr*Math.cos(th),height(rr,th)-1,rr*Math.sin(th)); sc.set(s,s,s); q.setFromAxisAngle(new THREE.Vector3(0,1,0),r()*6);
+    m.compose(p,q,sc); trees.setMatrixAt(n,m); snowCaps.setMatrixAt(n,m); n++;
+  }
+  trees.count=snowCaps.count=n; scene.add(trees,snowCaps);
+}
+
+// padajúci sneh
+let snow;
+{
+  const n=2500, pos=new Float32Array(n*3), r=rng(3);
+  for(let i=0;i<n;i++){ pos[i*3]=(r()-.5)*600; pos[i*3+1]=r()*300; pos[i*3+2]=(r()-.5)*600; }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  snow=new THREE.Points(g,new THREE.PointsMaterial({color:'#ffffff',size:1.6,transparent:true,opacity:.85,depthWrite:false}));
+  scene.add(snow);
+}
+
+/* ---------- lyžiari ---------- */
+const S = 2.2; // zväčšenie postavy, aby bola vidieť zďaleka
+const bodyGeo = mergeGeometries([
+  new THREE.BoxGeometry(.62,.8,.38).translate(0,1.15,0),     // bunda
+  new THREE.BoxGeometry(.22,.6,.22).translate(-.42,1.05,.08), // ruky
+  new THREE.BoxGeometry(.22,.6,.22).translate(.42,1.05,.08),
+]);
+const pantsGeo = mergeGeometries([
+  new THREE.BoxGeometry(.24,.7,.26).translate(-.15,.42,0),
+  new THREE.BoxGeometry(.24,.7,.26).translate(.15,.42,0),
+  new THREE.SphereGeometry(.2,8,6).translate(0,1.72,0),      // prilba
+  new THREE.BoxGeometry(.3,.1,.05).translate(0,1.72,.19),     // okuliare
+]);
+const gearGeo = {
+  lyziar: mergeGeometries([ new THREE.BoxGeometry(.1,.04,1.8).translate(-.15,.04,0), new THREE.BoxGeometry(.1,.04,1.8).translate(.15,.04,0),
+                            new THREE.CylinderGeometry(.02,.02,1.1).rotateX(.3).translate(-.5,.6,.2), new THREE.CylinderGeometry(.02,.02,1.1).rotateX(.3).translate(.5,.6,.2)]),
+  telemark: mergeGeometries([ new THREE.BoxGeometry(.1,.04,1.9).translate(-.15,.04,.25), new THREE.BoxGeometry(.1,.04,1.9).translate(.15,.04,-.25)]),
+  skialpinista: mergeGeometries([ new THREE.BoxGeometry(.1,.04,1.7).translate(-.15,.04,0), new THREE.BoxGeometry(.1,.04,1.7).translate(.15,.04,0),
+                            new THREE.BoxGeometry(.5,.5,.22).translate(0,1.2,-.3) ]), // batoh
+  snowboardista: new THREE.BoxGeometry(.32,.05,1.5).translate(0,.04,0),
+  sankar: mergeGeometries([ new THREE.BoxGeometry(.6,.12,1.1).translate(0,.22,0), new THREE.BoxGeometry(.06,.06,1.3).translate(-.28,.04,0), new THREE.BoxGeometry(.06,.06,1.3).translate(.28,.04,0)]),
+  bobista: new THREE.CylinderGeometry(.6,.5,.25,10).translate(0,.13,0),
+};
+const vipStripeGeo = new THREE.BoxGeometry(.64,.12,.4).translate(0,1.2,0);
+
+const bodyMesh = new THREE.InstancedMesh(bodyGeo, new THREE.MeshLambertMaterial(), N);
+const pantsMesh = new THREE.InstancedMesh(pantsGeo, new THREE.MeshLambertMaterial({color:'#30343b'}), N);
+const vipCount = people.filter(p=>p.vip).length;
+const vipMesh = new THREE.InstancedMesh(vipStripeGeo, new THREE.MeshLambertMaterial({color:'#C8102E'}), Math.max(1,vipCount));
+const gearMesh = {}, gearIdx = {};
+const gearColors = { lyziar:'#e8e8e8', telemark:'#f2b705', skialpinista:'#e05a2b', snowboardista:'#2b2d31', sankar:'#a0522d', bobista:'#e84a8a' };
+for (const k of TYPE_KEYS){
+  const cnt = people.filter(p=>p.t===k).length;
+  gearMesh[k] = new THREE.InstancedMesh(gearGeo[k], new THREE.MeshLambertMaterial({color:gearColors[k]}), Math.max(1,cnt));
+  gearMesh[k].count = cnt; gearIdx[k]=0;
+}
+const col = new THREE.Color();
+people.forEach(p=>{
+  bodyMesh.setColorAt(p.i, col.set(p.c));
+  p.gi = gearIdx[p.t]++;
+  if (p.vip) p.vi = p.i;
+});
+vipMesh.count = vipCount;
+[bodyMesh,pantsMesh,vipMesh,...Object.values(gearMesh)].forEach(m=>{ m.frustumCulled=false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); scene.add(m); });
+
+// deterministický pohyb podľa času t
+const LIFT_SPEED = 5.5, LIFT_LAT = 34;
+const _P=new THREE.Vector3(), _A=new THREE.Vector3(), _B=new THREE.Vector3();
+function skierState(p, t, out){
+  const run = runOf(p.i), T = TYPES[p.t];
+  const lane = ((p.h>>>8)%1000)/1000*2-1;           // stredná dráha v páse
+  const phase = ((p.h>>>4)%997)/997;
+  const down = T.down*(.85+.3*(((p.h>>>12)%100)/100));
+  const up = run.len/LIFT_SPEED;
+  const cyc = down+up, u = ((t + phase*cyc) % cyc + cyc) % cyc;
+  let s, lat, onLift=false, dir=1;
+  if (u < down){
+    s = u/down;
+    const sway = Math.sin((u/T.period)*Math.PI*2 + phase*6.28);
+    lat = THREE.MathUtils.clamp(lane*7 + sway*T.amp*12, -18, 18);
+  } else {
+    s = 1-(u-down)/up; dir=-1;
+    if (T.up){ lat = LIFT_LAT - 1.2; onLift=true; }
+    else { lat = -17.5; }           // skialpinista ide pešo po okraji
+  }
+  runPoint(run, s, lat, out.pos);
+  // smer pohybu
+  const ds = .004*dir;
+  runPoint(run, THREE.MathUtils.clamp(s+ds,0,1), lat + (onLift||dir<0?0:Math.cos((u/T.period)*Math.PI*2+phase*6.28)*T.amp*2), _B);
+  out.yaw = Math.atan2(_B.x-out.pos.x, _B.z-out.pos.z);
+  out.onLift = onLift; out.run = run;
+  if (onLift) out.pos.y += 7;      // visí na kotve / sedačke
+  // snowboardista občas skočí
+  if (p.t==='snowboardista' && !onLift){ const j=(u%23)/23; if(j<.05) out.pos.y += Math.sin(j/.05*Math.PI)*2.5; }
+  return out;
+}
+
+const st = { pos:new THREE.Vector3(), yaw:0, onLift:false, run:null };
+const M=new THREE.Matrix4(), Qt=new THREE.Quaternion(), SC=new THREE.Vector3(S,S,S), UP=new THREE.Vector3(0,1,0);
+const jumps = new Map(); // i -> čas začiatku skoku (povzbudenie)
+const positions = new Float32Array(N*3);
+function updateSkiers(t, now){
+  for (const p of people){
+    skierState(p, t, st);
+    const j = jumps.get(p.i);
+    if (j!==undefined){ const k=(now-j)/1400; if(k>1) jumps.delete(p.i); else st.pos.y += Math.sin(k*Math.PI)*9; }
+    Qt.setFromAxisAngle(UP, st.yaw);
+    M.compose(st.pos, Qt, SC);
+    bodyMesh.setMatrixAt(p.i, M); pantsMesh.setMatrixAt(p.i, M); gearMesh[p.t].setMatrixAt(p.gi, M);
+    if (p.vip) vipMesh.setMatrixAt(p.vi, M);
+    positions[p.i*3]=st.pos.x; positions[p.i*3+1]=st.pos.y; positions[p.i*3+2]=st.pos.z;
+  }
+  bodyMesh.instanceMatrix.needsUpdate = pantsMesh.instanceMatrix.needsUpdate = vipMesh.instanceMatrix.needsUpdate = true;
+  for (const k of TYPE_KEYS) gearMesh[k].instanceMatrix.needsUpdate = true;
+}
+bodyMesh.instanceColor.needsUpdate = true;
+
+/* ---------- menovky (iba blízko kamery) ---------- */
+const labelsEl = $('labels'), pool=[];
+const MAXL = 30;
+for (let i=0;i<MAXL+1;i++){ const d=document.createElement('div'); d.className='lbl'; d.style.display='none'; labelsEl.appendChild(d); pool.push(d); }
+const V=new THREE.Vector3();
+function placeLabel(div, i, cls){
+  V.set(positions[i*3], positions[i*3+1]+S*2.2, positions[i*3+2]).project(camera);
+  if (V.z>1 || Math.abs(V.x)>1.1 || Math.abs(V.y)>1.1){ div.style.display='none'; return; }
+  const p=people[i];
+  div.className='lbl'+(cls?' '+cls:'')+(p.vip&&!cls?' vip':'');
+  div.textContent = (cls?`#${p.num} `:'')+'@'+p.u;
+  div.style.display='block';
+  div.style.left = ((V.x+1)/2*innerWidth)+'px';
+  div.style.top = ((1-V.y)/2*innerHeight)+'px';
+}
+const near = [];
+function updateLabels(){
+  const cx=camera.position.x, cy=camera.position.y, cz=camera.position.z;
+  near.length=0;
+  const LIM = 260*260;
+  for (let i=0;i<N;i++){
+    if (i===selected) continue;
+    const dx=positions[i*3]-cx, dy=positions[i*3+1]-cy, dz=positions[i*3+2]-cz;
+    const d=dx*dx+dy*dy+dz*dz;
+    if (d<LIM) near.push(Math.floor(d)*1e6+i);
+  }
+  near.sort((a,b)=>a-b);
+  let n=0;
+  for (; n<Math.min(MAXL,near.length); n++) placeLabel(pool[n], near[n]%1e6, '');
+  for (; n<MAXL; n++) pool[n].style.display='none';
+  if (selected>=0) placeLabel(pool[MAXL], selected, 'sel'); else pool[MAXL].style.display='none';
+}
+
+/* ---------- kamera ---------- */
+let selected = -1, followBlend = 0, flying = null;
+function overview(){
+  const d = 1350 + Math.min(1600, RUNS.length*28);
+  return { pos:new THREE.Vector3(d*.62, d*.62, d*.78), target:new THREE.Vector3(0,120,0) };
+}
+function flyTo(pos, target, dur=1800){
+  flying = { p0:camera.position.clone(), t0:controls.target.clone(), p1:pos, t1:target, start:performance.now(), dur };
+}
+function showAll(){ select(-1); const o=overview(); flyTo(o.pos,o.target,2000); history.replaceState(null,'',location.pathname+location.search); }
+const followOff = new THREE.Vector3();
+
+/* ---------- karta ---------- */
+const cheers = JSON.parse(localStorage.getItem('svah_cheers')||'{}');
+function select(i, fly=true){
+  selected = i;
+  if (i<0){ $('card').style.display='none'; $('cta').style.display='block'; return; }
+  const p = people[i];
+  $('cNum').textContent = p.num; $('cName').textContent = '@'+p.u;
+  $('cType').textContent = TYPES[p.t].name + (p.vip ? ' · prvých 100' : '');
+  $('cRun').textContent = 'Zjazdovka '+(runOf(i).k+1);
+  $('cDot').style.background = p.c; $('cColor').textContent = (COLOR_NAMES[p.c]||p.c)+' bunda';
+  $('cZone').textContent = p.vip ? 'Prvá stopa' : 'bežná zóna';
+  updateCheerCount();
+  $('cComment').textContent = p.k ? '„'+p.k+'“' : '';
+  $('card').style.display='block'; $('cta').style.display='none';
+  history.replaceState(null,'','#lyziar-'+p.num);
+  if (fly){
+    followOff.set(28, 16, 34);
+    const t = new THREE.Vector3(positions[i*3],positions[i*3+1],positions[i*3+2]);
+    flyTo(t.clone().add(followOff), t, 2200);
+  }
+}
+function updateCheerCount(){ const p=people[selected]; const n=cheers[p.u]||0; $('cCheers').textContent = n? `povzbudené ${n}×` : 'ešte nepovzbudené'; }
+
+/* ---------- zvonce ---------- */
+let actx;
+function cowbell(base){
+  actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+  const now = actx.currentTime;
+  for (let r=0;r<3;r++){
+    const t0 = now + r*.16 + Math.random()*.03;
+    const g = actx.createGain(); g.connect(actx.destination);
+    g.gain.setValueAtTime(.0001,t0); g.gain.exponentialRampToValueAtTime(.35,t0+.005); g.gain.exponentialRampToValueAtTime(.0001,t0+.6);
+    const bp = actx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=base*1.3; bp.Q.value=2.5; bp.connect(g);
+    for (const mul of [1, 1.48]){ const o=actx.createOscillator(); o.type='square'; o.frequency.value=base*mul*(1+(Math.random()-.5)*.01); o.connect(bp); o.start(t0); o.stop(t0+.65); }
+  }
+}
+$('cheer').onclick = ()=>{
+  if (selected<0) return;
+  const p = people[selected];
+  cowbell(TYPES[p.t].bell);
+  jumps.set(p.i, performance.now());
+  cheers[p.u] = (cheers[p.u]||0)+1;
+  try{ localStorage.setItem('svah_cheers', JSON.stringify(cheers)); }catch(e){}
+  updateCheerCount();
+};
+$('close').onclick = showAll;
+$('bAll').onclick = showAll;
+$('bRand').onclick = ()=> select(Math.floor(Math.random()*N));
+
+/* ---------- vyhľadávanie ---------- */
+const q=$('q'), sug=$('sug'); let sugIdx=-1, sugList=[];
+const norm = s => s.toLowerCase().replace(/^@/,'').normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+const index = people.map(p=>norm(p.u));
+q.addEventListener('input', ()=>{
+  const v=norm(q.value); sug.innerHTML=''; sugIdx=-1;
+  if(!v){ sug.style.display='none'; return; }
+  sugList=[];
+  for(let i=0;i<N && sugList.length<8;i++) if(index[i].startsWith(v)) sugList.push(i);
+  for(let i=0;i<N && sugList.length<8;i++) if(!index[i].startsWith(v) && index[i].includes(v)) sugList.push(i);
+  if(!sugList.length){ sug.innerHTML='<button disabled>Zatiaľ tu nie si. Napíš koment pod reel ↓</button>'; sug.style.display='block'; return; }
+  sugList.forEach((i,k)=>{
+    const p=people[i], b=document.createElement('button');
+    b.innerHTML=`<i class="dot" style="background:${p.c}"></i>@${p.u}<span class="n">#${p.num}</span>`;
+    b.onclick=()=>{ pick(i) }; sug.appendChild(b);
+  });
+  sug.style.display='block';
+});
+function pick(i){ sug.style.display='none'; q.value=''; q.blur(); select(i); }
+q.addEventListener('keydown', e=>{
+  const bs=[...sug.querySelectorAll('button:not([disabled])')];
+  if(e.key==='ArrowDown'){ sugIdx=Math.min(bs.length-1,sugIdx+1); }
+  else if(e.key==='ArrowUp'){ sugIdx=Math.max(0,sugIdx-1); }
+  else if(e.key==='Enter'){ if(sugList.length) pick(sugList[Math.max(0,sugIdx)]); return; }
+  else return;
+  e.preventDefault(); bs.forEach((b,k)=>b.classList.toggle('on',k===sugIdx));
+});
+document.addEventListener('pointerdown', e=>{ if(!e.target.closest('.search')) sug.style.display='none'; });
+
+// ťuknutie na lyžiara
+const ray=new THREE.Raycaster(); let downAt=null;
+canvas.addEventListener('pointerdown', e=>{ downAt=[e.clientX,e.clientY]; });
+canvas.addEventListener('pointerup', e=>{
+  if(!downAt || Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>6) return;
+  // najbližší lyžiar k bodu na obrazovke
+  let best=-1, bd=28*28;
+  for(let i=0;i<N;i++){
+    V.set(positions[i*3],positions[i*3+1]+S,positions[i*3+2]).project(camera);
+    if(V.z>1) continue;
+    const x=(V.x+1)/2*innerWidth, y=(1-V.y)/2*innerHeight, d=(x-e.clientX)**2+(y-e.clientY)**2;
+    if(d<bd){ bd=d; best=i; }
+  }
+  if(best>=0) select(best);
+});
+
+/* ---------- veľkosť a slučka ---------- */
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h;
+  camera.fov = w/h < .8 ? 58 : 45; camera.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+
+const o = overview(); camera.position.copy(o.pos); controls.target.copy(o.target);
+const t0 = performance.now();
+const lastSel = new THREE.Vector3();
+function loop(now){
+  const t = (now - t0)/1000 + 1000; // posun, nech sú všetci rozjazdení
+  updateSkiers(t, now);
+  if (flying){
+    const k = Math.min(1,(now-flying.start)/flying.dur), e=ease(k);
+    if (selected>=0){ // cieľ sa hýbe
+      flying.t1.set(positions[selected*3],positions[selected*3+1],positions[selected*3+2]);
+      flying.p1.copy(flying.t1).add(followOff);
+    }
+    camera.position.lerpVectors(flying.p0, flying.p1, e);
+    controls.target.lerpVectors(flying.t0, flying.t1, e);
+    if (k>=1){ flying=null; if(selected>=0) lastSel.copy(controls.target); }
+  } else if (selected>=0){
+    // sledovanie: posuň kameru aj cieľ o pohyb lyžiara
+    const cur=_A.set(positions[selected*3],positions[selected*3+1],positions[selected*3+2]);
+    const d=_B.copy(cur).sub(lastSel);
+    if (d.lengthSq()<400){ camera.position.add(d); controls.target.add(d); }
+    lastSel.copy(cur);
+  }
+  controls.update();
+  // sneh okolo kamery
+  const sp=snow.geometry.attributes.position.array;
+  for(let i=1;i<sp.length;i+=3){ sp[i]-=.35; if(sp[i]<0) sp[i]+=300; }
+  snow.geometry.attributes.position.needsUpdate=true;
+  snow.position.set(controls.target.x, controls.target.y-60, controls.target.z);
+  renderer.render(scene,camera);
+  updateLabels();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+$('loading').style.opacity=0; setTimeout(()=>$('loading').remove(),600);
+
+// odkaz #lyziar-123
+function fromHash(){ const m=location.hash.match(/lyziar-(\d+)/); if(m){ const i=parseInt(m[1],10)-1; if(i>=0&&i<N) setTimeout(()=>select(i),400); } }
+addEventListener('hashchange', fromHash); fromHash();
+window.__svah = { select, showAll, N };
+</script>
+<script>
+  setTimeout(()=>{ if(document.getElementById('loading')){ const e=document.getElementById('err'); e.style.display='block';
+    e.textContent='Svah sa nepodarilo načítať. Skús obnoviť stránku alebo otvoriť v inom prehliadači.'; } }, 15000);
+</script>
+</body>
+</html>
