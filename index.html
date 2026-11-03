@@ -535,7 +535,7 @@ if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair) org.y=cy-4.5-0.32*SK; }
 if(ti==1 && dir>0.0){ float j=mod(u,23.0)/23.0; if(j<0.05) org.y+=sin(j/0.05*3.14159)*2.5; }
 if(abs(aId-uJumpId)<0.5){ float k=(uTime-uJumpT)/1.4; if(k>0.0&&k<1.0) org.y+=sin(k*3.14159)*9.0; }
 int part=int(aPart+0.5);
-vec3 p=position; vec3 n=normal; bool hide=false;
+vec3 p=position; vec3 n=normal; bool hide=aHide>0.5;
 if(aGear>-0.5 && abs(aGear-aP.w)>0.5) hide=true;
 if(aGear<-1.5 && aId>99.5) hide=true;
 if(part<=3){
@@ -579,7 +579,7 @@ function svahMaterial(kind){
   m.onBeforeCompile=(sh)=>{
     Object.assign(sh.uniforms,U);
     const attrs = kind==='skier'
-      ? 'attribute vec4 aRun; attribute vec4 aP; attribute float aId; attribute float aPart; attribute vec3 aBase; attribute float aUseJ; attribute float aGear; attribute float aTip;'
+      ? 'attribute vec4 aRun; attribute vec4 aP; attribute float aId; attribute float aPart; attribute vec3 aBase; attribute float aUseJ; attribute float aGear; attribute float aTip; attribute float aHide;'
       : 'attribute vec4 aRun; attribute float aOff; attribute vec3 aBase; attribute float aTip;';
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\n'+attrs+'\n'+GLSL_COMMON)
@@ -617,7 +617,7 @@ const skierParts=[
   Pt(B(.19,.72,.22).translate(.12,.41,0),1,'#2f343c'),
   Pt(B(.2,.16,.3).translate(-.12,.08,.03),1,'#1d2127'),
   Pt(B(.2,.16,.3).translate(.12,.08,.03),1,'#1d2127'),
-  Pt(new THREE.SphereGeometry(.17,7,5).translate(0,1.6,0),2,'#eef1f5'),
+  Pt(new THREE.SphereGeometry(.17,6,4).translate(0,1.6,0),2,'#eef1f5'),
   Pt(B(.27,.09,.07).translate(0,1.6,.14),2,'#ff8a2a'),
   ...skis(0,'#d64045'), ...poles(0),
   Pt(B(.3,.04,1.45).translate(0,.02,0),3,'#2b2d31',0,1),
@@ -636,7 +636,7 @@ const skierParts=[
   Pt(B(1.1,.6,.07).translate(0,-4.2,-.24),6,'#1E5AA8'),
   Pt(B(1.1,.05,.05).translate(0,-3.6,.45),6,'#59616b'),
 ];
-const skierGeo=mergeGeometries(skierParts);
+const skierGeoByType=TYPES.map((t,ti)=>mergeGeometries(skierParts.filter(g=>{ const a=g.attributes.aGear.array[0]; return a<-.5||Math.round(a)===ti; })));
 const farGeo=Pt(B(.75,1.9,.45).translate(0,.95,0),0,'#fff',1);
 const tbarCarrier=mergeGeometries([
   prep(new THREE.CylinderGeometry(.035,.035,1,5).translate(0,-.5,0),{aBase:lin('#69717c'),aTip:0}),
@@ -663,6 +663,7 @@ function instGeo(base, list, run){
   g.setAttribute('aP',new THREE.InstancedBufferAttribute(aP,4));
   g.setAttribute('aId',new THREE.InstancedBufferAttribute(aId,1));
   g.setAttribute('color',new THREE.InstancedBufferAttribute(col,3));
+  g.setAttribute('aHide',new THREE.InstancedBufferAttribute(new Float32Array(n),1).setUsage(THREE.DynamicDrawUsage));
   g.instanceCount=n; return g;
 }
 function carrierGeo(run){
@@ -677,11 +678,43 @@ function carrierGeo(run){
 }
 runObjs.forEach(o=>{
   const list=people.slice(o.run.k*CAP, Math.min(N,(o.run.k+1)*CAP));
-  o.detail=new THREE.Mesh(instGeo(skierGeo,list,o.run),skierMat);
   o.far=new THREE.Mesh(instGeo(farGeo,list,o.run),skierMat);
   o.carriers=new THREE.Mesh(carrierGeo(o.run),carrierMat);
-  for(const m of [o.detail,o.far,o.carriers]){ m.frustumCulled=false; scene.add(m); }
+  for(const m of [o.far,o.carriers]){ m.frustumCulled=false; scene.add(m); }
 });
+// detailné postavy: len najbližší lyžiari, buffer sa plní každý snímok
+const MAXD=260, DET2=170*170;
+const detail=TYPES.map((t,ti)=>{
+  const g=new THREE.InstancedBufferGeometry(), base=skierGeoByType[ti];
+  for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
+  const mk=(n)=>new THREE.InstancedBufferAttribute(new Float32Array(MAXD*n),n).setUsage(THREE.DynamicDrawUsage);
+  g.setAttribute('aRun',mk(4)); g.setAttribute('aP',mk(4)); g.setAttribute('aId',mk(1)); g.setAttribute('color',mk(3)); g.setAttribute('aHide',mk(1));
+  g.instanceCount=0;
+  const m=new THREE.Mesh(g,skierMat); m.frustumCulled=false; scene.add(m);
+  return {g,m,n:0};
+});
+const pColor=people.map(p=>lin(p.c));
+let farHidden=[];
+function updateDetail(nearRuns){
+  for(const [o,j] of farHidden){ o.far.geometry.attributes.aHide.array[j]=0; o.far.geometry.attributes.aHide.needsUpdate=true; }
+  farHidden=[];
+  for(const d of detail) d.n=0;
+  const cp=camera.position;
+  for(const o of nearRuns){
+    const run=o.run, from=run.k*CAP, to=Math.min(N,from+CAP);
+    for(let i=from;i<to;i++){
+      const dx=positions[i*3]-cp.x, dy=positions[i*3+1]-cp.y, dz=positions[i*3+2]-cp.z;
+      if(dx*dx+dy*dy+dz*dz>DET2 && i!==selected) continue;
+      const p=people[i], D=detail[p.ti]; if(D.n>=MAXD) continue;
+      const a=D.g.attributes, k=D.n++;
+      a.aRun.array.set([run.th,run.r0,run.len,run.chair?1:0],k*4);
+      a.aP.array.set([p.lane,p.phase,p.down,p.ti],k*4);
+      a.aId.array[k]=p.i; a.color.array.set(pColor[i],k*3);
+      const j=i-from; o.far.geometry.attributes.aHide.array[j]=1; o.far.geometry.attributes.aHide.needsUpdate=true; farHidden.push([o,j]);
+    }
+  }
+  for(const D of detail){ D.g.instanceCount=D.n; if(D.n){ for(const k of ['aRun','aP','aId','color']) D.g.attributes[k].needsUpdate=true; } }
+}
 function distSeg(p,a,b){ V1.subVectors(b,a); const t=Math.max(0,Math.min(1,V2.subVectors(p,a).dot(V1)/V1.lengthSq())); return V3.copy(a).addScaledVector(V1,t).distanceTo(p); }
 
 /* ---------- pozície na CPU (menovky, ťuknutie, kamera) ---------- */
@@ -854,12 +887,13 @@ function loop(now){
   // detailné postavy len pre blízke zjazdovky
   nearRuns.clear();
   for(const o of runObjs){
-    const d=distSeg(camera.position,o.a,o.b), det=d<480;
-    o.detail.visible=det; o.far.visible=!det; o.carriers.visible=d<1100;
-    if(d<420) nearRuns.add(o);
+    const d=distSeg(camera.position,o.a,o.b);
+    o.carriers.visible=d<1100;
+    if(d<200) nearRuns.add(o);
   }
   if(selected>=0) nearRuns.add(runObjs[runOf(selected).k]);
   updatePositions(t, nearRuns);
+  updateDetail(nearRuns);
   if(flying){
     const k=Math.min(1,(now-flying.start)/flying.dur), e=ease(k);
     if(selected>=0){ flying.t1.set(positions[selected*3],positions[selected*3+1]+1.5,positions[selected*3+2]); flying.p1.copy(flying.t1).add(followOff); }
