@@ -241,8 +241,8 @@ function skierOrg(p, t, out){
 
 /* ---------- renderer ---------- */
 const canvas=$('c');
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
-const prFor=()=>Math.max(.75,Math.min(devicePixelRatio, innerWidth<700?1.5:1.75, Math.sqrt(3.2e6/(innerWidth*innerHeight))));
+const renderer=new THREE.WebGLRenderer({canvas,antialias:innerWidth*innerHeight*devicePixelRatio*devicePixelRatio<2.4e6,powerPreference:'high-performance'});
+const prFor=()=>Math.max(.75,Math.min(devicePixelRatio, innerWidth<700?1.5:1.75, Math.sqrt(2.2e6/(innerWidth*innerHeight))));
 let PR = prFor();
 renderer.setPixelRatio(PR);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
