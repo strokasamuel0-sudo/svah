@@ -978,7 +978,7 @@ async function startReel(){
   const SHOTS={
     aerial:(t,i)=>{ const k=ease(Math.min(1,t/(bounds[1]+1.2))); return {p:P(1.32,-170,240).lerp(P(1.06,-110,140),k), q:P(.42,10,0)}; },
     chair:(t,i)=>({ p:sk.clone().addScaledVector(TAN,15).addScaledVector(DIR,11).add(UPV(2.5)), q:sk.clone().add(UPV(1.2)) }),
-    chase:(t,i)=>({ p:P(i.s-13/len, i.lat*0.65, 5.2), q:sk.clone().addScaledVector(DIR,7).add(UPV(.6)) }),
+    chase:(t,i)=>({ p:P(i.s-13/len, i.lat*0.65, 5.2), q:sk.clone().addScaledVector(DIR,14).add(UPV(-1)) }),
     side:(t,i)=>({ p:P(Math.min(1,i.s+5/len),i.lat-15,2.6), q:sk.clone().add(UPV(1)) }),
     crane:(t,i)=>{ const k=ease(Math.min(1,Math.max(0,(t-bounds[5])/(DUR-bounds[5])))); return { p:P(Math.max(0,i.s-(20+70*k)/len), -12*k, 7+110*k), q:P(Math.min(1,i.s+(8+90*k)/len),0,0) }; },
   };
@@ -1052,7 +1052,7 @@ async function startReel(){
     if(seg===1||seg===2) tag('#1 @svah.followerov',seg===1?segT:1);
     if(seg===2) bibCard(segT);
     if(seg===3) chips(segT);
-    if(seg<6) capDraw(CAP[seg],1180,86,segT);
+    if(seg<6) capDraw(CAP[seg],[900,1180,880,1180,900,900][seg],86,segT);
     else {
       const al=Math.min(1,segT/0.3); g.fillStyle='rgba(10,18,30,'+(0.38*al)+')'; g.fillRect(0,0,W,H2); board();
       capDraw(['Ideš na *svah*?'],860,124,segT);
