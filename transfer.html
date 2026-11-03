@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Svah followerov – prenos súborov</title></head>
+<body style="font:16px system-ui;padding:20px;background:#F4F6F9;color:#22262d">
+<p id="s">Pripravujem…</p>
+<script>
+/* Pomocná stránka: prenáša súbory (hlas, hotové video) medzi kartami cez IndexedDB tejto domény. */
+var P=new URLSearchParams(location.search), mode=P.get('mode'), key=P.get('key')||'x', s=document.getElementById('s');
+function db(){return new Promise(function(res,rej){var r=indexedDB.open('svah',1);r.onupgradeneeded=function(){r.result.createObjectStore('f')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+function put(k,v){return db().then(function(d){return new Promise(function(res,rej){var t=d.transaction('f','readwrite');t.objectStore('f').put(v,k);t.oncomplete=res;t.onerror=function(){rej(t.error)}})})}
+function get(k){return db().then(function(d){return new Promise(function(res,rej){var r=d.transaction('f').objectStore('f').get(k);r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})})}
+if(mode==='store'){
+  addEventListener('message',function(e){ if(!e.data||e.data.type!=='svah-file'||!(e.data.blob instanceof Blob))return;
+    put(e.data.key,e.data.blob).then(function(){ s.textContent='Uložené: '+e.data.key+' ('+e.data.blob.size+' B)'; e.source.postMessage({type:'svah-stored',key:e.data.key,size:e.data.blob.size},'*'); }); });
+  if(window.opener) window.opener.postMessage({type:'svah-ready'},'*');
+  s.textContent='Čakám na súbor…';
+} else if(mode==='get'){
+  get(key).then(function(b){ if(!b){ s.textContent='Súbor '+key+' tu nie je.'; if(window.opener) window.opener.postMessage({type:'svah-missing',key:key},'*'); return; }
+    if(window.opener) window.opener.postMessage({type:'svah-file',key:key,blob:b},'*'); s.textContent='Odoslané: '+key+' ('+b.size+' B)'; });
+} else { s.textContent='Pomocná stránka pre Svah followerov.'; }
+</script>
+</body></html>
