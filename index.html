@@ -36,6 +36,13 @@
   .board .cnt{text-align:right;line-height:1}
   .board .cnt small{display:block;font-size:9px;letter-spacing:.12em;font-weight:700;opacity:.85}
   .board .cnt b{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+  .sub{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;font-weight:700}
+  .sub span{background:var(--glass);border-radius:999px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-variant-numeric:tabular-nums}
+  #sug .tag{font-size:11px;color:var(--muted);margin-left:6px}
+  .lbl.role{background:#F26B21}
+  .lbl.wait{background:rgba(93,102,114,.85)}
+  .hint{margin-top:8px;font-size:13px;background:#FFF5D6;border-radius:10px;padding:8px 10px}
+  .hint:empty{display:none}
 
   .search{position:relative}
   .search input{width:100%;font-size:16px;padding:11px 12px 11px 38px;border-radius:12px;
@@ -110,6 +117,7 @@
     <div class="t"><b>Svah followerov</b><span id="runsInfo">1 zjazdovka</span></div>
     <div class="cnt"><small>NA SVAHU</small><b id="count">0</b></div>
   </div>
+  <div class="sub"><span id="clock">🕒 --:--</span><span id="groomInfo">ratrak</span><span id="waitInfo">čakáreň 0</span></div>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
     <input id="q" type="search" placeholder="Nájdi sa: @tvoje_meno" autocomplete="off" autocapitalize="off" spellcheck="false">
@@ -121,7 +129,7 @@
   </div>
 </div>
 
-<div id="cta">Nie si na svahu? Daj follow <a id="igLink" href="https://www.instagram.com/svah.followerov/" target="_blank" rel="noopener">@svah.followerov</a> a pod reel napíš <b>farbu bundy</b> a <b>lyže / snowboard / sánky</b>. Do pár dní tu jazdíš. Zmeniť si to môžeš kedykoľvek novým komentom.</div>
+<div id="cta">Nie si na svahu? Daj follow <a id="igLink" href="https://www.instagram.com/svah.followerov/" target="_blank" rel="noopener">@svah.followerov</a> a pod reel napíš <b>farbu bundy</b> a <b>lyže / snowboard / sánky</b>. Kto dal follow bez komentu, čaká v čakárni pod vlekom. Zmeniť si to môžeš kedykoľvek novým komentom.</div>
 
 <div id="card">
   <button id="close" aria-label="Zavrieť">×</button>
@@ -137,6 +145,7 @@
     <span id="cCheers"></span>
   </div>
   <div class="comment" id="cComment"></div>
+  <div class="hint" id="cHint"></div>
 </div>
 <div id="demo">UKÁŽKA · vymyslené mená</div>
 <div id="err"></div>
@@ -180,26 +189,63 @@ const COLOR_NAMES = {'#1E5AA8':'modrá','#C8102E':'červená','#F2B705':'žltá'
 /* ---------- dáta ---------- */
 const params = new URLSearchParams(location.search);
 const REEL = params.has('reel');
-let raw = window.FOLLOWERS.slice();
+Object.assign(COLOR_NAMES, {'#F7A8C8':'svetloružová','#8EC5F0':'svetlomodrá','#A6E3A1':'svetlozelená','#C9A7EB':'svetlofialová','#123A75':'tmavomodrá','#1F5F3A':'tmavozelená','#F7E35A':'citrónová','#B6F03C':'fosforová','#93C572':'pistáciová','#F4F4F4':'biela','#8A9099':'sivá','#D4AF37':'zlatá','#C0C0C0':'strieborná','#D9C2A0':'béžová','#7B1E3A':'bordová','#7D7A3B':'khaki'});
+let DATA = null;
+if (!params.has('solo')) {
+  try { const r = await fetch('data/followers.json?v=' + Math.floor(Date.now()/60000)); if (r.ok) DATA = await r.json(); } catch (e) {}
+}
+const OWNER = window.FOLLOWERS[0];
+const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c.toUpperCase() : '';
+let rawSki = DATA && Array.isArray(DATA.skiers) ? DATA.skiers.slice() : window.FOLLOWERS.slice();
+if (!rawSki.length || rawSki[0].u !== OWNER.u) rawSki = [OWNER, ...rawSki.filter(p => p.u !== OWNER.u)];
+const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [] };
+const roleOf = new Map();
+if (DATA && DATA.roles) for (const key of Object.keys(ROLES)) for (const u of (DATA.roles[key] || [])) if (u !== OWNER.u && !roleOf.has(u)) { roleOf.set(u, key); ROLES[key].push(u); }
+const rawById = new Map(rawSki.map(p => [p.u, p]));
+rawSki = rawSki.filter(p => !roleOf.has(p.u));
 const demoN = Math.min(60000, parseInt(params.get('demo')||'0',10)||0);
-if (demoN > raw.length){
+if (demoN > rawSki.length){
   const r = rng(7);
-  for (let i=raw.length; i<demoN; i++) raw.push({ u:'ukazka_'+String(i+1).padStart(5,'0'), t:TYPES[Math.floor(r()*6)].key, c:'', k:'' });
+  for (let i=rawSki.length; i<demoN; i++) rawSki.push({ u:'ukazka_'+String(i+1).padStart(5,'0'), t:TYPES[Math.floor(r()*6)].key, c:'', k:'' });
   $('demo').style.display='block';
 }
-const people = raw.map((p,i)=>{
-  const h = hash(p.u);
-  const ti = (p.t in TYPE_IDX) ? TYPE_IDX[p.t] : h % 6;
-  const c = (p.c && /^#[0-9a-f]{6}$/i.test(p.c)) ? p.c.toUpperCase() : PALETTE[h % PALETTE.length];
-  return { u:p.u, k:p.k||'', i, num:i+1, ti, c, h, vip:i<100,
-    lane: ((h>>>8)%1000)/1000*2-1,
-    phase: ((h>>>4)%997)/997,
-    down: TYPES[ti].down*(.85+.3*(((h>>>12)%100)/100)) };
-});
+const seenU = new Set();
+const CYC = [[240,270],[240,270],[288,300],[270],[225],[270,288]], CYC_FS = [108,120];
+const people = [];
+const claimed = new Set(rawSki.map(p => +p.n).filter(n => n > 0 && n < 1000));
+let bibSeq = 1;
+for (const p of rawSki){
+  if (!p || !p.u || seenU.has(p.u)) continue; seenU.add(p.u);
+  const h = hash(p.u), i = people.length;
+  const ti = (p.t in TYPE_IDX) ? TYPE_IDX[p.t] : [0,1,0,1,2,5][h % 6];
+  const rainbow = p.c === 'rainbow';
+  const c = rainbow ? '#E84A8A' : (hexOk(p.c) || PALETTE[h % PALETTE.length]);
+  let bib = +p.n > 0 && +p.n < 1000 ? +p.n : 0;
+  if (!bib){ while (claimed.has(bibSeq)) bibSeq++; bib = bibSeq++; }
+  const pcHex = hexOk(p.p), hcHex = hexOk(p.h), scHex = hexOk(p.s);
+  people.push({ kind:'ski', u:p.u, k:p.k||'', i, num:i+1, bib, ti, c, rainbow, h, vip:i<100, f:!!p.f, auto:!!(p.auto && (!p.t || !hexOk(p.c) && !rainbow)),
+    pcHex, hcHex, scHex, pc:pcHex?lin(pcHex):null, hc:hcHex?lin(hcHex):null, sc:scHex?lin(scHex):null,
+    lane: ((h>>>8)%1000)/1000*2-1, phase: ((h>>>4)%997)/997, cyc:0, down:0 });
+}
+const NSKI = people.length;
+for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
+  if (seenU.has(u)) continue; seenU.add(u);
+  const src = rawById.get(u) || {}, h = hash(u), i = people.length;
+  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B'})[key];
+  people.push({ kind:'role', role:key, u, k:src.k||'', i, num:i+1, ti:0, c, h, phase:((h>>>4)%997)/997 });
+}
+const NROLE = people.length;
+for (const u of (DATA && DATA.waiting) || []){
+  if (!u || seenU.has(u)) continue; seenU.add(u);
+  const h = hash(u), i = people.length;
+  people.push({ kind:'wait', u, k:'', i, num:i+1, ti:0, c:'#8A9099', h, phase:((h>>>4)%997)/997 });
+}
 const N = people.length;
+const skiers = people.slice(0, NSKI);
+const jacketLin = p => p.rainbow ? [-1,-1,-1] : lin(p.c);
 
 /* ---------- svet ---------- */
-const CAP=250, H=430, RAD=1600, LIFT_V=5.5, TSP=50, SK=1.9;
+const CAP=250, H=430, RAD=1600, LIFT_V=5.0, TSP=50, SK=1.9;
 function height(r, th){
   const PL=95, rr=Math.max(r,PL), k=Math.max(0,1-rr/RAD);
   const x=Math.min(1,Math.max(0,(r-PL)/70)), w=x*x*(3-2*x);
@@ -210,37 +256,307 @@ const groundAt = (x,z) => height(Math.hypot(x,z), Math.atan2(z,x));
 const RINGS=[{n:12,start:80,off:0},{n:12,start:230,off:.5},{n:24,start:390,off:.25},{n:48,start:560,off:.125},{n:96,start:720,off:.0625}];
 const SLOTS=[];
 RINGS.forEach(rg=>{ for(let j=0;j<rg.n;j++) SLOTS.push({ th:(j+rg.off)/rg.n*Math.PI*2-Math.PI/2, r0:rg.start, len:Math.min(800,1480-rg.start) }); });
-const RUNS = SLOTS.slice(0, Math.min(SLOTS.length, Math.max(1,Math.ceil(N/CAP)))).map((s,k)=>({
-  ...s, k, chair:false, color:['#1E5AA8','#C8102E','#2B2D31'][k%3],
-  LL: 34, TH: 7.5 }));
-const runOf = i => RUNS[Math.min(RUNS.length-1, Math.floor(i/CAP))];
-$('count').textContent = fmt(N);
-{ const n=RUNS.length; $('runsInfo').textContent = n+' '+(n===1?'zjazdovka':n<5?'zjazdovky':'zjazdoviek')+' · poma'; }
+const REG = skiers.filter(p => !p.f || p.i === 0);
+const nRuns = Math.min(SLOTS.length, Math.max(2, Math.ceil(REG.length/CAP)));
+const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
+  const w = k===1 ? 3 : 0;
+  return { ...s, k, w, chair:false, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:34, TH: 7.5 };
+});
+const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
+const ALLRUNS = [...RUNS, FS];
+REG.forEach((p,j) => { p.run = RUNS[j % RUNS.length]; });
+skiers.forEach(p => {
+  if (!p.run) p.run = FS;
+  const opts = p.run === FS ? CYC_FS : CYC[p.ti];
+  p.cyc = opts[p.h % opts.length];
+  p.down = p.cyc - p.run.len/LIFT_V;
+});
+$('count').textContent = fmt(NSKI);
+$('runsInfo').textContent = RUNS.length+' zjazdovky · snowpark';
 
 const _a=new THREE.Vector3(), _b=new THREE.Vector3();
-function runPt(run,s,lat,out){ const r=run.r0+s*run.len, t=run.th+lat/r; return out.set(r*Math.cos(t),height(r,t),r*Math.sin(t)); }
+function runPt(run,s,lat,out){
+  const r=run.r0+s*run.len, cv=(run.w===3&&Math.abs(lat)<=40)?30*Math.sin(s*6.6+.4):0, t=run.th+(lat+cv)/r;
+  return out.set(r*Math.cos(t),height(r,t),r*Math.sin(t));
+}
 function cabY(run,d,lat,TH){
   const d0=Math.floor(d/TSP)*TSP, d1=Math.min(run.len,d0+TSP), f=d1>d0?(d-d0)/(d1-d0):0;
   const a=runPt(run,d0/run.len,lat,_a).y, b=runPt(run,d1/run.len,lat,_b).y;
   return a+(b-a)*f+TH-.8*4*f*(1-f);
 }
+const polar = (r,th,out=new THREE.Vector3()) => out.set(r*Math.cos(th), height(r,th), r*Math.sin(th));
+
+/* miesta areálu pod zjazdovkami */
+const R0 = RUNS[0];
+const SPOT = {
+  crowd: polar(928, R0.th + 20/928),
+  hotel: polar(945, R0.th + .2),
+  pad: polar(1005, R0.th + .2 + 34/1005),
+  garage: polar(905, R0.th - 72/905),
+  summit: polar(52, R0.th + Math.PI),
+};
+SPOT.mascot = polar(925, R0.th + .2 - 30/925);
+const crowdR = Math.max(10, Math.sqrt(Math.max(1, N-NROLE)*3.4/Math.PI));
+const ZONES = [
+  {x:SPOT.crowd.x, z:SPOT.crowd.z, r:crowdR+10}, {x:SPOT.hotel.x, z:SPOT.hotel.z, r:40},
+  {x:SPOT.pad.x, z:SPOT.pad.z, r:18}, {x:SPOT.garage.x, z:SPOT.garage.z, r:20}, {x:SPOT.mascot.x, z:SPOT.mascot.z, r:8},
+];
 
 /* JS kópia pohybu z GPU (na menovky, kameru a ťuknutie) */
 let JUMP_ID=-1, JUMP_T=-99;
 function skierOrg(p, t, out){
-  const run=runOf(p.i), T=TYPES[p.ti], len=run.len, upd=len/LIFT_V, dn=p.down, cyc=dn+upd;
+  const run=p.run, T=TYPES[p.ti], len=run.len, upd=len/LIFT_V, dn=p.down, cyc=dn+upd, fs=run.w===2;
   const u=((t+p.phase*cyc)%cyc+cyc)%cyc;
   let s, lat, mode;
-  if (u<dn){ s=u/dn; const ph=(u/T.per)*Math.PI*2+p.phase*6.28; lat=Math.min(18,Math.max(-18,p.lane*7+Math.sin(ph)*T.amp*12)); mode='down'; }
+  if (u<dn){ s=u/dn; const ph=(u/T.per)*Math.PI*2+p.phase*6.28;
+    lat=fs?Math.min(6,Math.max(-6,p.lane*3+Math.sin(ph)*T.amp*4)):Math.min(18,Math.max(-18,p.lane*7+Math.sin(ph)*T.amp*12)); mode='down'; }
   else { s=1-(u-dn)/upd; if(T.lift){ lat=run.LL; mode=run.chair?'chair':'tbar'; } else { lat=-17.5; mode='walk'; } }
   runPt(run,s,lat,out); out.y+=.25;
   if (mode==='chair') out.y = cabY(run,s*len,run.LL,run.TH)-4.5-.32*SK;
-  if (p.ti===1 && mode==='down'){ const j=(u%23)/23; if(j<.05) out.y+=Math.sin(j/.05*Math.PI)*2.5; }
+  if (p.ti===1 && mode==='down' && !fs){ const j=(u%23)/23; if(j<.05) out.y+=Math.sin(j/.05*Math.PI)*2.5; }
+  if (fs && mode==='down') for (const sk of [.25,.5,.75]){ const dd=(s-sk)*len; if(dd>0&&dd<16) out.y+=Math.sin(dd/16*Math.PI)*4.5; }
   if (p.i===JUMP_ID){ const k=(t-JUMP_T)/1.4; if(k>0&&k<1) out.y+=Math.sin(k*Math.PI)*9; }
   out.mode=mode; out.s=s;
   return out;
 }
 
+/* ---------- reálny čas (Bratislava) ---------- */
+const TZ = (()=>{ try{ const d=new Date(), f=z=>{ const o={}; for(const x of new Intl.DateTimeFormat('en-GB',{timeZone:z,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).formatToParts(d)) o[x.type]=x.value; return Date.UTC(+o.year,+o.month-1,+o.day,+o.hour,+o.minute,+o.second); }; return Math.round((f('Europe/Bratislava')-f('UTC'))/1000); }catch(e){ return 3600; } })();
+const localSec = t => ((t+TZ)%86400+86400)%86400;
+const hhmm = s => { s=Math.floor(s)%86400; return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s/60)%60).padStart(2,'0'); };
+const GROOM = [27000, 39600, 52200, 64800, 77400];
+const GSEG = ALLRUNS.map(r => r.w===2 ? 240 : 480);
+const GDUR = GSEG.reduce((a,b)=>a+b,0);
+function groomState(t){
+  const L = localSec(t), day = Math.floor((Date.now()/1000+TZ)/86400);
+  for (let k=0;k<GROOM.length;k++){
+    let e = L - GROOM[k];
+    if (e>=0 && e<GDUR){
+      for (let j=0;j<ALLRUNS.length;j++){
+        if (e<GSEG[j]){ const run=ALLRUNS[j], f=e/GSEG[j];
+          return { active:true, run, s: f<.5 ? 1-f*2 : (f-.5)*2, lat: f<.5 ? -13 : 11, up: f<.5, session: day*5+k }; }
+        e -= GSEG[j];
+      }
+    }
+  }
+  let next = GROOM.find(g => g > L); if (next===undefined) next = GROOM[0];
+  return { active:false, next };
+}
+function heliState(t){
+  const ph = ((t%1200)+1200)%1200;
+  return { flying: ph < 150, ph };
+}
+const ROLE_TXT = {
+  ratrak:{ name:'ratrakista', short:'🚜', icon:'🚜', place:'Garáž ratraku' },
+  rescue:{ name:'horská služba', short:'🚁', icon:'🚁', place:'Heliport' },
+  hotel:{ name:'personál hotela Svah', short:'🏨', icon:'🏨', place:'Hotel Svah' },
+  lift:{ name:'vlekár', short:'🎫', icon:'🎫', place:'Dolná stanica vleku' },
+  mascot:{ name:'vianočný maskot', short:'⛄', icon:'⛄', place:'Pri hoteli Svah' },
+};
+function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
+function roleLive(p){
+  const t = (Date.now()/1000)%86400;
+  if (p.role==='ratrak'){ const st=groomState(t); if(st.active && groomDriver(st)===p.u) return 'práve upravuje '+(st.run.w===2?'snowpark':'zjazdovku '+st.run.label); return st.active?'čaká v garáži, teraz jazdí kolega':'ďalšia jazda o '+hhmm(st.next); }
+  if (p.role==='rescue') return heliState(t).flying ? 'letí vrtuľníkom na vrchol' : 'pohotovosť pri heliporte';
+  if (p.role==='hotel') return 'víta hostí v hoteli';
+  if (p.role==='lift') return 'obsluhuje vlek';
+  return 'máva lyžiarom pri hoteli';
+}
+
+/* statické postavy (čakáreň, personál) – stavba scény */
+const WORLD = { figs:[], ready:false };
+function colGeo(geo, hex){ const g=geo.index?geo.toNonIndexed():geo.clone(); if(g.attributes.uv) g.deleteAttribute('uv'); const c=new THREE.Color(hex), n=g.attributes.position.count, a=new Float32Array(n*3); for(let i=0;i<n;i++) a.set([c.r,c.g,c.b],i*3); g.setAttribute('color',new THREE.BufferAttribute(a,3)); return g; }
+function groupAt(g, P, yaw){ g.position.copy(P); g.rotation.y=yaw; scene.add(g); return g; }
+const BX=(x,y,z,hex,px=0,py=0,pz=0)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(x,y,z),new THREE.MeshLambertMaterial({color:hex})); m.position.set(px,py,pz); return m; };
+function buildKickers(run){
+  const sh=new THREE.Shape(); sh.moveTo(-9,0); sh.lineTo(0,0); sh.lineTo(0,2.4); sh.lineTo(-9,0);
+  const kg=new THREE.ExtrudeGeometry(sh,{depth:14,bevelEnabled:false}).translate(0,0,-7).rotateY(-Math.PI/2);
+  const km=new THREE.MeshLambertMaterial({color:'#f4f8fc'}), lip=new THREE.MeshLambertMaterial({color:'#1E5AA8'});
+  for (const sk of [.25,.5,.75]){
+    const P=runPt(run,sk,0,new THREE.Vector3()), Q=runPt(run,sk+.02,0,new THREE.Vector3());
+    const g=new THREE.Group(); const m=new THREE.Mesh(kg,km); m.position.y=-.3; g.add(m);
+    const l=new THREE.Mesh(new THREE.BoxGeometry(14,.15,.3),lip); l.position.set(0,2.2,-.1); g.add(l);
+    for (const x of [-8,8]){ const f=BX(.12,3,.12,'#3b4048',x,1.5,-2); const fl=BX(.05,.9,1.4,x<0?'#F26B21':'#F2B705',x,2.6,-1.3); g.add(f,fl); }
+    g.position.copy(P); scene.add(g); g.lookAt(Q);
+  }
+}
+function buildWorld(){
+  const yawTo = (P,Q) => Math.atan2(Q.x-P.x, Q.z-P.z);
+  const down = th => new THREE.Vector3(Math.cos(th),0,Math.sin(th));
+  // hotel
+  {
+    const P=SPOT.hotel, th=Math.atan2(P.z,P.x), g=new THREE.Group();
+    g.add(BX(46,10,24,'#8b9098',0,-4,0));
+    g.add(BX(42,13,20,'#7b4f33',0,7.5,0));
+    const roof=new THREE.Mesh(new THREE.ConeGeometry(31,9,4),new THREE.MeshLambertMaterial({color:'#f6f9fc'})); roof.scale.z=.55; roof.rotation.y=Math.PI/4; roof.position.y=18.5; g.add(roof);
+    for (let fl=0;fl<2;fl++) for (let k=-4;k<=4;k++) g.add(BX(2.6,2.2,.3,'#ffd77a',k*4.4,5+fl*5,10.1));
+    g.add(BX(5,4.5,.4,'#3b2a1e',0,3.2,10.2));
+    g.add(BX(16,.4,6,'#6b4a33',0,1.1,13));
+    groupAt(g, V1.set(P.x,P.y-.5,P.z), -th+Math.PI/2);
+    g.lookAt(V2.copy(P).add(down(th)).setY(P.y-.5));
+    const s=makeSign(['HOTEL SVAH'],'#C8102E','#fff',384,96); s.position.set(P.x,P.y+31,P.z); scene.add(s);
+  }
+  // heliport
+  {
+    const P=SPOT.pad, g=new THREE.Group();
+    const pad=new THREE.Mesh(new THREE.CylinderGeometry(11,12,8,24),new THREE.MeshLambertMaterial({color:'#8b9098'})); pad.position.y=-3; g.add(pad);
+    const top=new THREE.Mesh(new THREE.CircleGeometry(10.5,24).rotateX(-Math.PI/2),new THREE.MeshLambertMaterial({color:'#2f343b'})); top.position.y=1.03; g.add(top);
+    const cv=document.createElement('canvas'); cv.width=cv.height=128; const x=cv.getContext('2d'); x.strokeStyle='#fff'; x.lineWidth=7; x.beginPath(); x.arc(64,64,54,0,7); x.stroke(); x.fillStyle='#F2B705'; x.font='800 80px system-ui,Arial'; x.textAlign='center'; x.textBaseline='middle'; x.fillText('H',64,68);
+    const tx=new THREE.CanvasTexture(cv); tx.colorSpace=THREE.SRGBColorSpace;
+    const hm=new THREE.Mesh(new THREE.PlaneGeometry(18,18).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:tx,transparent:true})); hm.position.y=1.06; g.add(hm);
+    g.position.set(P.x,P.y,P.z); scene.add(g); WORLD.padY=P.y+1.1;
+    const s=makeSign(['HORSKÁ SLUŽBA'],'#C8102E','#fff',384,96); s.position.set(P.x,P.y+16,P.z); s.scale.multiplyScalar(.7); scene.add(s);
+  }
+  // vrtuľník
+  {
+    const g=new THREE.Group(), red=new THREE.MeshLambertMaterial({color:'#C8102E'});
+    const body=new THREE.Mesh(new THREE.SphereGeometry(1.6,12,8),red); body.scale.set(1,1,1.7); body.position.y=1.9; g.add(body);
+    const glass=new THREE.Mesh(new THREE.SphereGeometry(1.25,10,6),new THREE.MeshLambertMaterial({color:'#2a3440'})); glass.scale.set(1,.85,1); glass.position.set(0,2.1,1.7); g.add(glass);
+    g.add(BX(3.3,.35,3.2,'#f4f4f4',0,1.75,0));
+    const tail=new THREE.Mesh(new THREE.CylinderGeometry(.22,.45,5.2,8).rotateX(Math.PI/2),red); tail.position.set(0,2.4,-4.6); g.add(tail);
+    g.add(BX(.15,1.4,.8,'#C8102E',0,3,-7));
+    for (const x of [-1.1,1.1]){ g.add(BX(.12,.12,4,'#3b4048',x,.06,0)); g.add(BX(.1,.9,.1,'#3b4048',x,.5,.8)); g.add(BX(.1,.9,.1,'#3b4048',x,.5,-.8)); }
+    const rotor=new THREE.Group(); rotor.add(BX(11,.08,.35,'#2b2d31'),BX(.35,.08,11,'#2b2d31')); rotor.position.y=3.65; g.add(rotor);
+    const tr=new THREE.Group(); tr.add(BX(.06,2,.2,'#2b2d31')); tr.position.set(.2,3,-7); g.add(tr);
+    g.scale.setScalar(1.25); scene.add(g); WORLD.heli=g; WORLD.rotor=rotor; WORLD.trotor=tr;
+  }
+  // ratrak + garáž
+  {
+    const P=SPOT.garage, th=Math.atan2(P.z,P.x), gg=new THREE.Group();
+    gg.add(BX(16,9,14,'#6d7783',0,1,0)); gg.add(BX(17,.6,15,'#f6f9fc',0,5.8,0)); gg.add(BX(10,6,.3,'#3b4048',0,-.5,7.1));
+    gg.position.set(P.x,P.y-1,P.z); scene.add(gg); gg.lookAt(V2.copy(P).add(down(th)).setY(P.y-1));
+    WORLD.garageFront=new THREE.Vector3().copy(P).addScaledVector(down(th),14); WORLD.garageFront.y=groundAt(WORLD.garageFront.x,WORLD.garageFront.z);
+    const rg=new THREE.Group();
+    const body=new THREE.Mesh(new THREE.BoxGeometry(3.2,1.6,4.2),new THREE.MeshLambertMaterial({color:'#C8102E'})); body.position.y=1.6;
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.3,1.8),new THREE.MeshLambertMaterial({color:'#2a3440'})); cab.position.set(0,2.9,.6);
+    const blade=new THREE.Mesh(new THREE.BoxGeometry(4.6,1.1,.3),new THREE.MeshLambertMaterial({color:'#dfe4ea'})); blade.position.set(0,.7,2.6);
+    const tiller=new THREE.Mesh(new THREE.BoxGeometry(4.4,.7,1.2),new THREE.MeshLambertMaterial({color:'#9aa3ad'})); tiller.position.set(0,.5,-2.8);
+    const tr1=new THREE.Mesh(new THREE.BoxGeometry(.9,1,4.6),darkMat); tr1.position.set(-1.5,.5,0);
+    const tr2=tr1.clone(); tr2.position.x=1.5;
+    const beacon=new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),new THREE.MeshBasicMaterial({color:'#ffb000'})); beacon.position.set(0,3.7,.6);
+    rg.add(body,cab,blade,tiller,tr1,tr2,beacon); rg.scale.setScalar(1.6); scene.add(rg); WORLD.ratrak=rg; WORLD.beacon=beacon;
+  }
+  // čakáreň – pódium, reproduktory, žiarovky, tabuľa
+  {
+    const C=SPOT.crowd, th=Math.atan2(C.z,C.x), out=down(th), side=new THREE.Vector3(-out.z,0,out.x);
+    const st=V1.copy(C).addScaledVector(out,crowdR+6); st.y=groundAt(st.x,st.z);
+    const g=new THREE.Group(); g.add(BX(12,3,6,'#6b4a33',0,0,0)); g.add(BX(2,4,2,'#22262d',-5,3.4,0)); g.add(BX(2,4,2,'#22262d',5,3.4,0)); g.add(BX(4,1.4,1.4,'#3b4048',0,2.2,0));
+    g.position.copy(st); scene.add(g); g.lookAt(V2.copy(C).setY(st.y));
+    const bulbs=new THREE.InstancedMesh(new THREE.SphereGeometry(.35,6,4),new THREE.MeshBasicMaterial({color:'#fff'}),64), bc=['#F2B705','#C8102E','#2E9E5B','#1E5AA8','#E84A8A'].map(h=>new THREE.Color(h));
+    for (let k=0;k<64;k++){ const a=k/64*Math.PI*2, R=crowdR+3; V2.set(C.x+Math.cos(a)*R,0,C.z+Math.sin(a)*R); V2.y=groundAt(V2.x,V2.z)+6+Math.abs(Math.sin(k/4*Math.PI))*-1.2; M4.makeTranslation(V2.x,V2.y,V2.z); bulbs.setMatrixAt(k,M4); bulbs.setColorAt(k,bc[k%5]); }
+    scene.add(bulbs);
+    for (let k=0;k<8;k++){ const a=k/8*Math.PI*2, R=crowdR+3; const pl=new THREE.Mesh(poleGeo,steelMat); V2.set(C.x+Math.cos(a)*R,0,C.z+Math.sin(a)*R); pl.position.set(V2.x,groundAt(V2.x,V2.z),V2.z); pl.scale.y=3; scene.add(pl); }
+    const s=makeSign(['ČAKÁREŇ – napíš koment','farba bundy + farba lyží','→ ideš na vlek!'],'#F26B21','#fff',1024,240); s.scale.multiplyScalar(.42); s.position.set(st.x,st.y+16,st.z); scene.add(s);
+    WORLD.stage=st.clone();
+  }
+  // vianočný maskot – snehuliak s čiapkou
+  {
+    const P=SPOT.mascot, g=new THREE.Group(), w=new THREE.MeshLambertMaterial({color:'#ffffff'});
+    const a=new THREE.Mesh(new THREE.SphereGeometry(1.6,14,10),w); a.position.y=1.3;
+    const b=new THREE.Mesh(new THREE.SphereGeometry(1.15,14,10),w); b.position.y=3.4;
+    const c=new THREE.Mesh(new THREE.SphereGeometry(.8,14,10),w); c.position.y=4.9;
+    const nose=new THREE.Mesh(new THREE.ConeGeometry(.14,.8,8).rotateX(Math.PI/2),new THREE.MeshLambertMaterial({color:'#F26B21'})); nose.position.set(0,4.9,1.1);
+    const hat=new THREE.Mesh(new THREE.ConeGeometry(.75,1.6,12),new THREE.MeshLambertMaterial({color:'#C8102E'})); hat.position.set(0,6.2,0); hat.rotation.z=-.25;
+    const brim=new THREE.Mesh(new THREE.TorusGeometry(.72,.16,6,16).rotateX(Math.PI/2),w); brim.position.y=5.5;
+    const pom=new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),w); pom.position.set(.38,6.9,0);
+    const scarf=new THREE.Mesh(new THREE.TorusGeometry(.8,.18,6,16).rotateX(Math.PI/2),new THREE.MeshLambertMaterial({color:'#2E9E5B'})); scarf.position.y=4.2;
+    for (const y of [3.1,3.6]){ const btn=new THREE.Mesh(new THREE.SphereGeometry(.1,6,4),darkMat); btn.position.set(0,y,1.1); g.add(btn); }
+    for (const sx of [-1,1]){ const e=new THREE.Mesh(new THREE.SphereGeometry(.09,6,4),darkMat); e.position.set(sx*.28,5.1,.72); g.add(e); }
+    const arm=BX(.12,.12,2.2,'#6b4a33',0,0,0); arm.rotation.y=Math.PI/2; const armG=new THREE.Group(); arm.position.x=1.1; armG.add(arm); armG.position.set(1,3.6,0); g.add(armG);
+    g.add(a,b,c,nose,hat,brim,pom,scarf); g.scale.setScalar(1.4);
+    g.position.set(P.x,P.y-.2,P.z); scene.add(g); g.lookAt(V2.copy(P).add(down(Math.atan2(P.z,P.x))).setY(P.y-.2));
+    WORLD.mascotArm=armG;
+    const s=makeSign(['⛄ MASKOT'],'#2E9E5B','#fff',256,80); s.scale.multiplyScalar(.6); s.position.set(P.x,P.y+13,P.z); scene.add(s);
+  }
+  // postavy: bunda (tónovaná) + zvyšok
+  const jg=mergeGeometries([B(.5,.62,.3).translate(0,1.12,0), B(.15,.55,.16).translate(-.33,1.1,.05), B(.15,.55,.16).translate(.33,1.1,.05)].map(g=>colGeo(g,'#ffffff')));
+  const rgm=mergeGeometries([ colGeo(B(.19,.72,.22).translate(-.12,.41,0),'#2f343c'), colGeo(B(.19,.72,.22).translate(.12,.41,0),'#2f343c'),
+    colGeo(B(.2,.16,.3).translate(-.12,.08,.03),'#1d2127'), colGeo(B(.2,.16,.3).translate(.12,.08,.03),'#1d2127'),
+    colGeo(new THREE.SphereGeometry(.16,8,6).translate(0,1.58,0),'#f0c9a8'), colGeo(new THREE.SphereGeometry(.17,8,4,0,Math.PI*2,0,Math.PI/2).translate(0,1.62,0),'#C8102E') ]);
+  const figs=WORLD.figs;
+  const add=(i,P,yaw,bounce,col)=>{ figs.push({i,x:P.x,y:P.y,z:P.z,yaw,bounce,col:new THREE.Color(col),hide:false}); };
+  // čakáreň – slnečnica
+  const C=SPOT.crowd, GA=Math.PI*(3-Math.sqrt(5));
+  const nW=N-NROLE;
+  for (let k=0;k<nW;k++){ const i=NROLE+k, rr=crowdR*Math.sqrt((k+.5)/nW), a=k*GA; V2.set(C.x+Math.cos(a)*rr,0,C.z+Math.sin(a)*rr); V2.y=groundAt(V2.x,V2.z);
+    add(i,V2,Math.atan2(WORLD.stage.x-V2.x,WORLD.stage.z-V2.z),true,['#8A9099','#9aa3ad','#7c8591','#a7afb8'][k%4]); }
+  // personál
+  const staff=(list,base,fwd,spread,yaw)=>list.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
+    const sideV=new THREE.Vector3(-fwd.z,0,fwd.x); V2.copy(base).addScaledVector(sideV,(k-(list.length-1)/2)*spread); V2.y=groundAt(V2.x,V2.z); add(p.i,V2,yaw,false,p.c); });
+  const thH=Math.atan2(SPOT.hotel.z,SPOT.hotel.x), outH=down(thH);
+  staff(ROLES.hotel, V3.copy(SPOT.hotel).addScaledVector(outH,19), outH, 3, Math.atan2(outH.x,outH.z));
+  const thP=Math.atan2(SPOT.pad.z,SPOT.pad.x), outP=down(thP);
+  staff(ROLES.rescue, V3.copy(SPOT.pad).addScaledVector(outP,-15), outP, 3, Math.atan2(outP.x,outP.z));
+  const thG=Math.atan2(SPOT.garage.z,SPOT.garage.x), outG=down(thG);
+  staff(ROLES.ratrak, V3.copy(SPOT.garage).addScaledVector(outG,12).addScaledVector(new THREE.Vector3(-outG.z,0,outG.x),12), outG, 2.6, Math.atan2(outG.x,outG.z));
+  ROLES.lift.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const run=ALLRUNS[k%ALLRUNS.length]; runPt(run,1,run.LL-6,V2); add(p.i,V2,run.th+Math.PI/2,false,p.c); });
+  ROLES.mascot.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; WORLD.mascotI=p.i; });
+  const n=Math.max(1,figs.length);
+  const jm=new THREE.InstancedMesh(jg,new THREE.MeshLambertMaterial({vertexColors:true}),n), rm=new THREE.InstancedMesh(rgm,new THREE.MeshLambertMaterial({vertexColors:true}),n);
+  figs.forEach((f,k)=>jm.setColorAt(k,f.col)); jm.count=rm.count=figs.length;
+  scene.add(jm,rm); WORLD.jm=jm; WORLD.rm=rm;
+  WORLD.figIdx=new Map(figs.map((f,k)=>[f.i,k]));
+  WORLD.ready=true; placeFigs(0,true);
+}
+const _q=new THREE.Quaternion(), _s=new THREE.Vector3(), _e=new THREE.Euler();
+function placeFigs(t, all){
+  const {figs,jm,rm}=WORLD;
+  for (let k=0;k<figs.length;k++){
+    const f=figs[k]; if(!all && !f.bounce) continue;
+    let y=f.y, rz=0;
+    if (f.bounce){ const ph=f.i*1.7; y+=Math.abs(Math.sin(t*4.2+ph))*.45; rz=Math.sin(t*2.1+ph)*.12; }
+    _q.setFromEuler(_e.set(0,f.yaw,rz)); _s.setScalar(f.hide?0.0001:SK);
+    M4.compose(V3.set(f.x,y,f.z),_q,_s); jm.setMatrixAt(k,M4); rm.setMatrixAt(k,M4);
+    if(!f.hide){ positions[f.i*3]=f.x; positions[f.i*3+1]=y+.25; positions[f.i*3+2]=f.z; }
+  }
+  jm.instanceMatrix.needsUpdate=rm.instanceMatrix.needsUpdate=true;
+}
+let lastHud=-1, wFrame=0, needAll=false;
+const HP=new THREE.Vector3(), HQ=new THREE.Vector3();
+function updateWorld(t, now){
+  if (!WORLD.ready) return;
+  wFrame++;
+  // ratrak
+  const st=groomState(t), rg=WORLD.ratrak;
+  let driver='';
+  if (st.active){ driver=groomDriver(st); const run=st.run, ds=st.up?-.004:.004; runPt(run,st.s,st.lat,HP); runPt(run,Math.min(1,Math.max(0,st.s+ds)),st.lat,HQ); if(HQ.distanceToSquared(HP)<.01) HQ.copy(HP).add(V1.set(0,0,1));
+    rg.position.copy(HP); rg.lookAt(V1.copy(HQ)); WORLD.beacon.visible=(t*2%1)<.5; }
+  else { rg.position.copy(WORLD.garageFront); rg.lookAt(V1.copy(SPOT.garage).setY(rg.position.y)); rg.rotateY(Math.PI); WORLD.beacon.visible=false; }
+  // vrtuľník
+  const hs=heliState(t), hg=WORLD.heli, pad=V2.set(SPOT.pad.x,WORLD.padY,SPOT.pad.z), top=V3.set(SPOT.summit.x,SPOT.summit.y+.2,SPOT.summit.z);
+  const cruise=Math.max(pad.y,top.y)+70; let ph=hs.ph, fromP, toP, yawT=null;
+  if (!hs.flying){ hg.position.copy(pad); }
+  else {
+    const lerp=(a,b,f)=>a+(b-a)*f, e=x=>x<0?0:x>1?1:x*x*(3-2*x);
+    if (ph<8){ hg.position.set(pad.x,pad.y+ph/8*20,pad.z); yawT=Math.atan2(top.x-pad.x,top.z-pad.z); }
+    else if (ph<68){ const f=(ph-8)/60, g=e(f); hg.position.set(lerp(pad.x,top.x,g),lerp(pad.y+20,cruise,Math.sqrt(f)),lerp(pad.z,top.z,g)); yawT=Math.atan2(top.x-pad.x,top.z-pad.z); }
+    else if (ph<80){ const f=(ph-68)/12; hg.position.set(top.x,lerp(cruise,top.y,e(f)),top.z); yawT=Math.atan2(top.x-pad.x,top.z-pad.z); }
+    else if (ph<92){ hg.position.copy(top); yawT=Math.atan2(top.x-pad.x,top.z-pad.z); }
+    else if (ph<102){ const f=(ph-92)/10; hg.position.set(top.x,lerp(top.y,cruise,e(f)),top.z); yawT=Math.atan2(pad.x-top.x,pad.z-top.z); }
+    else if (ph<142){ const f=(ph-102)/40, g=e(f); hg.position.set(lerp(top.x,pad.x,g),lerp(cruise,pad.y+20,f*f),lerp(top.z,pad.z,g)); yawT=Math.atan2(pad.x-top.x,pad.z-top.z); }
+    else { const f=(ph-142)/8; hg.position.set(pad.x,pad.y+20*(1-f),pad.z); yawT=Math.atan2(pad.x-top.x,pad.z-top.z); }
+    hg.rotation.y=yawT; WORLD.rotor.rotation.y=t*25; WORLD.trotor.rotation.x=t*40;
+  }
+  if (!hs.flying) hg.rotation.y=Math.atan2(top.x-pad.x,top.z-pad.z);
+  // personál, ktorý sa vezie
+  for (const f of WORLD.figs){
+    const p=people[f.i]; if(!p || p.kind!=='role') continue;
+    if (p.role==='ratrak'){ const inCab=driver===p.u; if(inCab!==!!f.hide){ f.hide=inCab; needAll=true; } if(inCab){ positions[f.i*3]=rg.position.x; positions[f.i*3+1]=rg.position.y+4; positions[f.i*3+2]=rg.position.z; } }
+    if (p.role==='rescue'){ const inH=hs.flying; if(inH!==!!f.hide){ f.hide=inH; needAll=true; } if(inH){ positions[f.i*3]=hg.position.x; positions[f.i*3+1]=hg.position.y+2; positions[f.i*3+2]=hg.position.z; } }
+  }
+  if (WORLD.mascotI!==undefined){ positions[WORLD.mascotI*3]=SPOT.mascot.x; positions[WORLD.mascotI*3+1]=SPOT.mascot.y+3; positions[WORLD.mascotI*3+2]=SPOT.mascot.z; }
+  if (WORLD.mascotArm) WORLD.mascotArm.rotation.z=.5+Math.sin(t*3)*.45;
+  // tanec v čakárni len keď je kamera blízko
+  const cd=camera.position.distanceTo(SPOT.crowd);
+  if (needAll){ needAll=false; placeFigs(t,true); } else if (cd<900 || wFrame<3) placeFigs(t,false);
+  // HUD raz za sekundu
+  const sec=Math.floor(t);
+  if (sec!==lastHud){ lastHud=sec; const L=localSec(t);
+    $('clock').textContent='🕒 '+hhmm(L);
+    $('groomInfo').textContent=st.active?'🚜 ratrak práve upravuje '+(st.run.w===2?'snowpark':'trať '+st.run.label):'🚜 ratrak o '+hhmm(st.next);
+    $('waitInfo').textContent='čakáreň '+fmt(N-NROLE);
+  }
+}
 /* ---------- renderer ---------- */
 const canvas=$('c');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:innerWidth*innerHeight*devicePixelRatio*devicePixelRatio<2.4e6,powerPreference:'high-performance'});
@@ -349,7 +665,7 @@ function makeSign(lines,bg,fg,w=256,h=128){
   x.fillStyle=bg; x.beginPath(); x.roundRect(4,4,w-8,h-8,18); x.fill();
   x.strokeStyle='#fff'; x.lineWidth=6; x.stroke();
   x.fillStyle=fg; x.textAlign='center'; x.textBaseline='middle';
-  const fs=lines.length===1?h*.55:h*.3; x.font='800 '+fs+'px system-ui,Arial';
+  const fs=lines.length===1?h*.55:h*(lines.length>2?.25:.3); x.font='800 '+fs+'px system-ui,Arial';
   lines.forEach((l,i)=>x.fillText(l,w/2,h/2+(i-(lines.length-1)/2)*fs*1.1));
   const t=new THREE.CanvasTexture(cv); t.colorSpace=THREE.SRGBColorSpace;
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthWrite:false})); sp.scale.set(w/9,h/9,1); return sp;
@@ -388,7 +704,7 @@ function station(run, d, top){
 }
 
 const runObjs=[];
-RUNS.forEach(run=>{
+ALLRUNS.forEach(run=>{
   // zjazdovka (40 m) a stopa vleku
   scene.add(new THREE.Mesh(ribbon(run,-24,24,14,.22,'#ffffff'),pisteMat));
   scene.add(new THREE.Mesh(ribbon(run,run.LL-3.5,run.LL+3.5,4,.45,'#f7fafd'),pisteMat));
@@ -418,25 +734,17 @@ RUNS.forEach(run=>{
   }
   station(run,0,true); station(run,run.len,false);
   // tabuľky
-  runPt(run,0,-30,V1); const sg=makeSign([String(run.k+1)],run.color,'#fff',128,128); sg.position.set(V1.x,V1.y+14,V1.z); scene.add(sg);
+  runPt(run,0,-30,V1); const sg=run.w===2?makeSign(['SNOWPARK'],run.color,'#fff',320,96):makeSign([run.label],run.color,'#fff',128,128); sg.position.set(V1.x,V1.y+14,V1.z); scene.add(sg);
+  if(run.w===2) buildKickers(run);
   if(run.k===0){ runPt(run,.03,-6,V1); const vs=makeSign(['PRVÁ STOPA'],'#C8102E','#fff',384,96); vs.position.set(V1.x,V1.y+22,V1.z); scene.add(vs); }
-  // ratrak dole pri trati
-  {
-    const rg=new THREE.Group();
-    const body=new THREE.Mesh(new THREE.BoxGeometry(3.2,1.6,4.2),new THREE.MeshLambertMaterial({color:'#C8102E'})); body.position.y=1.6;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.3,1.8),new THREE.MeshLambertMaterial({color:'#2a3440'})); cab.position.set(0,2.9,.6);
-    const blade=new THREE.Mesh(new THREE.BoxGeometry(4.6,1.1,.3),new THREE.MeshLambertMaterial({color:'#dfe4ea'})); blade.position.set(0,.7,2.6);
-    const tr1=new THREE.Mesh(new THREE.BoxGeometry(.9,1,4.6),darkMat); tr1.position.set(-1.5,.5,0);
-    const tr2=tr1.clone(); tr2.position.x=1.5;
-    rg.add(body,cab,blade,tr1,tr2);
-    runPt(run,.96,-32,V1); rg.position.copy(V1); rg.rotation.y=-run.th+Math.PI*.6; scene.add(rg);
-  }
   const a=runPt(run,0,0,new THREE.Vector3()), b=runPt(run,1,0,new THREE.Vector3());
-  runObjs.push({run,a,b,detail:null,far:null,carriers:null});
+  const ro={run,a,b,detail:null,far:null,carriers:null,members:skiers.filter(p=>p.run===run).map(p=>p.i)}; run.ro=ro;
+  ro.members.forEach((i,j)=>{ people[i].slot=j; people[i].ro=ro; });
+  runObjs.push(ro);
 });
 // otvárajúca sa trať
 {
-  const last=RUNS[RUNS.length-1], filled=N-last.k*CAP;
+  const last=RUNS[RUNS.length-1], filled=last.ro?last.ro.members.length:CAP;
   if(filled<CAP){ runPt(last,Math.min(.95,filled/CAP+.06),-36,V1); const op=makeSign(['TRAŤ SA','OTVÁRA'],'#F2B705','#22262d',256,128); op.name='openSign'; op.position.set(V1.x,V1.y+12,V1.z); scene.add(op); }
 }
 // chata na vrchole
@@ -450,11 +758,13 @@ RUNS.forEach(run=>{
 
 /* smreky a skaly mimo zjazdoviek */
 function inCorridor(rr,th,extra){
-  for(const run of RUNS){
+  for(const run of ALLRUNS){
     if(rr<run.r0-40||rr>run.r0+run.len+60) continue;
     const dth=((th-run.th+Math.PI*3)%(Math.PI*2))-Math.PI, lat=dth*rr;
-    if(lat>-36-extra && lat<run.LL+24+extra) return true;
+    if(lat>-36-(run.w===3?32:0)-extra && lat<run.LL+24+extra) return true;
   }
+  const x=rr*Math.cos(th), z=rr*Math.sin(th);
+  for(const zn of ZONES) if((x-zn.x)**2+(z-zn.z)**2<(zn.r+extra)**2) return true;
   return false;
 }
 {
@@ -509,9 +819,9 @@ const U = {
 const GLSL_COMMON = `
 uniform float uTime; uniform float uJumpId; uniform float uJumpT;
 uniform float uAmp[6]; uniform float uPer[6]; uniform float uUp[6];
-const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.5; const float TAU_=6.28318530718; const float TSP=50.0; const float SK=1.9;
+const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.0; const float TAU_=6.28318530718; const float TSP=50.0; const float SK=1.9;
 float hgt(float r,float th){ float rr=max(r,95.0); float k=max(0.0,1.0-rr/R_); float w=smoothstep(95.0,165.0,r); float ridge=1.0+w*(0.06*sin(3.0*th+0.4)+0.045*sin(7.0*th+1.3)+0.025*sin(13.0*th)); return H_*pow(max(k,1e-6),1.35)*ridge+w*6.0*k*sin(r*0.012+th*5.0); }
-vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float t=run.x+lat/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
+vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float cv=(abs(run.w-3.0)<0.5&&abs(lat)<=40.0)?30.0*sin(s*6.6+0.4):0.0; float t=run.x+(lat+cv)/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
 float cabY(vec4 run,float d,float lat,float th){ float d0=floor(d/TSP)*TSP; float d1=min(run.z,d0+TSP); float f=d1>d0?(d-d0)/(d1-d0):0.0; float a=runPt(run,d0/run.z,lat).y; float b=runPt(run,d1/run.z,lat).y; return mix(a,b,f)+th-0.8*4.0*f*(1.0-f); }
 vec3 rX(vec3 v,float a){ float c=cos(a),s=sin(a); return vec3(v.x,v.y*c-v.z*s,v.y*s+v.z*c); }
 vec3 rY(vec3 v,float a){ float c=cos(a),s=sin(a); return vec3(v.x*c+v.z*s,v.y,-v.x*s+v.z*c); }
@@ -522,19 +832,21 @@ int ti=int(aP.w+0.5);
 float amp=uAmp[ti]; float per=uPer[ti]; float hasLift=uUp[ti];
 float len=aRun.z; float upd=len/LIFT_V; float dn=aP.z; float cyc=dn+upd;
 float u=mod(uTime+aP.y*cyc,cyc);
-bool chair=aRun.w>0.5; float LL=chair?36.0:34.0; float TH=chair?12.0:7.5;
+bool chair=abs(aRun.w-1.0)<0.5; bool fs=abs(aRun.w-2.0)<0.5; float LL=chair?36.0:(abs(aRun.w-3.0)<0.5?80.0:34.0); float TH=chair?12.0:7.5;
 float s; float lat; bool onLift=false; float dir=1.0; float swayV=0.0;
-if(u<dn){ s=u/dn; float ph=(u/per)*TAU_+aP.y*6.28; swayV=cos(ph); lat=clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
+if(u<dn){ s=u/dn; float ph=(u/per)*TAU_+aP.y*6.28; swayV=cos(ph); lat=fs?clamp(aP.x*3.0+sin(ph)*amp*4.0,-6.0,6.0):clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
 else { s=1.0-(u-dn)/upd; dir=-1.0; if(hasLift>0.5){ lat=LL; onLift=true; } else { lat=-17.5; } }
 vec3 org=runPt(aRun,s,lat); org.y+=0.25;
 float groundY=org.y;
 float s2=s+0.004*dir; float lat2=lat+((onLift||dir<0.0)?0.0:swayV*amp*2.0);
-float r2=aRun.y+s2*len; float t2=aRun.x+lat2/r2;
-float yaw=atan(r2*cos(t2)-org.x, r2*sin(t2)-org.z);
+vec3 nx2=runPt(aRun,s2,lat2);
+float yaw=atan(nx2.x-org.x, nx2.z-org.z);
 bool sit=(!onLift && dir>0.0 && (ti==2||ti==4)) || (onLift&&chair);
 float cy=0.0;
 if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair) org.y=cy-4.5-0.32*SK; }
-if(ti==1 && dir>0.0){ float j=mod(u,23.0)/23.0; if(j<0.05) org.y+=sin(j/0.05*3.14159)*2.5; }
+if(ti==1 && dir>0.0 && !fs){ float j=mod(u,23.0)/23.0; if(j<0.05) org.y+=sin(j/0.05*3.14159)*2.5; }
+float flipA=0.0;
+if(fs && dir>0.0){ for(int kk=0;kk<3;kk++){ float sk=0.25+0.25*float(kk); float dd=(s-sk)*len; if(dd>0.0&&dd<16.0){ float f=dd/16.0; org.y+=sin(f*3.14159)*4.5; float tr=mod(aId+float(kk),4.0); if(tr<1.0) yaw+=f*6.28318; else if(tr<2.0) yaw+=f*12.56637; else if(tr<3.0) flipA=-f*6.28318; else { yaw+=f*6.28318; flipA=f*6.28318; } } } }
 if(abs(aId-uJumpId)<0.5){ float k=(uTime-uJumpT)/1.4; if(k>0.0&&k<1.0) org.y+=sin(k*3.14159)*9.0; }
 int part=int(aPart+0.5);
 vec3 p=position; vec3 n=normal; bool hide=aHide>0.5;
@@ -547,6 +859,7 @@ if(part<=3){
   float roll=(dir>0.0)?-swayV*amp*0.55:0.0;
   if(part<=2){ p=rX(p,pitch); n=rX(n,pitch); }
   p=rZ(p,roll); n=rZ(n,roll);
+  if(flipA!=0.0){ p.y-=1.0; p=rX(p,flipA); p.y+=1.0; n=rX(n,flipA); }
   p*=SK; p=rY(p,yaw); n=rY(n,yaw);
   svahPos=org+p;
 } else if(part==4){
@@ -563,14 +876,14 @@ if(part<=3){
 if(hide) svahPos=vec3(0.0,-9999.0,0.0);
 `;
 const CARRIER_VERT = `
-bool chair=aRun.w>0.5; float LL=chair?36.0:34.0; float TH=chair?12.0:7.5;
+bool chair=abs(aRun.w-1.0)<0.5; bool fs=abs(aRun.w-2.0)<0.5; float LL=chair?36.0:(abs(aRun.w-3.0)<0.5?80.0:34.0); float TH=chair?12.0:7.5;
 float len=aRun.z; float P=mod(uTime*LIFT_V+aOff,2.0*len);
 float d; float lat; float dirS;
 if(P<len){ d=len-P; lat=LL; dirS=-1.0; } else { d=P-len; lat=LL+6.0; dirS=1.0; }
 float cy=cabY(aRun,d,lat,TH);
 float s=d/len; vec3 a=runPt(aRun,s,lat);
-float r2=aRun.y+(s+0.004*dirS)*len; float t2=aRun.x+lat/r2;
-float yaw=atan(r2*cos(t2)-a.x, r2*sin(t2)-a.z);
+vec3 nx2=runPt(aRun,s+0.004*dirS,lat);
+float yaw=atan(nx2.x-a.x, nx2.z-a.z);
 vec3 p=position; vec3 n=normal;
 if(!chair){ if(aTip>0.5){ p.y-=1.5; } else { p.y*=1.5; } }
 p=rY(p,yaw); n=rY(n,yaw);
@@ -581,11 +894,11 @@ function svahMaterial(kind){
   m.onBeforeCompile=(sh)=>{
     Object.assign(sh.uniforms,U);
     const attrs = kind==='skier'
-      ? 'attribute vec4 aRun; attribute vec4 aP; attribute float aId; attribute float aPart; attribute vec3 aBase; attribute float aUseJ; attribute float aGear; attribute float aTip; attribute float aHide;'
+      ? 'attribute vec4 aRun; attribute vec4 aP; attribute float aId; attribute float aPart; attribute vec3 aBase; attribute float aUseJ; attribute float aGear; attribute float aTip; attribute float aHide; attribute vec3 aPants; attribute vec3 aHelm; attribute vec3 aSki;'
       : 'attribute vec4 aRun; attribute float aOff; attribute vec3 aBase; attribute float aTip;';
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\n'+attrs+'\n'+GLSL_COMMON)
-      .replace('#include <color_vertex>', kind==='skier' ? 'vColor = mix(aBase, color, aUseJ);' : 'vColor = aBase;')
+      .replace('#include <color_vertex>', kind==='skier' ? 'vColor = aBase; if(aUseJ>0.5&&aUseJ<1.5) vColor=color.r<0.0?0.55+0.45*cos(6.2832*(position.y*1.8+position.x*0.9+vec3(0.0,0.33,0.67))):color; else if(aUseJ>1.5&&aUseJ<2.5&&aPants.r>=0.0) vColor=aPants; else if(aUseJ>2.5&&aUseJ<3.5&&aHelm.r>=0.0) vColor=aHelm; else if(aUseJ>3.5&&aSki.r>=0.0) vColor=aSki;' : 'vColor = aBase;')
       .replace('#include <beginnormal_vertex>', 'vec3 svahPos;\n'+(kind==='skier'?SKIER_VERT:CARRIER_VERT)+'\nvec3 objectNormal = n;')
       .replace('#include <begin_vertex>', 'vec3 transformed = svahPos;');
   };
@@ -607,7 +920,7 @@ function prep(geo, a){
 }
 const Pt=(geo,part,base,useJ=0,gear=-1,tip=0)=>prep(geo,{aPart:part,aBase:lin(base),aUseJ:useJ,aGear:gear,aTip:tip});
 const B=(x,y,z)=>new THREE.BoxGeometry(x,y,z);
-const skis=(gear,col,stagger=0)=>[ Pt(B(.09,.03,1.7).translate(-.12,.015,.1+stagger),3,col,0,gear), Pt(B(.09,.03,1.7).translate(.12,.015,.1-stagger),3,col,0,gear) ];
+const skis=(gear,col,stagger=0)=>[ Pt(B(.09,.03,1.7).translate(-.12,.015,.1+stagger),3,col,4,gear), Pt(B(.09,.03,1.7).translate(.12,.015,.1-stagger),3,col,4,gear) ];
 const poles=gear=>[ Pt(new THREE.CylinderGeometry(.015,.015,1.15,4).rotateX(.35).translate(-.38,.62,.18),3,'#4b525b',0,gear), Pt(new THREE.CylinderGeometry(.015,.015,1.15,4).rotateX(.35).translate(.38,.62,.18),3,'#4b525b',0,gear) ];
 const skierParts=[
   Pt(B(.5,.62,.3).translate(0,1.12,0),0,'#fff',1),
@@ -615,20 +928,20 @@ const skierParts=[
   Pt(B(.15,.55,.16).translate(.33,1.1,.05),0,'#fff',1),
   Pt(B(.52,.1,.32).translate(0,1.25,0),0,'#C8102E',0,-2),
   Pt(B(.36,.42,.2).translate(0,1.15,-.25),0,'#e05a2b',0,3),
-  Pt(B(.19,.72,.22).translate(-.12,.41,0),1,'#2f343c'),
-  Pt(B(.19,.72,.22).translate(.12,.41,0),1,'#2f343c'),
+  Pt(B(.19,.72,.22).translate(-.12,.41,0),1,'#2f343c',2),
+  Pt(B(.19,.72,.22).translate(.12,.41,0),1,'#2f343c',2),
   Pt(B(.2,.16,.3).translate(-.12,.08,.03),1,'#1d2127'),
   Pt(B(.2,.16,.3).translate(.12,.08,.03),1,'#1d2127'),
-  Pt(new THREE.SphereGeometry(.17,6,4).translate(0,1.6,0),2,'#eef1f5'),
+  Pt(new THREE.SphereGeometry(.17,6,4).translate(0,1.6,0),2,'#eef1f5',3),
   Pt(B(.27,.09,.07).translate(0,1.6,.14),2,'#ff8a2a'),
   ...skis(0,'#d64045'), ...poles(0),
-  Pt(B(.3,.04,1.45).translate(0,.02,0),3,'#2b2d31',0,1),
-  Pt(B(.55,.08,.95).translate(0,.32,0),3,'#a0522d',0,2),
+  Pt(B(.3,.04,1.45).translate(0,.02,0),3,'#2b2d31',4,1),
+  Pt(B(.55,.08,.95).translate(0,.32,0),3,'#a0522d',4,2),
   Pt(B(.05,.06,1.15).translate(-.24,.04,0),3,'#5b6068',0,2), Pt(B(.05,.06,1.15).translate(.24,.04,0),3,'#5b6068',0,2),
   Pt(B(.05,.26,.05).translate(-.24,.18,.35),3,'#a0522d',0,2), Pt(B(.05,.26,.05).translate(.24,.18,.35),3,'#a0522d',0,2),
   Pt(B(.05,.26,.05).translate(-.24,.18,-.35),3,'#a0522d',0,2), Pt(B(.05,.26,.05).translate(.24,.18,-.35),3,'#a0522d',0,2),
   ...skis(3,'#e8e8e8'), ...poles(3),
-  Pt(new THREE.CylinderGeometry(.5,.45,.12,12).translate(0,.06,0),3,'#e84a8a',0,4),
+  Pt(new THREE.CylinderGeometry(.5,.45,.12,12).translate(0,.06,0),3,'#e84a8a',4,4),
   ...skis(5,'#f2b705',.22), ...poles(5),
   Pt(new THREE.CircleGeometry(.5,10).rotateX(-Math.PI/2).scale(1,1,1.8).translate(0,.04,0),4,'#c2cede'),
   Pt(new THREE.CylinderGeometry(.035,.035,1,5).translate(0,-.5,0),5,'#69717c'),
@@ -657,9 +970,9 @@ function instGeo(base, list, run){
   for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
   const n=list.length, aRun=new Float32Array(n*4), aP=new Float32Array(n*4), aId=new Float32Array(n), col=new Float32Array(n*3), c=new THREE.Color();
   list.forEach((p,j)=>{
-    aRun.set([run.th,run.r0,run.len,run.chair?1:0],j*4);
+    aRun.set([run.th,run.r0,run.len,run.w],j*4);
     aP.set([p.lane,p.phase,p.down,p.ti],j*4);
-    aId[j]=p.i; c.set(p.c); col.set([c.r,c.g,c.b],j*3);
+    aId[j]=p.i; col.set(jacketLin(p),j*3);
   });
   g.setAttribute('aRun',new THREE.InstancedBufferAttribute(aRun,4));
   g.setAttribute('aP',new THREE.InstancedBufferAttribute(aP,4));
@@ -673,13 +986,13 @@ function carrierGeo(run){
   const g=new THREE.InstancedBufferGeometry();
   for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
   const aRun=new Float32Array(n*4), aOff=new Float32Array(n);
-  for(let j=0;j<n;j++){ aRun.set([run.th,run.r0,run.len,run.chair?1:0],j*4); aOff[j]=j*sp; }
+  for(let j=0;j<n;j++){ aRun.set([run.th,run.r0,run.len,run.w],j*4); aOff[j]=j*sp; }
   g.setAttribute('aRun',new THREE.InstancedBufferAttribute(aRun,4));
   g.setAttribute('aOff',new THREE.InstancedBufferAttribute(aOff,1));
   g.instanceCount=n; return g;
 }
 runObjs.forEach(o=>{
-  const list=people.slice(o.run.k*CAP, Math.min(N,(o.run.k+1)*CAP));
+  const list=o.members.map(i=>people[i]);
   o.far=new THREE.Mesh(instGeo(farGeo,list,o.run),skierMat);
   o.carriers=new THREE.Mesh(carrierGeo(o.run),carrierMat);
   for(const m of [o.far,o.carriers]){ m.frustumCulled=false; scene.add(m); }
@@ -691,11 +1004,13 @@ const detail=TYPES.map((t,ti)=>{
   for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
   const mk=(n)=>new THREE.InstancedBufferAttribute(new Float32Array(MAXD*n),n).setUsage(THREE.DynamicDrawUsage);
   g.setAttribute('aRun',mk(4)); g.setAttribute('aP',mk(4)); g.setAttribute('aId',mk(1)); g.setAttribute('color',mk(3)); g.setAttribute('aHide',mk(1));
+  g.setAttribute('aPants',mk(3)); g.setAttribute('aHelm',mk(3)); g.setAttribute('aSki',mk(3));
   g.instanceCount=0;
   const m=new THREE.Mesh(g,skierMat); m.frustumCulled=false; scene.add(m);
   return {g,m,n:0};
 });
-const pColor=people.map(p=>lin(p.c));
+const NEG=[-1,-1,-1];
+const pColor=people.map(p=>p.kind==='ski'?jacketLin(p):lin(p.c));
 let farHidden=[];
 function updateDetail(nearRuns){
   for(const [o,j] of farHidden){ o.far.geometry.attributes.aHide.array[j]=0; o.far.geometry.attributes.aHide.needsUpdate=true; }
@@ -703,19 +1018,20 @@ function updateDetail(nearRuns){
   for(const d of detail) d.n=0;
   const cp=camera.position;
   for(const o of nearRuns){
-    const run=o.run, from=run.k*CAP, to=Math.min(N,from+CAP);
-    for(let i=from;i<to;i++){
+    const run=o.run;
+    for(const i of o.members){
       const dx=positions[i*3]-cp.x, dy=positions[i*3+1]-cp.y, dz=positions[i*3+2]-cp.z;
       if(dx*dx+dy*dy+dz*dz>DET2 && i!==selected) continue;
       const p=people[i], D=detail[p.ti]; if(D.n>=MAXD) continue;
       const a=D.g.attributes, k=D.n++;
-      a.aRun.array.set([run.th,run.r0,run.len,run.chair?1:0],k*4);
+      a.aRun.array.set([run.th,run.r0,run.len,run.w],k*4);
       a.aP.array.set([p.lane,p.phase,p.down,p.ti],k*4);
       a.aId.array[k]=p.i; a.color.array.set(pColor[i],k*3);
-      const j=i-from; o.far.geometry.attributes.aHide.array[j]=1; o.far.geometry.attributes.aHide.needsUpdate=true; farHidden.push([o,j]);
+      a.aPants.array.set(p.pc||NEG,k*3); a.aHelm.array.set(p.hc||NEG,k*3); a.aSki.array.set(p.sc||NEG,k*3);
+      const j=p.slot; o.far.geometry.attributes.aHide.array[j]=1; o.far.geometry.attributes.aHide.needsUpdate=true; farHidden.push([o,j]);
     }
   }
-  for(const D of detail){ D.g.instanceCount=D.n; if(D.n){ for(const k of ['aRun','aP','aId','color']) D.g.attributes[k].needsUpdate=true; } }
+  for(const D of detail){ D.g.instanceCount=D.n; if(D.n){ for(const k of ['aRun','aP','aId','color','aPants','aHelm','aSki']) D.g.attributes[k].needsUpdate=true; } }
 }
 function distSeg(p,a,b){ V1.subVectors(b,a); const t=Math.max(0,Math.min(1,V2.subVectors(p,a).dot(V1)/V1.lengthSq())); return V3.copy(a).addScaledVector(V1,t).distanceTo(p); }
 
@@ -725,11 +1041,11 @@ const tmp=new THREE.Vector3(); tmp.mode=''; tmp.s=0;
 function updatePositions(t, onlyRuns){
   for(const o of runObjs){
     if(onlyRuns && !onlyRuns.has(o)) continue;
-    const from=o.run.k*CAP, to=Math.min(N,from+CAP);
-    for(let i=from;i<to;i++){ skierOrg(people[i],t,tmp); positions[i*3]=tmp.x; positions[i*3+1]=tmp.y; positions[i*3+2]=tmp.z; }
+    for(const i of o.members){ skierOrg(people[i],t,tmp); positions[i*3]=tmp.x; positions[i*3+1]=tmp.y; positions[i*3+2]=tmp.z; }
   }
 }
 
+buildWorld();
 /* ---------- menovky ---------- */
 const labelsEl=$('labels'), pool=[], MAXL=28;
 for(let i=0;i<=MAXL;i++){ const d=document.createElement('div'); d.className='lbl'; d.style.display='none'; labelsEl.appendChild(d); pool.push(d); }
@@ -737,7 +1053,7 @@ const PV=new THREE.Vector3();
 function placeLabel(div,i,cls){
   PV.set(positions[i*3],positions[i*3+1]+SK*1.25,positions[i*3+2]).project(camera);
   if(PV.z>1||Math.abs(PV.x)>1.1||Math.abs(PV.y)>1.1){ div.style.display='none'; return; }
-  const p=people[i], name=(cls?'#'+p.num+' ':'')+'@'+p.u, c='lbl'+(cls?' '+cls:(p.vip?' vip':''));
+  const p=people[i], name=(cls&&p.kind==='ski'?'#'+p.bib+' ':'')+(p.kind==='role'?ROLE_TXT[p.role].short+' ':'')+'@'+p.u, c='lbl'+(cls?' '+cls:(p.kind==='role'?' role':p.kind==='wait'?' wait':(p.vip?' vip':'')));
   if(div.className!==c) div.className=c;
   if(div.textContent!==name) div.textContent=name;
   div.style.display='block';
@@ -747,12 +1063,16 @@ const near=[];
 function updateLabels(nearRuns){
   const cp=camera.position; near.length=0; const LIM=230*230;
   for(const o of nearRuns){
-    const from=o.run.k*CAP, to=Math.min(N,from+CAP);
-    for(let i=from;i<to;i++){
+    for(const i of o.members){
       if(i===selected) continue;
       const dx=positions[i*3]-cp.x, dy=positions[i*3+1]-cp.y, dz=positions[i*3+2]-cp.z, d=dx*dx+dy*dy+dz*dz;
       if(d<LIM) near.push(Math.floor(d)*1e6+i);
     }
+  }
+  for(let i=NSKI;i<N;i++){
+    if(i===selected) continue;
+    const dx=positions[i*3]-cp.x, dy=positions[i*3+1]-cp.y, dz=positions[i*3+2]-cp.z, d=dx*dx+dy*dy+dz*dz;
+    if(d<LIM*.35) near.push(Math.floor(d)*1e6+i);
   }
   near.sort((a,b)=>a-b);
   let n=0;
@@ -766,8 +1086,9 @@ let selected=-1, flying=null;
 const followOff=new THREE.Vector3(), lastSel=new THREE.Vector3();
 function overview(){
   if(RUNS.length<=3){
-    const run=RUNS[0], tgt=runPt(run,.45,10,new THREE.Vector3());
-    const cam=runPt(run,1.55,-160,new THREE.Vector3()); cam.y=Math.max(cam.y,groundAt(cam.x,cam.z))+170;
+    const r1=RUNS[RUNS.length>1?1:0], mid=(RUNS[0].th+r1.th)/2;
+    const tgt=new THREE.Vector3(560*Math.cos(mid),0,560*Math.sin(mid)); tgt.y=groundAt(tgt.x,tgt.z)+20;
+    const R=RUNS.length>1?2050:1700, cam=new THREE.Vector3(R*Math.cos(mid-.08),0,R*Math.sin(mid-.08)); cam.y=groundAt(cam.x,cam.z)+(RUNS.length>1?380:260);
     return {pos:cam,target:tgt};
   }
   const d=1500+Math.min(1800,RUNS.length*26);
@@ -783,15 +1104,21 @@ function select(i, fly=true){
   selected=i;
   if(i<0){ $('card').style.display='none'; $('cta').style.display='block'; return; }
   const p=people[i];
-  $('cNum').textContent=p.num; $('cName').textContent='@'+p.u;
-  $('cType').textContent=TYPES[p.ti].name+(p.vip?' · prvých 100':'');
-  $('cRun').textContent='Zjazdovka '+(runOf(i).k+1);
-  $('cDot').style.background=p.c; $('cColor').textContent=(COLOR_NAMES[p.c]||p.c)+' bunda';
+  $('cNum').textContent=p.kind==='ski'?p.bib:(p.kind==='wait'?'–':ROLE_TXT[p.role].icon); $('cName').textContent='@'+p.u;
+  const extras=[]; if(p.kind==='ski'){ if(p.pcHex) extras.push((COLOR_NAMES[p.pcHex]||'')+' nohavice'); if(p.hcHex) extras.push((COLOR_NAMES[p.hcHex]||'')+' čiapka'); if(p.scHex) extras.push((COLOR_NAMES[p.scHex]||'')+' '+(p.ti===1?'doska':p.ti===2?'sánky':'lyže')); if(p.f) extras.push('snowpark'); }
+  $('cType').textContent=p.kind==='ski'?TYPES[p.ti].name+(p.vip?' · prvých 100':'')+(extras.length?' · '+extras.join(', '):''):(p.kind==='wait'?'čaká na výber':ROLE_TXT[p.role].name);
+  $('cRun').textContent=p.kind==='ski'?(p.run.w===2?'Snowpark':'Zjazdovka '+p.run.label):(p.kind==='wait'?'Čakáreň':ROLE_TXT[p.role].place);
+  $('cDot').parentElement.style.display=p.kind==='ski'?'':'none';
+  if(p.kind==='ski'){ $('cDot').style.background=p.rainbow?'conic-gradient(#C8102E,#F2B705,#2E9E5B,#1E5AA8,#7A3FB8,#C8102E)':p.c; $('cColor').textContent=(p.rainbow?'dúhová':(COLOR_NAMES[p.c]||'vlastná'))+' bunda'; }
   updateCheerCount(); updateLive();
   $('cComment').textContent=p.k?'„'+p.k+'“':'';
+  $('cHint').textContent=p.kind==='wait'?'Zatiaľ si nenapísal, akého lyžiara chceš. Napíš pod reel farbu bundy a lyže / snowboard / sánky a pustíme ťa na vlek.':(p.auto?'Časť výberu sme ti doplnili. Ak chceš inú farbu alebo typ, napíš nový koment.':'');
   $('card').style.display='block'; $('cta').style.display='none';
   history.replaceState(null,'','#lyziar-'+p.num);
-  if(fly){
+  if(fly && p.kind!=='ski'){
+    const tgt=new THREE.Vector3(positions[i*3],positions[i*3+1]+1.5,positions[i*3+2]);
+    followOff.set(18,12,22); flyTo(tgt.clone().add(followOff),tgt,2200);
+  } else if(fly){
     skierOrg(p,simT(),tmp);
     const r=Math.hypot(tmp.x,tmp.z), rad=V1.set(tmp.x/r,0,tmp.z/r), tang=V2.set(-rad.z,0,rad.x);
     followOff.set(0,0,0).addScaledVector(tang,-26).addScaledVector(rad,12); followOff.y=10;
@@ -800,7 +1127,10 @@ function select(i, fly=true){
   }
 }
 function updateCheerCount(){ const n=cheers[people[selected].u]||0; $('cCheers').textContent=n?'povzbudené '+n+'×':'ešte nepovzbudené'; }
-function updateLive(){ if(selected<0) return; skierOrg(people[selected],simT(),tmp); $('cLive').textContent=MODE_TXT[tmp.mode]; }
+function updateLive(){ if(selected<0) return; const p=people[selected];
+  if(p.kind==='ski'){ skierOrg(p,simT(),tmp); $('cLive').textContent=(p.run.w===2&&tmp.mode==='down')?'skáče v snowparku':MODE_TXT[tmp.mode]; }
+  else if(p.kind==='wait') $('cLive').textContent='čaká v čakárni';
+  else $('cLive').textContent=roleLive(p); }
 setInterval(updateLive,700);
 
 /* ---------- kravské zvonce ---------- */
@@ -818,8 +1148,8 @@ function cowbell(base){
 $('cheer').onclick=()=>{
   if(selected<0) return;
   const p=people[selected];
-  cowbell(TYPES[p.ti].bell);
-  JUMP_ID=p.i; JUMP_T=simT(); U.uJumpId.value=JUMP_ID; U.uJumpT.value=JUMP_T;
+  cowbell(p.kind==='ski'?TYPES[p.ti].bell:800);
+  if(p.kind==='ski') JUMP_ID=p.i; JUMP_T=simT(); U.uJumpId.value=JUMP_ID; U.uJumpT.value=JUMP_T;
   cheers[p.u]=(cheers[p.u]||0)+1;
   try{ localStorage.setItem('svah_cheers',JSON.stringify(cheers)); }catch(e){}
   updateCheerCount();
@@ -842,7 +1172,7 @@ q.addEventListener('input',()=>{
     const p=people[i], b=document.createElement('button');
     const dot=document.createElement('i'); dot.className='dot'; dot.style.background=p.c;
     const nm=document.createElement('span'); nm.textContent='@'+p.u;
-    const nr=document.createElement('span'); nr.className='n'; nr.textContent='#'+p.num;
+    const nr=document.createElement('span'); nr.className='n'; nr.textContent=p.kind==='ski'?'#'+p.bib:(p.kind==='wait'?'čakáreň':ROLE_TXT[p.role].short);
     b.append(dot,nm,nr); b.onclick=()=>pick(i); sug.appendChild(b);
   }
   sug.style.display='block';
@@ -879,7 +1209,7 @@ function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false)
 addEventListener('resize',resize); resize();
 { const o=overview(); camera.position.copy(o.pos); controls.target.copy(o.target); }
 const t0=performance.now();
-const simT=()=>(performance.now()-t0)/1000+1000;
+const simT=()=>(Date.now()/1000)%86400;
 let slowFrames=0, lastNow=performance.now();
 const nearRuns=new Set();
 function loop(now){
@@ -894,8 +1224,9 @@ function loop(now){
     o.carriers.visible=d<1100;
     if(d<200) nearRuns.add(o);
   }
-  if(selected>=0) nearRuns.add(runObjs[runOf(selected).k]);
+  if(selected>=0 && people[selected].kind==='ski') nearRuns.add(people[selected].ro);
   updatePositions(t, nearRuns);
+  updateWorld(t, now);
   updateDetail(nearRuns);
   if(flying){
     const k=Math.min(1,(now-flying.start)/flying.dur), e=ease(k);
@@ -1076,7 +1407,7 @@ async function startReel(){
   { const os=scene.getObjectByName('openSign'); if(os) os.visible=false; }
   function renderFrame(t){
     const T=T0+t; U.uTime.value=T;
-    updatePositions(T,nearSet);
+    updatePositions(T,nearSet); updateWorld(T);
     const sh=camAt(t,T); camera.position.copy(sh.p); camera.lookAt(sh.q); camera.updateMatrixWorld();
     updateDetail(nearSet);
     for(let i=1;i<snowArr.length;i+=3){ snowArr[i]-=.3; if(snowArr[i]<0) snowArr[i]+=260; }
