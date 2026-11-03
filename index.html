@@ -201,20 +201,21 @@ const N = people.length;
 /* ---------- svet ---------- */
 const CAP=250, H=430, RAD=1600, LIFT_V=5.5, TSP=50, SK=1.9;
 function height(r, th){
-  const k=Math.max(0,1-r/RAD);
-  const ridge=1+.06*Math.sin(3*th+.4)+.045*Math.sin(7*th+1.3)+.025*Math.sin(13*th);
-  return H*Math.pow(Math.max(k,1e-6),1.35)*ridge + 6*k*Math.sin(r*.012+th*5);
+  const PL=95, rr=Math.max(r,PL), k=Math.max(0,1-rr/RAD);
+  const x=Math.min(1,Math.max(0,(r-PL)/70)), w=x*x*(3-2*x);
+  const ridge=1+w*(.06*Math.sin(3*th+.4)+.045*Math.sin(7*th+1.3)+.025*Math.sin(13*th));
+  return H*Math.pow(Math.max(k,1e-6),1.35)*ridge + w*6*k*Math.sin(r*.012+th*5);
 }
 const groundAt = (x,z) => height(Math.hypot(x,z), Math.atan2(z,x));
 const RINGS=[{n:12,start:80,off:0},{n:12,start:230,off:.5},{n:24,start:390,off:.25},{n:48,start:560,off:.125},{n:96,start:720,off:.0625}];
 const SLOTS=[];
 RINGS.forEach(rg=>{ for(let j=0;j<rg.n;j++) SLOTS.push({ th:(j+rg.off)/rg.n*Math.PI*2-Math.PI/2, r0:rg.start, len:Math.min(800,1480-rg.start) }); });
 const RUNS = SLOTS.slice(0, Math.min(SLOTS.length, Math.max(1,Math.ceil(N/CAP)))).map((s,k)=>({
-  ...s, k, chair:k===0, color:['#1E5AA8','#C8102E','#2B2D31'][k%3],
-  LL: k===0?36:34, TH: k===0?12:7.5 }));
+  ...s, k, chair:false, color:['#1E5AA8','#C8102E','#2B2D31'][k%3],
+  LL: 34, TH: 7.5 }));
 const runOf = i => RUNS[Math.min(RUNS.length-1, Math.floor(i/CAP))];
 $('count').textContent = fmt(N);
-{ const n=RUNS.length; $('runsInfo').textContent = n+' '+(n===1?'zjazdovka':n<5?'zjazdovky':'zjazdoviek'); }
+{ const n=RUNS.length; $('runsInfo').textContent = n+' '+(n===1?'zjazdovka':n<5?'zjazdovky':'zjazdoviek')+' · poma'; }
 
 const _a=new THREE.Vector3(), _b=new THREE.Vector3();
 function runPt(run,s,lat,out){ const r=run.r0+s*run.len, t=run.th+lat/r; return out.set(r*Math.cos(t),height(r,t),r*Math.sin(t)); }
@@ -509,7 +510,7 @@ const GLSL_COMMON = `
 uniform float uTime; uniform float uJumpId; uniform float uJumpT;
 uniform float uAmp[6]; uniform float uPer[6]; uniform float uUp[6];
 const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.5; const float TAU_=6.28318530718; const float TSP=50.0; const float SK=1.9;
-float hgt(float r,float th){ float k=max(0.0,1.0-r/R_); float ridge=1.0+0.06*sin(3.0*th+0.4)+0.045*sin(7.0*th+1.3)+0.025*sin(13.0*th); return H_*pow(max(k,1e-6),1.35)*ridge+6.0*k*sin(r*0.012+th*5.0); }
+float hgt(float r,float th){ float rr=max(r,95.0); float k=max(0.0,1.0-rr/R_); float w=smoothstep(95.0,165.0,r); float ridge=1.0+w*(0.06*sin(3.0*th+0.4)+0.045*sin(7.0*th+1.3)+0.025*sin(13.0*th)); return H_*pow(max(k,1e-6),1.35)*ridge+w*6.0*k*sin(r*0.012+th*5.0); }
 vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float t=run.x+lat/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
 float cabY(vec4 run,float d,float lat,float th){ float d0=floor(d/TSP)*TSP; float d1=min(run.z,d0+TSP); float f=d1>d0?(d-d0)/(d1-d0):0.0; float a=runPt(run,d0/run.z,lat).y; float b=runPt(run,d1/run.z,lat).y; return mix(a,b,f)+th-0.8*4.0*f*(1.0-f); }
 vec3 rX(vec3 v,float a){ float c=cos(a),s=sin(a); return vec3(v.x,v.y*c-v.z*s,v.y*s+v.z*c); }
@@ -552,8 +553,8 @@ if(part<=3){
   p*=SK; p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,groundY,org.z)+p;
 } else if(part==5){
   if(!(onLift&&!chair)) hide=true;
-  float L=cy-(org.y+0.85*SK);
-  if(aTip>0.5){ p.y-=L; p.z-=0.24*SK; } else { p.y*=L; }
+  float L=cy-(org.y+0.72*SK);
+  if(aTip>0.5){ p.y-=L; p.z-=0.1*SK; } else { p.y*=L; }
   p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,cy,org.z)+p;
 } else {
   if(!(onLift&&chair)) hide=true;
@@ -631,7 +632,7 @@ const skierParts=[
   ...skis(5,'#f2b705',.22), ...poles(5),
   Pt(new THREE.CircleGeometry(.5,10).rotateX(-Math.PI/2).scale(1,1,1.8).translate(0,.04,0),4,'#c2cede'),
   Pt(new THREE.CylinderGeometry(.035,.035,1,5).translate(0,-.5,0),5,'#69717c'),
-  Pt(B(.75,.07,.07),5,'#F2B705',0,-1,1),
+  Pt(new THREE.CylinderGeometry(.17,.17,.05,12),5,'#F2B705',0,-1,1),
   Pt(new THREE.CylinderGeometry(.05,.05,4.5,5).translate(0,-2.25,0),6,'#59616b'),
   Pt(B(1.1,.08,.55).translate(0,-4.54,.05),6,'#1E5AA8'),
   Pt(B(1.1,.6,.07).translate(0,-4.2,-.24),6,'#1E5AA8'),
@@ -641,7 +642,7 @@ const skierGeoByType=TYPES.map((t,ti)=>mergeGeometries(skierParts.filter(g=>{ co
 const farGeo=Pt(B(.75,1.9,.45).translate(0,.95,0),0,'#fff',1);
 const tbarCarrier=mergeGeometries([
   prep(new THREE.CylinderGeometry(.035,.035,1,5).translate(0,-.5,0),{aBase:lin('#69717c'),aTip:0}),
-  prep(B(.75,.07,.07),{aBase:lin('#F2B705'),aTip:1}),
+  prep(new THREE.CylinderGeometry(.32,.32,.09,12),{aBase:lin('#F2B705'),aTip:1}),
   prep(B(.2,.3,.2).translate(0,-.15,0),{aBase:lin('#3a3f47'),aTip:0}),
 ]);
 const chairCarrier=mergeGeometries([
@@ -777,7 +778,7 @@ function showAll(){ select(-1); const o=overview(); flyTo(o.pos,o.target,2200); 
 
 /* ---------- karta ---------- */
 let cheers={}; try{ cheers=JSON.parse(localStorage.getItem('svah_cheers')||'{}'); }catch(e){}
-const MODE_TXT={down:'práve jazdí dolu', tbar:'ide vlekom hore', chair:'sedí na lanovke', walk:'stúpa pešo hore'};
+const MODE_TXT={down:'práve jazdí dolu', tbar:'ide pumou hore', chair:'sedí na lanovke', walk:'stúpa pešo hore'};
 function select(i, fly=true){
   selected=i;
   if(i<0){ $('card').style.display='none'; $('cta').style.display='block'; return; }
