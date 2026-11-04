@@ -69,6 +69,8 @@
     e.texts.push(c.t.replace(/\s+/g, ' ').trim());
     for (const [re, role] of ROLE) if (re.test(t)) e.role = e.role || role;
     if (FREE.test(t)) e.f = 1;
+    const sv = t.match(/(?:svah|zjazdovk\w*|sjezdovk\w*|trat\w*)\s*(?:c\.?\s*|cislo\s*)?([1-9])\b/); if (sv) e.r = +sv[1];
+    if (/svah snowpark|do snowparku/.test(t)) { e.r = 'SP'; e.f = 1; }
     const num = t.match(/(?:cislo|cisl|number|c\.)\s*(\d{1,3})/); if (num && +num[1] > 0 && +num[1] !== 69) e.n = +num[1];
     const found = [];
     words.forEach((w, i) => {
@@ -99,7 +101,7 @@
     if (!signed) continue;
     const o = { u: e.u, g: 'ski', t: e.t || '', c: e.c || '', k: e.texts[0].slice(0, 90) };
     if (!e.t || !e.c) o.auto = 1;
-    for (const key of ['n', 'h', 'p', 's', 'f']) if (e[key] !== undefined) o[key] = e[key];
+    for (const key of ['n', 'h', 'p', 's', 'f', 'r']) if (e[key] !== undefined) o[key] = e[key];
     out.push(o);
   }
   const inData = new Set(out.map(o => o.u));
