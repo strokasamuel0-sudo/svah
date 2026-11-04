@@ -257,10 +257,10 @@ const RINGS=[{n:12,start:80,off:0},{n:12,start:230,off:.5},{n:24,start:390,off:.
 const SLOTS=[];
 RINGS.forEach(rg=>{ for(let j=0;j<rg.n;j++) SLOTS.push({ th:(j+rg.off)/rg.n*Math.PI*2-Math.PI/2, r0:rg.start, len:Math.min(800,1480-rg.start) }); });
 const REG = skiers.filter(p => !p.f || p.i === 0);
-const nRuns = Math.min(SLOTS.length, Math.max(2, Math.ceil(REG.length/CAP)));
+const nRuns = Math.min(SLOTS.length, Math.max(3, Math.ceil(REG.length/CAP)));
 const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
-  const w = k===1 ? 3 : 0;
-  return { ...s, k, w, chair:false, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:34, TH: 7.5 };
+  const w = k===1 ? 3 : k===2 ? 1 : 0;
+  return { ...s, k, w, chair:w===1, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:w===1?36:34, TH: w===1?12:7.5 };
 });
 const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
 const ALLRUNS = [...RUNS, FS];
@@ -271,8 +271,8 @@ skiers.forEach(p => {
   p.cyc = opts[p.h % opts.length];
   p.down = p.cyc - p.run.len/LIFT_V;
 });
-$('count').textContent = fmt(NSKI);
-$('runsInfo').textContent = RUNS.length+' zjazdovky · snowpark';
+$('count').textContent = fmt(N);
+$('runsInfo').textContent = RUNS.length+' zjazdovky · 8-sedačka · snowpark';
 
 const _a=new THREE.Vector3(), _b=new THREE.Vector3();
 function runPt(run,s,lat,out){
@@ -311,8 +311,9 @@ function skierOrg(p, t, out){
   if (u<dn){ s=u/dn; const ph=(u/T.per)*Math.PI*2+p.phase*6.28;
     lat=fs?Math.min(6,Math.max(-6,p.lane*3+Math.sin(ph)*T.amp*4)):Math.min(18,Math.max(-18,p.lane*7+Math.sin(ph)*T.amp*12)); mode='down'; }
   else { s=1-(u-dn)/upd; if(T.lift){ lat=run.LL; mode=run.chair?'chair':'tbar'; } else { lat=-17.5; mode='walk'; } }
+  if (mode==='chair'){ const sp=22, L2=2*len, nC=Math.floor(L2/sp), d=s*len; let j=Math.floor((((len-d-t*LIFT_V)%L2+L2)%L2)/sp+.5); j=Math.min(j,nC-1); const P=((t*LIFT_V+j*sp)%L2+L2)%L2, dS=len-P; if(dS>=0&&dS<=len) s=dS/len; }
   runPt(run,s,lat,out); out.y+=.25;
-  if (mode==='chair') out.y = cabY(run,s*len,run.LL,run.TH)-4.5-.32*SK;
+  if (mode==='chair'){ out.y = cabY(run,s*len,run.LL,run.TH)-4.5-.32*SK; const a=runPt(run,Math.max(0,s-.01),lat,_a); const dx=a.x-out.x, dz=a.z-out.z, dl=Math.hypot(dx,dz)||1, so=((p.i%8)-3.5)*.56; out.x+=dz/dl*so; out.z-=dx/dl*so; }
   if (p.ti===1 && mode==='down' && !fs){ const j=(u%23)/23; if(j<.05) out.y+=Math.sin(j/.05*Math.PI)*2.5; }
   if (fs && mode==='down') for (const sk of [.25,.5,.75]){ const dd=(s-sk)*len; if(dd>0&&dd<16) out.y+=Math.sin(dd/16*Math.PI)*4.5; }
   if (p.i===JUMP_ID){ const k=(t-JUMP_T)/1.4; if(k>0&&k<1) out.y+=Math.sin(k*Math.PI)*9; }
@@ -328,7 +329,7 @@ const GROOM = [27000, 39600, 52200, 64800, 77400];
 const GSEG = ALLRUNS.map(r => r.w===2 ? 240 : 480);
 const GDUR = GSEG.reduce((a,b)=>a+b,0);
 function groomState(t){
-  const L = localSec(t), day = Math.floor((Date.now()/1000+TZ)/86400);
+  const L = localSec(t+(window.__gOff||0)), day = Math.floor((Date.now()/1000+TZ)/86400);
   for (let k=0;k<GROOM.length;k++){
     let e = L - GROOM[k];
     if (e>=0 && e<GDUR){
@@ -343,7 +344,7 @@ function groomState(t){
   return { active:false, next };
 }
 function heliState(t){
-  const ph = ((t%1200)+1200)%1200;
+  const ph = (((t+(window.__hOff||0))%1200)+1200)%1200;
   return { flying: ph < 150, ph };
 }
 const ROLE_TXT = {
@@ -665,7 +666,7 @@ function makeSign(lines,bg,fg,w=256,h=128){
   x.fillStyle=bg; x.beginPath(); x.roundRect(4,4,w-8,h-8,18); x.fill();
   x.strokeStyle='#fff'; x.lineWidth=6; x.stroke();
   x.fillStyle=fg; x.textAlign='center'; x.textBaseline='middle';
-  const fs=lines.length===1?h*.55:h*.3; x.font='800 '+fs+'px system-ui,Arial';
+  const fs=lines.length===1?h*.55:h*(lines.length>2?.25:.3); x.font='800 '+fs+'px system-ui,Arial';
   lines.forEach((l,i)=>x.fillText(l,w/2,h/2+(i-(lines.length-1)/2)*fs*1.1));
   const t=new THREE.CanvasTexture(cv); t.colorSpace=THREE.SRGBColorSpace;
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthWrite:false})); sp.scale.set(w/9,h/9,1); return sp;
@@ -736,6 +737,7 @@ ALLRUNS.forEach(run=>{
   // tabuľky
   runPt(run,0,-30,V1); const sg=run.w===2?makeSign(['SNOWPARK'],run.color,'#fff',320,96):makeSign([run.label],run.color,'#fff',128,128); sg.position.set(V1.x,V1.y+14,V1.z); scene.add(sg);
   if(run.w===2) buildKickers(run);
+  if(run.w===1){ runPt(run,.02,-24,V1); const ls=makeSign(['8-SEDAČKOVÁ','LANOVKA'],'#F26B21','#fff',384,128); ls.position.set(V1.x,V1.y+24,V1.z); scene.add(ls); runPt(run,1,-26,V1); const lb=makeSign(['8-SEDAČKA','pri 1000 followeroch'],'#F26B21','#fff',384,128); lb.position.set(V1.x,V1.y+16,V1.z); scene.add(lb); }
   if(run.k===0){ runPt(run,.03,-6,V1); const vs=makeSign(['PRVÁ STOPA'],'#C8102E','#fff',384,96); vs.position.set(V1.x,V1.y+22,V1.z); scene.add(vs); }
   const a=runPt(run,0,0,new THREE.Vector3()), b=runPt(run,1,0,new THREE.Vector3());
   const ro={run,a,b,detail:null,far:null,carriers:null,members:skiers.filter(p=>p.run===run).map(p=>p.i)}; run.ro=ro;
@@ -836,6 +838,7 @@ bool chair=abs(aRun.w-1.0)<0.5; bool fs=abs(aRun.w-2.0)<0.5; float LL=chair?36.0
 float s; float lat; bool onLift=false; float dir=1.0; float swayV=0.0;
 if(u<dn){ s=u/dn; float ph=(u/per)*TAU_+aP.y*6.28; swayV=cos(ph); lat=fs?clamp(aP.x*3.0+sin(ph)*amp*4.0,-6.0,6.0):clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
 else { s=1.0-(u-dn)/upd; dir=-1.0; if(hasLift>0.5){ lat=LL; onLift=true; } else { lat=-17.5; } }
+if(onLift&&chair){ float sp=22.0; float L2=2.0*len; float nC=floor(L2/sp); float jj=min(floor(mod(len-s*len-uTime*LIFT_V,L2)/sp+0.5),nC-1.0); float PP=mod(uTime*LIFT_V+jj*sp,L2); float dS=len-PP; if(dS>=0.0&&dS<=len) s=dS/len; }
 vec3 org=runPt(aRun,s,lat); org.y+=0.25;
 float groundY=org.y;
 float s2=s+0.004*dir; float lat2=lat+((onLift||dir<0.0)?0.0:swayV*amp*2.0);
@@ -843,7 +846,7 @@ vec3 nx2=runPt(aRun,s2,lat2);
 float yaw=atan(nx2.x-org.x, nx2.z-org.z);
 bool sit=(!onLift && dir>0.0 && (ti==2||ti==4)) || (onLift&&chair);
 float cy=0.0;
-if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair) org.y=cy-4.5-0.32*SK; }
+if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair){ org.y=cy-4.5-0.32*SK; org+=rY(vec3((mod(aId,8.0)-3.5)*0.56,0.0,0.0),yaw); } }
 if(ti==1 && dir>0.0 && !fs){ float j=mod(u,23.0)/23.0; if(j<0.05) org.y+=sin(j/0.05*3.14159)*2.5; }
 float flipA=0.0;
 if(fs && dir>0.0){ for(int kk=0;kk<3;kk++){ float sk=0.25+0.25*float(kk); float dd=(s-sk)*len; if(dd>0.0&&dd<16.0){ float f=dd/16.0; org.y+=sin(f*3.14159)*4.5; float tr=mod(aId+float(kk),4.0); if(tr<1.0) yaw+=f*6.28318; else if(tr<2.0) yaw+=f*12.56637; else if(tr<3.0) flipA=-f*6.28318; else { yaw+=f*6.28318; flipA=f*6.28318; } } } }
@@ -870,7 +873,7 @@ if(part<=3){
   if(aTip>0.5){ p.y-=L; p.z-=0.1*SK; } else { p.y*=L; }
   p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,cy,org.z)+p;
 } else {
-  if(!(onLift&&chair)) hide=true;
+  hide=true;
   p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,cy,org.z)+p;
 }
 if(hide) svahPos=vec3(0.0,-9999.0,0.0);
@@ -959,10 +962,14 @@ const tbarCarrier=mergeGeometries([
   prep(B(.2,.3,.2).translate(0,-.15,0),{aBase:lin('#3a3f47'),aTip:0}),
 ]);
 const chairCarrier=mergeGeometries([
-  prep(new THREE.CylinderGeometry(.05,.05,4.5,5).translate(0,-2.25,0),{aBase:lin('#59616b'),aTip:0}),
-  prep(B(1.1,.08,.55).translate(0,-4.54,.05),{aBase:lin('#1E5AA8'),aTip:0}),
-  prep(B(1.1,.6,.07).translate(0,-4.2,-.24),{aBase:lin('#1E5AA8'),aTip:0}),
-  prep(B(1.1,.05,.05).translate(0,-3.6,.45),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.07,.07,3.4,6).translate(0,-1.7,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(B(4.7,.1,.1).translate(0,-3.4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.05,.05,1.2,5).translate(-2.3,-4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.05,.05,1.2,5).translate(2.3,-4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(B(4.6,.1,.6).translate(0,-4.54,.05),{aBase:lin('#C8102E'),aTip:0}),
+  prep(B(4.6,.65,.08).translate(0,-4.2,-.25),{aBase:lin('#C8102E'),aTip:0}),
+  prep(B(4.6,.05,.05).translate(0,-3.75,.5),{aBase:lin('#F2B705'),aTip:0}),
+  prep(B(4.8,.06,1.3).translate(0,-3.35,-.1),{aBase:lin('#F26B21'),aTip:0}),
 ]);
 
 function instGeo(base, list, run){
@@ -1086,7 +1093,7 @@ let selected=-1, flying=null;
 const followOff=new THREE.Vector3(), lastSel=new THREE.Vector3();
 function overview(){
   if(RUNS.length<=3){
-    const r1=RUNS[RUNS.length>1?1:0], mid=(RUNS[0].th+r1.th)/2;
+    const r1=RUNS[RUNS.length-1], mid=(RUNS[0].th+r1.th)/2;
     const tgt=new THREE.Vector3(560*Math.cos(mid),0,560*Math.sin(mid)); tgt.y=groundAt(tgt.x,tgt.z)+20;
     const R=RUNS.length>1?2050:1700, cam=new THREE.Vector3(R*Math.cos(mid-.08),0,R*Math.sin(mid-.08)); cam.y=groundAt(cam.x,cam.z)+(RUNS.length>1?380:260);
     return {pos:cam,target:tgt};
@@ -1257,6 +1264,7 @@ function fromHash(){ const m=location.hash.match(/lyziar-(\d+)/); if(m){ const i
 addEventListener('hashchange',fromHash); fromHash();
 /* ================= REEL: export videa priamo zo svahu (?reel=1 alebo ?reel=preview) ================= */
 async function startReel(){
+  { const sid=params.get('script')||''; let sc2=SC2[sid]; if(!sc2&&sid&&!/^[12]$/.test(sid)){ try{ sc2=await fetch('data/reels/'+encodeURIComponent(sid)+'.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null); }catch(e){} if(sc2){ sc2.voice=sc2.voice||('voice_'+sid); sc2.out=sc2.out||('reel_'+sid); } } if(sc2) return startReel2(sc2); }
   const W=1080, H2=1920, FPS=30, SR=48000, NS=7;
   for(const id of ['top','cta','card','labels','demo']){ const e=$(id); if(e) e.style.display='none'; }
   const stEl=document.createElement('div'); stEl.style.cssText='position:fixed;left:12px;top:12px;z-index:60;background:#fff;padding:10px 14px;border-radius:10px;font:600 14px system-ui;max-width:90vw'; document.body.appendChild(stEl);
@@ -1486,6 +1494,309 @@ async function startReel(){
   vid.style.cssText='position:fixed;left:50%;top:0;height:100vh;transform:translateX(-50%);z-index:40;background:#000'; document.body.appendChild(vid);
   say('Hotovo: '+(blob.size/1e6).toFixed(1)+' MB, '+DUR.toFixed(1)+' s – uložené pre Instagram');
 }
+/* ================= REEL 2: scenáre 3+ (svet, čakáreň, úpravy, lanovka) ================= */
+const FOLN = (DATA && DATA.followers) || N;
+const byU = u => people.find(p => p.u === u);
+const SC2 = {
+  '3': { voice:'voice3', out:'reel3', align:'fs',
+    sents:['Ďakujeme! Za jeden večer vás prišlo skoro osemsto.','Každý, kto napísal koment, už jazdí na svahu.','Pribudla kľukatá zjazdovka a snowpark so skokmi.','Ratrak upravuje trať päťkrát denne, podľa reálneho času.','Lieta horská služba a pri hoteli máva vianočný maskot.','Svojho lyžiara nájdeš cez odkaz v bio.'],
+    segs:[ {shot:'aerial', cap:['*ĎAKUJEME!*','skoro *'+FOLN+'* followerov','za jeden večer'], y:900},
+           {shot:'slope', cap:['Kto napísal *koment*,','už *jazdí na svahu*'], y:1180},
+           {shot:'fs', cap:['Nová *kľukatá zjazdovka*','a *snowpark* so skokmi'], y:1250},
+           {shot:'ratrak', cap:['*Ratrak* chodí','*5× denne* podľa','reálneho času'], y:1250},
+           {shot:'heliHotel', cap:['*Horská služba*,','*hotel* aj vianočný','*maskot*'], y:1250},
+           {shot:'crane', cap:['Nájdi sa cez','*odkaz v bio*'], y:900} ],
+    end:[['*Ďakujeme* ❤️'],['Daj *follow* a napíš','koment 👇']] },
+  '4': { voice:'voice4', out:'reel4', align:'cust',
+    sents:['Písali ste, že si chcete upraviť postavu.','Stačí to napísať do komentu.','Štartové číslo, farba bundy, nohavíc, čiapky, aj zlaté alebo strieborné lyže.','A my to na svahu upravíme presne podľa teba.','Napíš, ako chceš vyzerať!'],
+    segs:[ {shot:'slope', cap:['Chceli ste si','*upraviť postavu*'], y:520, ov:'comments'},
+           {shot:'slope2', cap:['Stačí to napísať','do *komentu*'], y:900},
+           {shot:'cust', cap:['*Číslo* · *bunda* · *nohavice*','*čiapka* · *zlaté lyže*'], y:1250, ov:'custTag'},
+           {shot:'custSide', cap:['Upravíme to','*presne podľa teba*'], y:1250, ov:'custTag'},
+           {shot:'crane', cap:['Napíš, ako chceš','*vyzerať* 👇'], y:900} ],
+    end:[['Tvoj lyžiar,','*tvoj štýl*'],['Napíš *koment* 👇']] },
+  '5': { voice:'voice5', out:'reel5', align:'lift',
+    sents:['Dal si follow, ale nenapísal si koment?','Tak stojíš v čakárni pod vlekom.','Je tam párty, ale na svah sa nedostaneš.','Napíš do komentu farbu bundy a farbu lyží.','A ideš rovno na vlek!'],
+    segs:[ {shot:'crowdWide', cap:['Dal si *follow*,','ale *bez komentu*?'], y:1250},
+           {shot:'crowdClose', cap:['Stojíš v *čakárni*','pod vlekom'], y:1250},
+           {shot:'crowdLow', cap:['Je tam *párty*,','ale na svah *nemôžeš*'], y:1250},
+           {shot:'liftBottom', cap:['Napíš *farbu bundy*','a *farbu lyží*'], y:900, ov:'colors'},
+           {shot:'liftRide', cap:['…a ideš','rovno *na vlek!*'], y:1250} ],
+    end:[['Napíš *koment* 👇'],['a ideš *na svah*']] },
+  '6': { voice:'voice6', out:'reel6', align:'fs',
+    sents:['Jeden z vás napísal: osemsedačkovú lanovku.','Dobre, platí!','Keď nás bude tisíc, postavíme prvú osemsedačkovú lanovku.','Teraz nás je skoro osemsto.','Pošli svah kamošom a poďme na to!'],
+    segs:[ {shot:'liftBottom', cap:['Jeden z vás *chce*:'], y:520, ov:'liftComment'},
+           {shot:'aerial', cap:['*Platí!*'], y:900},
+           {shot:'liftLine', cap:['Pri *1000 followeroch*','postavíme *8-sedačkovú*','*lanovku*'], y:1250},
+           {shot:'crowdWide', cap:['Teraz nás je','*'+FOLN+'*'], y:820, ov:'progress'},
+           {shot:'crane', cap:['Pošli svah','*kamošom* 👇'], y:900} ],
+    end:[['*1000* = *lanovka*'],['Daj *follow* 👇']] },
+};
+const REEL_COMMENTS = {
+  comments:[['dandyk_96','ja chci lyze a cislo 96'],['robert.kavalek','Modrá bunda zelena čiapka'],['__s5bos__','Ja lyze ,čierna bunda,čierne nohavice'],['eliska_rigova','Zlaté lyže']],
+  liftComment:[['m4.t_y','8 sedačkovou sedačku']],
+};
+async function startReel2(SC){
+  const _ph=s=>typeof s==='string'?s.split('{FOLN}').join(String(FOLN)).split('{NSKI}').join(String(NSKI)).split('{N}').join(String(N)):s;
+  SC.segs.forEach(sg=>{ sg.cap=(sg.cap||['']).map(_ph); }); SC.end=(SC.end||[[''],['']]).map(a=>a.map(_ph)); SC.align=SC.align||'fs';
+  const W=1080, H2=1920, FPS=30, SR=48000, NSEG=SC.segs.length, NS=NSEG+1;
+  for(const id of ['top','cta','card','labels','demo']){ const e=$(id); if(e) e.style.display='none'; }
+  const stEl=document.createElement('div'); stEl.style.cssText='position:fixed;left:12px;top:12px;z-index:60;background:#fff;padding:10px 14px;border-radius:10px;font:600 14px system-ui;max-width:90vw'; document.body.appendChild(stEl);
+  const say=t=>{ stEl.textContent=t; window.__reelStatus=t; };
+  canvas.style.display='none';
+  renderer.setPixelRatio(1); renderer.setSize(W,H2,false);
+  camera.aspect=W/H2; camera.fov=58; camera.near=.5; camera.updateProjectionMatrix();
+  const fl=document.createElement('link'); fl.rel='stylesheet'; fl.href='https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap'; document.head.appendChild(fl);
+  try{ await new Promise(r=>{ fl.onload=r; setTimeout(r,4000); }); await document.fonts.load('800 80px Poppins'); await document.fonts.load('600 40px Poppins'); }catch(e){}
+  const FONT='Poppins, system-ui, -apple-system, Arial, sans-serif';
+  const idb=()=>new Promise((res,rej)=>{ const r=indexedDB.open('svah',1); r.onupgradeneeded=()=>r.result.createObjectStore('f'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); });
+  const dbGet=async k=>{ const d=await idb(); return new Promise((res,rej)=>{ const r=d.transaction('f').objectStore('f').get(k); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); };
+  const dbPut=async(k,v)=>{ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction('f','readwrite'); t.objectStore('f').put(v,k); t.oncomplete=res; t.onerror=()=>rej(t.error); }); };
+  say('Načítavam hlas…');
+  const voiceBlob=await dbGet(SC.voice);
+  let voice=null;
+  if(voiceBlob){ const ac=new OfflineAudioContext(2,SR,SR); voice=await ac.decodeAudioData(await voiceBlob.arrayBuffer()); }
+  const VO=0.35, vDur=voice?voice.duration:22;
+  const DUR=Math.ceil((VO+vDur+2.2)*FPS)/FPS;
+  const LENS=SC.sents.map(s=>s.length);
+  let bounds=null;
+  if(voice){
+    const d=voice.getChannelData(0), win=Math.round(SR*0.02), rms=[];
+    for(let i=0;i+win<=d.length;i+=win){ let s=0; for(let j=0;j<win;j++) s+=d[i+j]*d[i+j]; rms.push(Math.sqrt(s/win)); }
+    let mx=0; for(const v of rms) if(v>mx) mx=v;
+    const thr=mx*0.06, gaps=[]; let s0=-1;
+    rms.forEach((v,i)=>{ if(v<thr){ if(s0<0) s0=i; } else { if(s0>=0){ const len=i-s0; if(len*0.02>=0.14) gaps.push({t:(s0+len/2)*0.02,len}); s0=-1; } } });
+    let first=0; while(first<rms.length&&rms[first]<thr) first++;
+    let last=rms.length-1; while(last>0&&rms[last]<thr) last--;
+    const fT=first*0.02, lT=last*0.02; let tot=0; for(const l of LENS) tot+=l;
+    const cand=gaps.filter(g=>g.t>fT+0.4&&g.t<lT-0.4); const pick=[]; let acc=0, prev=fT;
+    for(let k=0;k<NSEG-1;k++){ acc+=LENS[k]; const e=fT+(lT-fT)*acc/tot; let best=null, bs=1e9;
+      for(const g of cand){ if(g.t<=prev+0.3) continue; const sc=Math.abs(g.t-e)-0.6*g.len*0.02; if(sc<bs){ bs=sc; best=g; } }
+      if(!best||Math.abs(best.t-e)>2.5){ pick.length=0; break; } pick.push(best.t); prev=best.t; }
+    if(pick.length===NSEG-1) bounds=[0].concat(pick,[lT+0.3]);
+  }
+  if(!bounds){ let tot=0; for(const l of LENS) tot+=l; let acc=0; bounds=[0]; for(const l of LENS){ acc+=l/tot*(vDur-0.2); bounds.push(acc); } }
+  bounds=bounds.map((b,i)=>i===0?0:b+VO);
+  window.__reelBounds=bounds;
+  const segStart=k=>bounds[k];
+
+  // zarovnanie času: hlavná postava je v správnej fáze vo svojom zábere
+  const segOf=name=>SC.segs.findIndex(s=>s.shot===name);
+  const fsP=skiers.find(p=>p.run===FS&&p.ti!==3)||skiers.find(p=>p.run===FS);
+  const custP=(SC.focus&&byU(SC.focus))||byU('eliska_rigova')||byU('kristian132015')||skiers.find(p=>p.scHex)||people[0];
+  const liftP=skiers.find(p=>p.run===RUNS[0]&&TYPES[p.ti].lift&&p.i>0)||people[0];
+  const R2=RUNS.find(r=>r.w===1)||RUNS[0]; const chP=skiers.find(p=>p.run===R2&&TYPES[p.ti].lift&&p.ti!==1)||liftP;
+  let T0;
+  { let p, sname, want;
+    if(SC.align==='cust'){ p=custP; sname='cust'; want=p.down*0.30; }
+    else if(SC.align==='lift'){ p=liftP; sname='liftRide'; want=p.down+(p.run.len/LIFT_V)*0.02; }
+    else if(SC.align==='chair'){ p=chP; sname='chairRide'; want=p.down+(p.run.len/LIFT_V)*0.2; }
+    else { p=fsP; sname='fs'; want=p.down*0.20; }
+    const k=Math.max(0,segOf(sname)), ts=segStart(k)+0.1, cyc=p.cyc;
+    T0=40000; const u=((T0+ts+p.phase*cyc)%cyc+cyc)%cyc; T0+=((want-u)%cyc+cyc)%cyc;
+  }
+  // ratrak a vrtuľník v správnej chvíli
+  { const kr=segOf('ratrak'); if(kr>=0) window.__gOff=27000+150-(T0+segStart(kr)+TZ); else window.__gOff=27000+150-(T0+TZ);
+    const kh=segOf('heliHotel'); const th=T0+(kh>=0?segStart(kh):segStart(1)); window.__hOff=((30-th)%1200+1200)%1200; }
+
+  const R0r=RUNS[0], Pr=(run,s,lat,dy)=>{ const v=runPt(run,s,lat,new THREE.Vector3()); v.y+=dy; return v; };
+  const midTh=(RUNS[0].th+RUNS[1].th)/2;
+  const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+  const pos=(p,T)=>{ skierOrg(p,T,tmp); return V(tmp.x,tmp.y,tmp.z); };
+  const follow=(p,T,back,side,up,ahead)=>{ const a=pos(p,T), b=pos(p,T+0.4); const d=b.clone().sub(a); d.y=0; if(d.lengthSq()<1e-4) d.set(Math.cos(p.run.th),0,Math.sin(p.run.th)); d.normalize(); const sd=V(-d.z,0,d.x);
+    return { p:a.clone().addScaledVector(d,-back).addScaledVector(sd,side).add(V(0,up,0)), q:a.clone().addScaledVector(d,ahead).add(V(0,1.2,0)) }; };
+  const orbit=(C,r,h,a0,w,t,lookUp)=>{ const a=a0+w*t; return { p:V(C.x+Math.cos(a)*r,C.y+h,C.z+Math.sin(a)*r), q:V(C.x,C.y+(lookUp||3),C.z) }; };
+  const thC=Math.atan2(SPOT.crowd.z,SPOT.crowd.x);
+  const SH={
+    aerial:(t,T,k)=>{ const e=ease(Math.min(1,k)); const a=V(2100*Math.cos(midTh-.1),0,2100*Math.sin(midTh-.1)), b=V(1500*Math.cos(midTh-.05),0,1500*Math.sin(midTh-.05)); a.y=groundAt(a.x,a.z)+420; b.y=groundAt(b.x,b.z)+260; const tg=V(600*Math.cos(midTh),0,600*Math.sin(midTh)); tg.y=groundAt(tg.x,tg.z)+10; return {p:a.lerp(b,e), q:tg}; },
+    crane:(t,T,k)=>{ const e=ease(Math.min(1,k)); const a=Pr(R0r,1.02,-40,12), b=V(1900*Math.cos(midTh-.12),0,1900*Math.sin(midTh-.12)); b.y=groundAt(b.x,b.z)+330; const q=Pr(R0r,.85,0,0).lerp(V(400*Math.cos(midTh),groundAt(400*Math.cos(midTh),400*Math.sin(midTh)),400*Math.sin(midTh)),e); return {p:a.lerp(b,e), q}; },
+    slope:(t,T,k)=>({ p:Pr(R0r,.52-.03*k,-34,9), q:Pr(R0r,.6,4,0) }),
+    slope2:(t,T,k)=>({ p:Pr(R0r,.78,30,7+3*k), q:Pr(R0r,.7,-4,0) }),
+    fs:(t,T,k)=>follow(fsP,T,4,15,6,3),
+    cust:(t,T,k)=>follow(custP,T,7,2.5,2.6,6),
+    custSide:(t,T,k)=>follow(custP,T,-1,9,2.2,0),
+    liftRide:(t,T,k)=>follow(liftP,T,3,-13,3.5,2),
+    ratrak:(t,T,k)=>{ const r=WORLD.ratrak.position; const d=V(0,0,1).applyQuaternion(WORLD.ratrak.quaternion); const sd=V(-d.z,0,d.x); return { p:r.clone().addScaledVector(d,16).addScaledVector(sd,12).add(V(0,9,0)), q:r.clone().add(V(0,2,0)) }; },
+    heliHotel:(t,T,k)=>{ if(k<0.5){ const h=WORLD.heli.position; const d=V(0,0,1).applyAxisAngle(V(0,1,0),WORLD.heli.rotation.y); return { p:h.clone().addScaledVector(d,-28).add(V(10,8,0)), q:h.clone() }; }
+      const th=Math.atan2(SPOT.hotel.z,SPOT.hotel.x), c=V(1035*Math.cos(th-.035),0,1035*Math.sin(th-.035)); c.y=groundAt(c.x,c.z)+22; return { p:c, q:V(SPOT.hotel.x,SPOT.hotel.y+6,SPOT.hotel.z).lerp(V(SPOT.mascot.x,SPOT.mascot.y+4,SPOT.mascot.z),.3) }; },
+    crowdWide:(t,T,k)=>orbit(SPOT.crowd,crowdR+48,26,thC+.6,.08,t,2),
+    crowdClose:(t,T,k)=>orbit(SPOT.crowd,crowdR*0.8,11,thC+2.2,.05,t,2),
+    crowdLow:(t,T,k)=>{ const st=WORLD.stage; const C=SPOT.crowd; const d=V(st.x-C.x,0,st.z-C.z).normalize(); const sd=V(-d.z,0,d.x); return { p:V(C.x,0,C.z).addScaledVector(d,-crowdR-4).addScaledVector(sd,8-6*k).setY(C.y+4), q:V(st.x,st.y+5,st.z) }; },
+    liftBottom:(t,T,k)=>({ p:Pr(R0r,1.0,-16,7), q:Pr(R0r,.78,34,7) }),
+    chairRide:(t,T,k)=>follow(chP,T,7,11,2,3),
+    chairLine:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R2,.97-.3*e,78,26), q:Pr(R2,.4-.15*e,36,10) }; },
+    chairTop:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R2,.08+.05*e,-40,40-10*e), q:Pr(R2,.3,30,0) }; },
+    liftLine:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R0r,.9-.2*e,62,30), q:Pr(R0r,.25-.1*e,30,10) }; },
+  };
+  const BL=.9;
+  function camAt(t,T){
+    let seg=0; for(let i=0;i<NS;i++) if(t>=bounds[i]) seg=i;
+    const sIdx=Math.min(seg,NSEG-1); const s=SC.segs[sIdx];
+    const st=bounds[sIdx], en=sIdx+1<bounds.length?bounds[sIdx+1]:DUR; const k=(t-st)/Math.max(.5,en-st);
+    const kk=seg>=NSEG?1+(t-bounds[NSEG])/Math.max(1,DUR-bounds[NSEG])*.4:k;
+    let A=SH[s.shot](t,T,Math.min(1.4,kk));
+    const gy=groundAt(A.p.x,A.p.z)+2; if(A.p.y<gy) A.p.y=gy;
+    return A;
+  }
+  // grafika
+  const cv2=document.createElement('canvas'); cv2.width=W; cv2.height=H2; const g=cv2.getContext('2d');
+  const rr=(x,y,w,h,r)=>{ g.beginPath(); g.roundRect(x,y,w,h,r); };
+  const backOut=x=>1+2.70158*Math.pow(x-1,3)+1.70158*Math.pow(x-1,2);
+  function capDraw(lines,cy,size,segT){
+    if(segT<0) return;
+    const k=Math.min(1,segT/0.22), sc=0.82+0.18*backOut(k), al=Math.min(1,segT/0.12);
+    g.save(); g.globalAlpha=al; g.translate(W/2,cy); g.scale(sc,sc);
+    g.font='800 '+size+'px '+FONT;
+    const parsed=lines.map(l=>l.split('*').map((s,j)=>({s,hl:j%2===1})).filter(x=>x.s));
+    const widths=parsed.map(segs=>segs.reduce((a,x)=>a+g.measureText(x.s).width,0));
+    const f=Math.min(1,940/Math.max(...widths)), sz=size*f;
+    g.font='800 '+sz+'px '+FONT; g.textBaseline='middle'; g.textAlign='left'; g.lineJoin='round';
+    const lh=sz*1.2, y0=-(lines.length-1)*lh/2;
+    parsed.forEach((segs,li)=>{ let x=-widths[li]*f/2; const y=y0+li*lh;
+      for(const it of segs){ g.lineWidth=sz*0.2; g.strokeStyle='rgba(16,20,28,.95)'; g.strokeText(it.s,x,y); g.fillStyle=it.hl?'#FFD23F':'#ffffff'; g.fillText(it.s,x,y); x+=g.measureText(it.s).width; } });
+    g.restore();
+  }
+  function board(){
+    g.save(); g.fillStyle='#1E5AA8'; rr(40,240,640,110,26); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
+    g.fillStyle='#fff'; g.font='800 44px '+FONT; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Svah followerov',72,296);
+    g.textAlign='right'; g.font='800 20px '+FONT; g.fillText('NA SVAHU',652,272); g.font='800 50px '+FONT; g.fillText(String(N),652,316); g.restore();
+  }
+  const AVC=['#E84A8A','#1E5AA8','#F26B21','#2E9E5B','#7A3FB8','#0FA3B1'];
+  function commentCard(u,text,x,y,w,segT,delay){
+    const k=Math.min(1,Math.max(0,(segT-delay)/0.3)); if(k<=0) return 0;
+    g.save(); g.globalAlpha=k; const yy=y+(1-backOut(k))*40;
+    g.font='600 34px '+FONT; const words=text.split(' '); const lines=[]; let cur='';
+    for(const wd of words){ const tst=cur?cur+' '+wd:wd; if(g.measureText(tst).width>w-170&&cur){ lines.push(cur); cur=wd; } else cur=tst; } if(cur) lines.push(cur);
+    const h=78+lines.length*44;
+    g.shadowColor='rgba(0,0,0,.25)'; g.shadowBlur=24; g.fillStyle='#fff'; rr(x,yy,w,h,30); g.fill(); g.shadowBlur=0;
+    g.fillStyle=AVC[hash(u)%AVC.length]; g.beginPath(); g.arc(x+58,yy+56,34,0,Math.PI*2); g.fill();
+    g.fillStyle='#fff'; g.font='800 34px '+FONT; g.textAlign='center'; g.textBaseline='middle'; g.fillText(u.replace(/[^a-z0-9]/gi,'').charAt(0).toUpperCase(),x+58,yy+57);
+    g.textAlign='left'; g.fillStyle='#111'; g.font='800 30px '+FONT; g.fillText(u,x+112,yy+40);
+    g.fillStyle='#222'; g.font='600 34px '+FONT; lines.forEach((l,i)=>g.fillText(l,x+112,yy+86+i*44));
+    g.fillStyle='#E0245E'; g.font='600 34px '+FONT; g.textAlign='right'; g.fillText('♥',x+w-30,yy+44);
+    g.restore(); return h;
+  }
+  function tagAt(P,text,segT){
+    const v=P.clone().project(camera); if(v.z>1||Math.abs(v.x)>.95||Math.abs(v.y)>.95) return;
+    const x=(v.x+1)/2*W, y=(1-v.y)/2*H2;
+    g.save(); g.globalAlpha=Math.min(1,segT/0.2); g.font='700 38px '+FONT; const w=g.measureText(text).width+44;
+    g.fillStyle='#1E5AA8'; rr(x-w/2,y-82,w,62,31); g.fill(); g.beginPath(); g.moveTo(x-14,y-21); g.lineTo(x+14,y-21); g.lineTo(x,y-4); g.fill();
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(text,x,y-51); g.restore();
+  }
+  function colorsRow(segT){
+    const cols=['#C8102E','#1E5AA8','#F2B705','#2E9E5B','#7A3FB8','#E84A8A','#FFFFFF','#2B2D31'];
+    cols.forEach((c,i)=>{ const k=Math.min(1,Math.max(0,(segT-0.15-i*0.06)/0.25)); if(k<=0) return; const r=30*backOut(k); const x=W/2+(i-(cols.length-1)/2)*86;
+      g.save(); g.fillStyle=c; g.strokeStyle='#fff'; g.lineWidth=5; g.beginPath(); g.arc(x,1110,r,0,Math.PI*2); g.fill(); g.stroke(); g.restore(); });
+  }
+  function progress(segT){
+    const k=Math.min(1,Math.max(0,segT/1.2)), e=ease(k), val=FOLN/1000;
+    g.save(); g.fillStyle='rgba(255,255,255,.95)'; rr(110,1010,860,190,36); g.fill();
+    g.fillStyle='#22262d'; g.font='800 40px '+FONT; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Do 8-sedačkovej lanovky',150,1062);
+    g.fillStyle='#E3EBF4'; rr(150,1110,780,46,23); g.fill();
+    g.fillStyle='#1E5AA8'; rr(150,1110,Math.max(46,780*val*e),46,23); g.fill();
+    g.fillStyle='#fff'; g.font='800 28px '+FONT; g.fillText(Math.round(FOLN*e)+' / 1000',170,1134);
+    g.restore();
+  }
+  function overlay(t,T){
+    const gr=g.createLinearGradient(0,960,0,H2); gr.addColorStop(0,'rgba(10,20,35,0)'); gr.addColorStop(1,'rgba(10,20,35,.45)'); g.fillStyle=gr; g.fillRect(0,960,W,H2-960);
+    board();
+    let seg=0; for(let i=0;i<NS;i++) if(t>=bounds[i]) seg=i;
+    const segT=seg===0?t+0.3:t-bounds[seg];
+    if(seg<NSEG){
+      const s=SC.segs[seg];
+      if(s.ov==='comments'){ let y=760; (SC.comments||REEL_COMMENTS.comments).forEach((c,i)=>{ const h=commentCard(c[0],c[1],90,y,900,segT,0.25+i*0.35); y+=(h||120)+26; }); }
+      if(s.ov==='liftComment'){ const lc=(SC.comment||REEL_COMMENTS.liftComment[0]); commentCard(lc[0],lc[1],90,760,900,segT,0.3); }
+      if(s.ov==='custTag'){ const P=pos(custP,T); P.y+=SK*1.7; tagAt(P,'#'+custP.bib+' @'+custP.u,segT); }
+      if(s.ov==='colors') colorsRow(segT);
+      if(s.ov==='progress') progress(segT);
+      capDraw(s.cap,s.y||1250,86,segT);
+    } else {
+      const al=Math.min(1,segT/0.3); g.fillStyle='rgba(10,18,30,'+(0.38*al)+')'; g.fillRect(0,0,W,H2); board();
+      capDraw(SC.end[0],860,112,segT);
+      capDraw(SC.end[1],1080,64,segT-0.5);
+    }
+  }
+  const snowArr=snow.geometry.attributes.position.array;
+  { const os=scene.getObjectByName('openSign'); if(os) os.visible=false; }
+  const allRuns=new Set(runObjs);
+  function renderFrame(t){
+    const T=T0+t; U.uTime.value=T;
+    updatePositions(T,allRuns); updateWorld(T,0);
+    const sh=camAt(t,T); camera.position.copy(sh.p); camera.lookAt(sh.q); camera.updateMatrixWorld();
+    const near=new Set(); for(const o of runObjs){ if(distSeg(camera.position,o.a,o.b)<260) near.add(o); }
+    updateDetail(near);
+    for(let i=1;i<snowArr.length;i+=3){ snowArr[i]-=.3; if(snowArr[i]<0) snowArr[i]+=260; }
+    snow.geometry.attributes.position.needsUpdate=true; snow.position.set(camera.position.x,camera.position.y-130,camera.position.z);
+    renderer.render(scene,camera);
+    g.drawImage(renderer.domElement,0,0,W,H2);
+    overlay(t,T);
+  }
+  if(params.get('reel')==='preview'){
+    cv2.style.cssText='position:fixed;left:50%;top:0;height:100vh;transform:translateX(-50%);z-index:40';
+    document.body.appendChild(cv2);
+    window.__reelShow=t=>{ renderFrame(t); return {t,bounds,DUR}; };
+    renderFrame(Math.min(DUR-0.1,bounds[1]+1));
+    say('Náhľad: '+DUR.toFixed(1)+' s'+(voice?'':' (bez hlasu)'));
+    return;
+  }
+  if(!voice){ say('Chýba hlas'); return; }
+  say('Mixujem zvuk…');
+  const nTot=Math.ceil(DUR*SR), oc=new OfflineAudioContext(2,nTot,SR);
+  const music=oc.createGain(); music.connect(oc.destination);
+  music.gain.setValueAtTime(1,0); music.gain.linearRampToValueAtTime(0.5,VO+0.2); music.gain.setValueAtTime(0.5,VO+vDur); music.gain.linearRampToValueAtTime(1,VO+vDur+0.4); music.gain.setValueAtTime(1,DUR-1); music.gain.linearRampToValueAtTime(0,DUR);
+  { const nb=oc.createBuffer(2,SR*2,SR); for(let c=0;c<2;c++){ const d=nb.getChannelData(c); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; }
+    const ns=oc.createBufferSource(); ns.buffer=nb; ns.loop=true; const nf=oc.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=420; const ng=oc.createGain(); ng.gain.value=0.12; ns.connect(nf).connect(ng).connect(music); ns.start(0); }
+  { const chords=[[261.63,329.63,392.0],[196.0,246.94,392.0],[220.0,261.63,329.63],[174.61,220.0,261.63]];
+    const pf=oc.createBiquadFilter(); pf.type='lowpass'; pf.frequency.value=1600; pf.connect(music);
+    for(let i=0,t=0;t<DUR;i++,t+=3){ const ch=chords[i%4];
+      for(const f of ch) for(const det of [-5,5]){ const o=oc.createOscillator(); o.type='triangle'; o.frequency.value=f; o.detune.value=det; const e=oc.createGain(); e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(0.02,t+0.5); e.gain.setValueAtTime(0.02,t+2.6); e.gain.linearRampToValueAtTime(0,t+3.3); o.connect(e).connect(pf); o.start(t); o.stop(Math.min(DUR,t+3.4)); }
+      const arp=[0,1,2,1,0,1,2,1];
+      arp.forEach((ni,j)=>{ const tt=t+j*0.375; if(tt>=DUR) return; const o=oc.createOscillator(); o.type='sine'; o.frequency.value=ch[ni]*2; const e=oc.createGain(); e.gain.setValueAtTime(0,tt); e.gain.linearRampToValueAtTime(0.05,tt+0.01); e.gain.exponentialRampToValueAtTime(0.0005,tt+0.35); o.connect(e).connect(pf); o.start(tt); o.stop(tt+0.4); }); } }
+  function whoosh(t0){ const nb=oc.createBuffer(1,SR,SR), d=nb.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const s=oc.createBufferSource(); s.buffer=nb; const bp=oc.createBiquadFilter(); bp.type='bandpass'; bp.Q.value=1.2; bp.frequency.setValueAtTime(300,Math.max(0,t0-0.35)); bp.frequency.exponentialRampToValueAtTime(3500,t0+0.25);
+    const e=oc.createGain(); e.gain.setValueAtTime(0,Math.max(0,t0-0.35)); e.gain.linearRampToValueAtTime(0.22,t0); e.gain.linearRampToValueAtTime(0,t0+0.4); s.connect(bp).connect(e).connect(oc.destination); s.start(Math.max(0,t0-0.35)); s.stop(t0+0.5); }
+  for(let k=1;k<NS;k++) whoosh(bounds[k]);
+  function bellAt(t0,base){ for(let r=0;r<3;r++){ const t=t0+r*0.16; const e=oc.createGain(); e.connect(oc.destination); e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(0.14,t+0.005); e.gain.exponentialRampToValueAtTime(0.0001,t+0.6);
+      const bp=oc.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=base*1.3; bp.Q.value=2.5; bp.connect(e);
+      for(const m of [1,1.48]){ const o=oc.createOscillator(); o.type='square'; o.frequency.value=base*m; o.connect(bp); o.start(t); o.stop(t+0.65); } } }
+  bellAt(bounds[NSEG]+0.05,880); bellAt(bounds[NSEG]+0.75,740);
+  { const s=oc.createBufferSource(); s.buffer=voice; s.connect(oc.destination); s.start(VO); }
+  const mix=await oc.startRendering();
+  { let pk=0; for(let c=0;c<2;c++){ const d=mix.getChannelData(c); for(let i=0;i<d.length;i++){ const a=Math.abs(d[i]); if(a>pk) pk=a; } }
+    const k=pk>0?0.95/pk:1; for(let c=0;c<2;c++){ const d=mix.getChannelData(c); for(let i=0;i<d.length;i++) d[i]*=k; } }
+  say('Načítavam kóder…');
+  let M=null; for(const v of ['5.1.3','5.1.0','5.0.0','4.3.3']){ try{ M=await import('https://cdn.jsdelivr.net/npm/mp4-muxer@'+v+'/+esm'); break; }catch(e){} }
+  if(!M){ say('Nepodarilo sa načítať mp4-muxer'); return; }
+  let vcodec=null; for(const c of ['avc1.640028','avc1.4d0028','avc1.42e028']){ try{ const s=await VideoEncoder.isConfigSupported({codec:c,width:W,height:H2,bitrate:9e6,framerate:FPS}); if(s.supported){ vcodec=c; break; } }catch(e){} }
+  if(!vcodec){ say('Tento prehliadač nevie kódovať H.264'); return; }
+  const muxer=new M.Muxer({ target:new M.ArrayBufferTarget(), video:{codec:'avc',width:W,height:H2}, audio:{codec:'aac',numberOfChannels:2,sampleRate:SR}, fastStart:'in-memory', firstTimestampBehavior:'offset' });
+  let encErr=null;
+  const aenc=new AudioEncoder({output:(c,m)=>muxer.addAudioChunk(c,m), error:e=>{ encErr=e; }});
+  aenc.configure({codec:'mp4a.40.2',sampleRate:SR,numberOfChannels:2,bitrate:160000});
+  { const L=mix.getChannelData(0), R=mix.getChannelData(1), CH=1024;
+    for(let i=0;i<mix.length;i+=CH){ const n=Math.min(CH,mix.length-i); const d=new Float32Array(n*2); d.set(L.subarray(i,i+n),0); d.set(R.subarray(i,i+n),n);
+      const ad=new AudioData({format:'f32-planar',sampleRate:SR,numberOfFrames:n,numberOfChannels:2,timestamp:Math.round(i/SR*1e6),data:d}); aenc.encode(ad); ad.close(); }
+    await aenc.flush(); }
+  const venc=new VideoEncoder({output:(c,m)=>muxer.addVideoChunk(c,m), error:e=>{ encErr=e; }});
+  venc.configure({codec:vcodec,width:W,height:H2,bitrate:9e6,framerate:FPS,avc:{format:'avc'}});
+  const NF=Math.round(DUR*FPS);
+  for(let f=0;f<NF;f++){
+    const t=f/FPS; renderFrame(t);
+    const vf=new VideoFrame(cv2,{timestamp:Math.round(t*1e6),duration:Math.round(1e6/FPS)});
+    venc.encode(vf,{keyFrame:f%60===0}); vf.close();
+    while(venc.encodeQueueSize>4) await new Promise(r=>setTimeout(r,4));
+    if(f%15===0){ say('Renderujem video… '+Math.round(f/NF*100)+' %'); await new Promise(r=>setTimeout(r,0)); }
+    if(encErr){ say('Chyba kódovania: '+encErr.message); return; }
+  }
+  await venc.flush(); muxer.finalize();
+  const blob=new Blob([muxer.target.buffer],{type:'video/mp4'});
+  await dbPut(SC.out,blob);
+  window.__reelInfo={size:blob.size,dur:DUR,frames:NF,codec:vcodec};
+  const vid=document.createElement('video'); vid.src=URL.createObjectURL(blob); vid.controls=true; vid.muted=true;
+  vid.style.cssText='position:fixed;left:50%;top:0;height:100vh;transform:translateX(-50%);z-index:40;background:#000'; document.body.appendChild(vid);
+  say('Hotovo: '+(blob.size/1e6).toFixed(1)+' MB, '+DUR.toFixed(1)+' s – uložené pre Instagram');
+}
+
 if(REEL) startReel().catch(e=>{ const d=document.createElement('div'); d.style.cssText='position:fixed;left:12px;bottom:12px;z-index:70;background:#fff;padding:10px;color:#C8102E;font:600 14px system-ui'; d.textContent='Chyba: '+e.message; document.body.appendChild(d); window.__reelStatus='Chyba: '+e.message; });
 window.__svah={select,showAll,N};
 </script>
