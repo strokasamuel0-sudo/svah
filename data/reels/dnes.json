@@ -1,0 +1,80 @@
+{
+ "align": "chair",
+ "racer": "risky_scrt_",
+ "sents": [
+  "Toto všetko pribudlo na svahu len za dnešok!",
+  "Vyše sedemsto nových followerov a viac ako tristo nových lyžiarov.",
+  "Hra Zjazd na čas a rebríček najrýchlejších.",
+  "Osemsedačková lanovka a štvrtá zjazdovka.",
+  "Snežné delá, skúter, tréner a kaviareň na vrchole.",
+  "A teraz si vyberieš aj svoj svah.",
+  "Zajtra ďalšie novinky, tak daj follow!"
+ ],
+ "segs": [
+  {
+   "shot": "aerial",
+   "cap": [
+    "Len za *DNEŠOK*",
+    "pribudlo toto 👇"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+700* followerov",
+    "*+300* lyžiarov ⛷️"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "⏱ *Zjazd na čas*",
+    "1. miesto: cafis_edits 31,02 s"
+   ],
+   "y": 760
+  },
+  {
+   "shot": "chairRide",
+   "cap": [
+    "🚡 *8-sedačka*",
+    "a *4. zjazdovka*"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "cafe",
+   "cap": [
+    "❄️ delá · 🛷 skúter · 🏂 tréner",
+    "☕ *kaviareň na vrchole*"
+   ],
+   "y": 1300
+  },
+  {
+   "shot": "slope",
+   "cap": [
+    "🔀 *Vyber si svah*",
+    "každý má obmedzenú kapacitu"
+   ],
+   "y": 800,
+   "ov": "runPick"
+  },
+  {
+   "shot": "crane",
+   "cap": [
+    "*Zajtra* ďalšie 🔥",
+    "daj follow 👇"
+   ],
+   "y": 900
+  }
+ ],
+ "end": [
+  [
+   "*Zajtra* ďalšie 🔥"
+  ],
+  [
+   "Daj *follow* a napíš farbu bundy 👇"
+  ]
+ ]
+}
