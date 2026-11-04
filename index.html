@@ -257,10 +257,10 @@ const RINGS=[{n:12,start:80,off:0},{n:12,start:230,off:.5},{n:24,start:390,off:.
 const SLOTS=[];
 RINGS.forEach(rg=>{ for(let j=0;j<rg.n;j++) SLOTS.push({ th:(j+rg.off)/rg.n*Math.PI*2-Math.PI/2, r0:rg.start, len:Math.min(800,1480-rg.start) }); });
 const REG = skiers.filter(p => !p.f || p.i === 0);
-const nRuns = Math.min(SLOTS.length, Math.max(2, Math.ceil(REG.length/CAP)));
+const nRuns = Math.min(SLOTS.length, Math.max(3, Math.ceil(REG.length/CAP)));
 const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
-  const w = k===1 ? 3 : 0;
-  return { ...s, k, w, chair:false, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:34, TH: 7.5 };
+  const w = k===1 ? 3 : k===2 ? 1 : 0;
+  return { ...s, k, w, chair:w===1, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:w===1?36:34, TH: w===1?12:7.5 };
 });
 const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
 const ALLRUNS = [...RUNS, FS];
@@ -271,8 +271,8 @@ skiers.forEach(p => {
   p.cyc = opts[p.h % opts.length];
   p.down = p.cyc - p.run.len/LIFT_V;
 });
-$('count').textContent = fmt(NSKI);
-$('runsInfo').textContent = RUNS.length+' zjazdovky · snowpark';
+$('count').textContent = fmt(N);
+$('runsInfo').textContent = RUNS.length+' zjazdovky · 8-sedačka · snowpark';
 
 const _a=new THREE.Vector3(), _b=new THREE.Vector3();
 function runPt(run,s,lat,out){
@@ -311,8 +311,9 @@ function skierOrg(p, t, out){
   if (u<dn){ s=u/dn; const ph=(u/T.per)*Math.PI*2+p.phase*6.28;
     lat=fs?Math.min(6,Math.max(-6,p.lane*3+Math.sin(ph)*T.amp*4)):Math.min(18,Math.max(-18,p.lane*7+Math.sin(ph)*T.amp*12)); mode='down'; }
   else { s=1-(u-dn)/upd; if(T.lift){ lat=run.LL; mode=run.chair?'chair':'tbar'; } else { lat=-17.5; mode='walk'; } }
+  if (mode==='chair'){ const sp=22, L2=2*len, nC=Math.floor(L2/sp), d=s*len; let j=Math.floor((((len-d-t*LIFT_V)%L2+L2)%L2)/sp+.5); j=Math.min(j,nC-1); const P=((t*LIFT_V+j*sp)%L2+L2)%L2, dS=len-P; if(dS>=0&&dS<=len) s=dS/len; }
   runPt(run,s,lat,out); out.y+=.25;
-  if (mode==='chair') out.y = cabY(run,s*len,run.LL,run.TH)-4.5-.32*SK;
+  if (mode==='chair'){ out.y = cabY(run,s*len,run.LL,run.TH)-4.5-.32*SK; const a=runPt(run,Math.max(0,s-.01),lat,_a); const dx=a.x-out.x, dz=a.z-out.z, dl=Math.hypot(dx,dz)||1, so=((p.i%8)-3.5)*.56; out.x+=dz/dl*so; out.z-=dx/dl*so; }
   if (p.ti===1 && mode==='down' && !fs){ const j=(u%23)/23; if(j<.05) out.y+=Math.sin(j/.05*Math.PI)*2.5; }
   if (fs && mode==='down') for (const sk of [.25,.5,.75]){ const dd=(s-sk)*len; if(dd>0&&dd<16) out.y+=Math.sin(dd/16*Math.PI)*4.5; }
   if (p.i===JUMP_ID){ const k=(t-JUMP_T)/1.4; if(k>0&&k<1) out.y+=Math.sin(k*Math.PI)*9; }
@@ -736,6 +737,7 @@ ALLRUNS.forEach(run=>{
   // tabuľky
   runPt(run,0,-30,V1); const sg=run.w===2?makeSign(['SNOWPARK'],run.color,'#fff',320,96):makeSign([run.label],run.color,'#fff',128,128); sg.position.set(V1.x,V1.y+14,V1.z); scene.add(sg);
   if(run.w===2) buildKickers(run);
+  if(run.w===1){ runPt(run,.02,-24,V1); const ls=makeSign(['8-SEDAČKOVÁ','LANOVKA'],'#F26B21','#fff',384,128); ls.position.set(V1.x,V1.y+24,V1.z); scene.add(ls); runPt(run,1,-26,V1); const lb=makeSign(['8-SEDAČKA','pri 1000 followeroch'],'#F26B21','#fff',384,128); lb.position.set(V1.x,V1.y+16,V1.z); scene.add(lb); }
   if(run.k===0){ runPt(run,.03,-6,V1); const vs=makeSign(['PRVÁ STOPA'],'#C8102E','#fff',384,96); vs.position.set(V1.x,V1.y+22,V1.z); scene.add(vs); }
   const a=runPt(run,0,0,new THREE.Vector3()), b=runPt(run,1,0,new THREE.Vector3());
   const ro={run,a,b,detail:null,far:null,carriers:null,members:skiers.filter(p=>p.run===run).map(p=>p.i)}; run.ro=ro;
@@ -836,6 +838,7 @@ bool chair=abs(aRun.w-1.0)<0.5; bool fs=abs(aRun.w-2.0)<0.5; float LL=chair?36.0
 float s; float lat; bool onLift=false; float dir=1.0; float swayV=0.0;
 if(u<dn){ s=u/dn; float ph=(u/per)*TAU_+aP.y*6.28; swayV=cos(ph); lat=fs?clamp(aP.x*3.0+sin(ph)*amp*4.0,-6.0,6.0):clamp(aP.x*7.0+sin(ph)*amp*12.0,-18.0,18.0); }
 else { s=1.0-(u-dn)/upd; dir=-1.0; if(hasLift>0.5){ lat=LL; onLift=true; } else { lat=-17.5; } }
+if(onLift&&chair){ float sp=22.0; float L2=2.0*len; float nC=floor(L2/sp); float jj=min(floor(mod(len-s*len-uTime*LIFT_V,L2)/sp+0.5),nC-1.0); float PP=mod(uTime*LIFT_V+jj*sp,L2); float dS=len-PP; if(dS>=0.0&&dS<=len) s=dS/len; }
 vec3 org=runPt(aRun,s,lat); org.y+=0.25;
 float groundY=org.y;
 float s2=s+0.004*dir; float lat2=lat+((onLift||dir<0.0)?0.0:swayV*amp*2.0);
@@ -843,7 +846,7 @@ vec3 nx2=runPt(aRun,s2,lat2);
 float yaw=atan(nx2.x-org.x, nx2.z-org.z);
 bool sit=(!onLift && dir>0.0 && (ti==2||ti==4)) || (onLift&&chair);
 float cy=0.0;
-if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair) org.y=cy-4.5-0.32*SK; }
+if(onLift){ cy=cabY(aRun,s*len,LL,TH); if(chair){ org.y=cy-4.5-0.32*SK; org+=rY(vec3((mod(aId,8.0)-3.5)*0.56,0.0,0.0),yaw); } }
 if(ti==1 && dir>0.0 && !fs){ float j=mod(u,23.0)/23.0; if(j<0.05) org.y+=sin(j/0.05*3.14159)*2.5; }
 float flipA=0.0;
 if(fs && dir>0.0){ for(int kk=0;kk<3;kk++){ float sk=0.25+0.25*float(kk); float dd=(s-sk)*len; if(dd>0.0&&dd<16.0){ float f=dd/16.0; org.y+=sin(f*3.14159)*4.5; float tr=mod(aId+float(kk),4.0); if(tr<1.0) yaw+=f*6.28318; else if(tr<2.0) yaw+=f*12.56637; else if(tr<3.0) flipA=-f*6.28318; else { yaw+=f*6.28318; flipA=f*6.28318; } } } }
@@ -870,7 +873,7 @@ if(part<=3){
   if(aTip>0.5){ p.y-=L; p.z-=0.1*SK; } else { p.y*=L; }
   p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,cy,org.z)+p;
 } else {
-  if(!(onLift&&chair)) hide=true;
+  hide=true;
   p=rY(p,yaw); n=rY(n,yaw); svahPos=vec3(org.x,cy,org.z)+p;
 }
 if(hide) svahPos=vec3(0.0,-9999.0,0.0);
@@ -959,10 +962,14 @@ const tbarCarrier=mergeGeometries([
   prep(B(.2,.3,.2).translate(0,-.15,0),{aBase:lin('#3a3f47'),aTip:0}),
 ]);
 const chairCarrier=mergeGeometries([
-  prep(new THREE.CylinderGeometry(.05,.05,4.5,5).translate(0,-2.25,0),{aBase:lin('#59616b'),aTip:0}),
-  prep(B(1.1,.08,.55).translate(0,-4.54,.05),{aBase:lin('#1E5AA8'),aTip:0}),
-  prep(B(1.1,.6,.07).translate(0,-4.2,-.24),{aBase:lin('#1E5AA8'),aTip:0}),
-  prep(B(1.1,.05,.05).translate(0,-3.6,.45),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.07,.07,3.4,6).translate(0,-1.7,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(B(4.7,.1,.1).translate(0,-3.4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.05,.05,1.2,5).translate(-2.3,-4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(new THREE.CylinderGeometry(.05,.05,1.2,5).translate(2.3,-4,0),{aBase:lin('#59616b'),aTip:0}),
+  prep(B(4.6,.1,.6).translate(0,-4.54,.05),{aBase:lin('#C8102E'),aTip:0}),
+  prep(B(4.6,.65,.08).translate(0,-4.2,-.25),{aBase:lin('#C8102E'),aTip:0}),
+  prep(B(4.6,.05,.05).translate(0,-3.75,.5),{aBase:lin('#F2B705'),aTip:0}),
+  prep(B(4.8,.06,1.3).translate(0,-3.35,-.1),{aBase:lin('#F26B21'),aTip:0}),
 ]);
 
 function instGeo(base, list, run){
@@ -1086,7 +1093,7 @@ let selected=-1, flying=null;
 const followOff=new THREE.Vector3(), lastSel=new THREE.Vector3();
 function overview(){
   if(RUNS.length<=3){
-    const r1=RUNS[RUNS.length>1?1:0], mid=(RUNS[0].th+r1.th)/2;
+    const r1=RUNS[RUNS.length-1], mid=(RUNS[0].th+r1.th)/2;
     const tgt=new THREE.Vector3(560*Math.cos(mid),0,560*Math.sin(mid)); tgt.y=groundAt(tgt.x,tgt.z)+20;
     const R=RUNS.length>1?2050:1700, cam=new THREE.Vector3(R*Math.cos(mid-.08),0,R*Math.sin(mid-.08)); cam.y=groundAt(cam.x,cam.z)+(RUNS.length>1?380:260);
     return {pos:cam,target:tgt};
@@ -1578,10 +1585,12 @@ async function startReel2(SC){
   const fsP=skiers.find(p=>p.run===FS&&p.ti!==3)||skiers.find(p=>p.run===FS);
   const custP=(SC.focus&&byU(SC.focus))||byU('eliska_rigova')||byU('kristian132015')||skiers.find(p=>p.scHex)||people[0];
   const liftP=skiers.find(p=>p.run===RUNS[0]&&TYPES[p.ti].lift&&p.i>0)||people[0];
+  const R2=RUNS.find(r=>r.w===1)||RUNS[0]; const chP=skiers.find(p=>p.run===R2&&TYPES[p.ti].lift&&p.ti!==1)||liftP;
   let T0;
   { let p, sname, want;
     if(SC.align==='cust'){ p=custP; sname='cust'; want=p.down*0.30; }
     else if(SC.align==='lift'){ p=liftP; sname='liftRide'; want=p.down+(p.run.len/LIFT_V)*0.02; }
+    else if(SC.align==='chair'){ p=chP; sname='chairRide'; want=p.down+(p.run.len/LIFT_V)*0.2; }
     else { p=fsP; sname='fs'; want=p.down*0.20; }
     const k=Math.max(0,segOf(sname)), ts=segStart(k)+0.1, cyc=p.cyc;
     T0=40000; const u=((T0+ts+p.phase*cyc)%cyc+cyc)%cyc; T0+=((want-u)%cyc+cyc)%cyc;
@@ -1614,6 +1623,9 @@ async function startReel2(SC){
     crowdClose:(t,T,k)=>orbit(SPOT.crowd,crowdR*0.8,11,thC+2.2,.05,t,2),
     crowdLow:(t,T,k)=>{ const st=WORLD.stage; const C=SPOT.crowd; const d=V(st.x-C.x,0,st.z-C.z).normalize(); const sd=V(-d.z,0,d.x); return { p:V(C.x,0,C.z).addScaledVector(d,-crowdR-4).addScaledVector(sd,8-6*k).setY(C.y+4), q:V(st.x,st.y+5,st.z) }; },
     liftBottom:(t,T,k)=>({ p:Pr(R0r,1.0,-16,7), q:Pr(R0r,.78,34,7) }),
+    chairRide:(t,T,k)=>follow(chP,T,7,11,2,3),
+    chairLine:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R2,.97-.3*e,78,26), q:Pr(R2,.4-.15*e,36,10) }; },
+    chairTop:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R2,.08+.05*e,-40,40-10*e), q:Pr(R2,.3,30,0) }; },
     liftLine:(t,T,k)=>{ const e=ease(Math.min(1,k)); return { p:Pr(R0r,.9-.2*e,62,30), q:Pr(R0r,.25-.1*e,30,10) }; },
   };
   const BL=.9;
@@ -1647,7 +1659,7 @@ async function startReel2(SC){
   function board(){
     g.save(); g.fillStyle='#1E5AA8'; rr(40,240,640,110,26); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
     g.fillStyle='#fff'; g.font='800 44px '+FONT; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Svah followerov',72,296);
-    g.textAlign='right'; g.font='800 20px '+FONT; g.fillText('NA SVAHU',652,272); g.font='800 50px '+FONT; g.fillText(String(NSKI),652,316); g.restore();
+    g.textAlign='right'; g.font='800 20px '+FONT; g.fillText('NA SVAHU',652,272); g.font='800 50px '+FONT; g.fillText(String(N),652,316); g.restore();
   }
   const AVC=['#E84A8A','#1E5AA8','#F26B21','#2E9E5B','#7A3FB8','#0FA3B1'];
   function commentCard(u,text,x,y,w,segT,delay){
