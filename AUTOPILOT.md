@@ -145,6 +145,30 @@ Vyber 1 najžiadanejšiu vec z komentov (hospoda/bufet, snežné delá, boulová
 - Komentár cez web posielaj cez GraphQL mutáciu, ktorú web používa pri „Odpovedať“. Raz odpovedz ručne cez UI a zachyť POST na `/api/graphql` s premennými `{"data":{"comment_text","media_id","replied_to_comment_id"},"root_connections":[]}`. Potom ten istý formulár zopakuj s inými hodnotami (`replied_to_comment_id` je JSON číslo, skladaj ho ako text, nie cez JSON.parse).
 - Nesľubuj termíny. Píš „zapisujeme“ alebo „je na zozname noviniek“. Sľúbená je iba 8-sedačková lanovka, ktorú treba postaviť (1000 followerov prekročených 4. 11.).
 
+### PRAVIDLO: hecovanie a míľniky (Samuelova požiadavka)
+
+Nie každý reel má hneď dodať novinku. Striedaj ich:
+- **Teaser alebo míľnik**: „Keď nás bude 2000, postavíme hore kaviareň“ alebo „pri 2500 predĺžime svah až na Mount Everest“ (nápad z komentov). Pridaj `progress` lištu (ak treba, uprav text a cieľ v `index.html`) a kartičky komentov, kto to chcel.
+- **Novinka**: keď sa cieľ splní, vyjde reel „Splnili ste to!“.
+- **Hlasovanie**: „Čo postavíme pri 2000? Napíš do komentu: kaviareň, Everest alebo skúter“. Výsledok potom oznám v ďalšom reeli.
+- **Súťaže a výzvy**: najrýchlejší zjazd dňa, najkrajšia bunda týždňa, kto nájde maskota.
+- Pomer: zhruba 1 teaser alebo hlasovanie na 1 novinku. Míľniky a sľuby si zapisuj do `data/log.md` a vždy ich dodrž.
+
+## 6. ROADMAP – interaktívnosť a dizajn (stavaj postupne vo večerných behoch, každá vec = vlastný reel)
+
+1. **„Moja fotka“**: tlačidlo na karte lyžiara vygeneruje obrázok 1080×1920 (jeho lyžiar, meno, číslo, svah), ktorý si stiahne a pridá do storky s @svah.followerov. Bez servera, cez canvas a download. Najväčší rast followerov.
+2. **„Zjazd na čas“**: hráč si sám zjazdí so svojím lyžiarom (šípky alebo naklonenie mobilu), prejde bránkami a dostane čas. Rekord sa uloží v prehliadači a výsledok si stiahne ako obrázok. Najlepšie časy z obrázkov, ktoré ľudia pošlú do DM, vyhlás v reeli.
+3. **Povzbuď kamoša**: zdieľateľný odkaz `svahfollowerov.online/#lyziar-N`, ktorý otvorí rovno toho lyžiara (už funguje), plus tlačidlo „Pošli kamošovi“ (navigator.share).
+4. **Reálny deň a noc a počasie**: obloha podľa času v Bratislave, večer svetlá na zjazdovkách a nočné lyžovanie, občas sneženie.
+5. **Úlohy a easter eggy**: nájdi maskota, nájdi zlatého lyžiara, ťukni na ratrak (zatrúbi), vrtuľník zamáva. Malé odmeny (odznak v karte, uložený v localStorage).
+6. **Dizajn**:
+   - krajšie postavy (zaoblené tvary, okuliare, šál), tiene, hmla a jemný gradient oblohy,
+   - krajšie menovky a karty (sklenený vzhľad),
+   - minimapa, rýchlejšie načítanie na mobile, ambientný zvuk (vietor, vlek).
+7. Väčšie veci pri míľnikoch: kaviareň hore, Everest (predĺženie svahu), nočné lyžovanie, preteky.
+
+Pri každej novinke najprv `beta.html`, otestuj na mobilnom rozmere (resize_window 390×844) aj na desktope, skontroluj FPS a až potom `index.html`.
+
 ## Prenos medzi kartami (recv.html)
 
 `https://svahfollowerov.online/recv.html` vie `{op:'put',items:[[kľúč,hodnota],…]}` (uloží do IDB 'svah'/'f' a odpovie `{op:'done'}`) a `{op:'get',keys:[…]}` (odpovie `{op:'got',items:[[k,v],…]}`). Popup musí otvoriť skutočný klik. Ak stránka prepísala `window.open`, vezmi ho z prázdneho iframe:
