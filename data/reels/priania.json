@@ -31,7 +31,8 @@
    "comment": [
     "stan.peduzzi",
     "Ahoj mužu se starat o zasnežovani a sjezdovkách abi jsme mneli sníh k ližovani"
-   ]
+   ],
+   "cy": 420
   },
   {
    "shot": "skuter",
@@ -43,7 +44,8 @@
    "comment": [
     "jedlitibor",
     "Já chci mít sněžný skútr"
-   ]
+   ],
+   "cy": 420
   },
   {
    "shot": "tagCam",
@@ -58,7 +60,8 @@
    "comment": [
     "jukin.12",
     "Můžu být snowboardový trenér na skoky"
-   ]
+   ],
+   "cy": 420
   },
   {
    "shot": "slope",
@@ -101,5 +104,6 @@
   [
    "Napíš do komentu 👇"
   ]
- ]
+ ],
+ "hideCrowd": true
 }
