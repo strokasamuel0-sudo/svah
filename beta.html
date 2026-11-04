@@ -1887,10 +1887,10 @@ async function startReel2(SC){
   const R2=RUNS.find(r=>r.w===1)||RUNS[0]; const chP=skiers.find(p=>p.run===R2&&TYPES[p.ti].lift&&p.ti!==1)||liftP;
   // hra (Zjazd na čas) v reeli
   const gP=(SC.racer&&byU(SC.racer))||custP, gRun=RUNS[SC.gameRun||0];
-  const gNG=Math.max(6,Math.floor(gRun.len/70)), gGates=[], gGrp=new THREE.Group();
+  const gNG=Math.max(5,Math.floor(gRun.len/120)), gGates=[], gGrp=new THREE.Group();
   { const poleG=new THREE.CylinderGeometry(.09,.09,3.2,6).translate(0,1.6,0), flagG=new THREE.BoxGeometry(.05,1,1.3).translate(0,2.6,.65);
     for(let k=0;k<gNG;k++){ const s=(k+1)/(gNG+1)*.9, c=k%2?6:-6, mat=new THREE.MeshLambertMaterial({color:k%2?'#1E5AA8':'#C8102E'});
-      for(const side of [-4.5,4.5]){ const P=runPt(gRun,s,c+side,new THREE.Vector3()); const m1=new THREE.Mesh(poleG,mat), m2=new THREE.Mesh(flagG,mat); m1.position.copy(P); m2.position.copy(P); gGrp.add(m1,m2); }
+      for(const side of [-6,6]){ const P=runPt(gRun,s,c+side,new THREE.Vector3()); const m1=new THREE.Mesh(poleG,mat), m2=new THREE.Mesh(flagG,mat); m1.position.copy(P); m2.position.copy(P); gGrp.add(m1,m2); }
       gGates.push({s,c}); } }
   const gHas=SC.segs.some(s=>/^game/.test(s.shot)); if(gHas) scene.add(gGrp);
   const gRacer=buildRacer(gP.kind==='ski'?gP:{c:'#C8102E',ti:0}); gRacer.visible=false; scene.add(gRacer);
@@ -1962,7 +1962,7 @@ async function startReel2(SC){
     const sIdx=Math.min(seg,NSEG-1); const s=SC.segs[sIdx];
     const st=bounds[sIdx], en=sIdx+1<bounds.length?bounds[sIdx+1]:DUR; const k=(t-st)/Math.max(.5,en-st);
     const kk=seg>=NSEG?1+(t-bounds[NSEG])/Math.max(1,DUR-bounds[NSEG])*.4:k;
-    gRacer.visible=false; curSeg=s;
+    gRacer.visible=false; curSeg=s; if(SC.hideCrowd) gameCrowd(!/^game/.test(s.shot));
     let A=SH[s.shot](t,T,Math.min(1.4,kk));
     const gy=groundAt(A.p.x,A.p.z)+2; if(A.p.y<gy) A.p.y=gy;
     return A;
