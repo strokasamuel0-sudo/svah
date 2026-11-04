@@ -8,6 +8,28 @@ Samuel (majiteľ @svah.followerov) chce, aby projekt bežal **úplne sám**. Pla
 - Píš po slovensky, hravo, krátko. Žiadne klamstvá o počtoch: čísla ber z dát.
 - Každý beh na konci zapíš do `data/log.md` (commit), aby ďalší beh vedel, čo už vyšlo.
 
+## ⭐ AKTUÁLNY REŽIM (od 4. 11. 2026, 16:45) – má prednosť pred starším rozpisom nižšie
+
+Samuel: „Zapneš sa dvakrát za deň a urobíš všetko, čo treba. Každý deň 100 % aktualizované, videá správne, nech ľudia stále majú záujem.“
+
+**Dva behy denne: ~11:40 a ~18:40.** Každý beh = celý cyklus, v tomto poradí:
+
+1. **Príprava:** `git clone` repa, prečítaj tento súbor a `data/log.md` (ciele, sľuby, čo už vyšlo, `POSLEDNÝ_KOMENT_TS`). Ak je pripojených viac Chrome, vyber ten, kde je prihlásený IG (videá v IDB sú v ňom). Ak `find` hlási limit, klikaj súradnicami (`getBoundingClientRect`).
+2. **Sync followerov a komentov** (sekcia 1, `tools/ig-sync.js` – číta aj odpovede, roly ratrak/rescue/hotel/lift/mascot/snow/coach/skuter, „svah N“ → pole `r`). Zlúč so súčasným `followers.json` (nikoho nemaž, novšia požiadavka vyhráva), commitni.
+3. **Správy:** prijmi všetky žiadosti o správy a odpíš **všetkým** novým správam. Požiadavky (farba bundy/lyží/nohavíc/čiapky, typ, číslo, „svah 2“/„svah snowpark“, rola) zapíš do `followers.json`. Časy zo Zjazdu na čas (DM aj označenia v storkách) zapíš do rebríčka v logu.
+4. **Komentáre:** odpíš na **všetky nové komenty** od posledného behu (Samuel 4. 11. 16:43 – platí namiesto staršieho „len zaujímavé“). Krátko, osobne, po slovensky, s potvrdením („Hotovo ✅ červená bunda – už jazdíš!“, „Zapísané ☕ – reštika je v pláne“). Max ~80 odpovedí za beh, rozostup 10–20 s; ak je ich viac, prednosť majú požiadavky a otázky, zvyšok v ďalšom behu. Na konci zapíš `POSLEDNÝ_KOMENT_TS=<unix>` do logu.
+5. **Splň zadania:** dátové veci hneď (krok 2–3). Nápady na svah (budovy, roly, mechaniky): v každom behu postav aspoň 1 najžiadanejšiu vec, ktorá ešte nie je (beta.html → test konzoly a screenshotu → index.html). Nové roly pridaj do `ROLES` v index.html aj do `tools/ig-sync.js`.
+6. **Ciele:** v logu je aktuálny cieľ (teraz: **pri 3500 followeroch predĺžime svah až na Mount Everest**). Keď je splnený, postav ho a hneď stanov ďalší (zapíš do logu a ohlás v najbližšom videu).
+7. **Video (1 za beh, zverejni v tom istom behu):**
+   - obed: noví ľudia + splnené priania (kartičky reálnych komentov, kto čo chcel) alebo súťaž/rebríček;
+   - večer: novinka dňa alebo hecovanie k cieľu / hlasovanie.
+   - Kvalita: háčik v 1. sekunde, 15–28 s, skutočné čísla z dát, kartička komentu pri každej splnenej veci, výzva na konci. Pred renderom pozri náhľad (`?reel=preview&script=<id>` + `__reelShow(t)`) aspoň pre každý záber – titulky nesmú zakrývať postavu. Hlas ElevenLabs (Brian, Multilingual v2), render `?reel=1&script=<id>` (karta v popredí), IG orezanie **„Pôvodné“**.
+   - Zábery: aerial, crane, slope, slope2, fs, cust, custSide, liftRide, liftBottom, liftLine, chairRide, chairLine, chairTop, ratrak, heliHotel, crowdWide/Close/Low, **game / gameFront / gameHigh** (pretekár `SC.racer`, `SC.hideCrowd`), **tagCam** (`tag`, `dist`, `ang` – kamera okolo človeka v role), **skuter**, **cafe**. Overlaye: comments, liftComment, custTag, colors, progress, **goal** (`SC.goal=[cieľ,"text"]`), **tapRace**, **runPick**, v každom zábere `comment:[meno,text]` (+`cy`) a `tag:"meno"`.
+8. **Storka:** večer 1 PNG pre Samuela (SendUserFile + push), napr. rebríček, nový cieľ alebo novinka.
+9. **Log:** dátum, čas, video id, čo si pridal, počty (followeri, lyžiari, čakáreň), rebríček, ciele, `POSLEDNÝ_KOMENT_TS`. Na konci pošli Samuelovi 2–3 vety push.
+
+Kapacita svahov: zjazdovka 250 (CAP), snowpark 60 (FS_CAP); keď sú plné, automaticky pribudne ďalšia zjazdovka – oznám to vo videu.
+
 ## Kde čo je
 
 - Web: https://svahfollowerov.online (GitHub Pages, repo `strokasamuel0-sudo/svah`, vetva `main`).
