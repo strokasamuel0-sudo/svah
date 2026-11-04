@@ -1257,7 +1257,7 @@ function fromHash(){ const m=location.hash.match(/lyziar-(\d+)/); if(m){ const i
 addEventListener('hashchange',fromHash); fromHash();
 /* ================= REEL: export videa priamo zo svahu (?reel=1 alebo ?reel=preview) ================= */
 async function startReel(){
-  { const sc2=SC2[params.get('script')||'']; if(sc2) return startReel2(sc2); }
+  { const sid=params.get('script')||''; let sc2=SC2[sid]; if(!sc2&&sid&&!/^[12]$/.test(sid)){ try{ sc2=await fetch('data/reels/'+encodeURIComponent(sid)+'.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null); }catch(e){} if(sc2){ sc2.voice=sc2.voice||('voice_'+sid); sc2.out=sc2.out||('reel_'+sid); } } if(sc2) return startReel2(sc2); }
   const W=1080, H2=1920, FPS=30, SR=48000, NS=7;
   for(const id of ['top','cta','card','labels','demo']){ const e=$(id); if(e) e.style.display='none'; }
   const stEl=document.createElement('div'); stEl.style.cssText='position:fixed;left:12px;top:12px;z-index:60;background:#fff;padding:10px 14px;border-radius:10px;font:600 14px system-ui;max-width:90vw'; document.body.appendChild(stEl);
@@ -1530,6 +1530,8 @@ const REEL_COMMENTS = {
   liftComment:[['m4.t_y','8 sedačkovou sedačku']],
 };
 async function startReel2(SC){
+  const _ph=s=>typeof s==='string'?s.split('{FOLN}').join(String(FOLN)).split('{NSKI}').join(String(NSKI)).split('{N}').join(String(N)):s;
+  SC.segs.forEach(sg=>{ sg.cap=(sg.cap||['']).map(_ph); }); SC.end=(SC.end||[[''],['']]).map(a=>a.map(_ph)); SC.align=SC.align||'fs';
   const W=1080, H2=1920, FPS=30, SR=48000, NSEG=SC.segs.length, NS=NSEG+1;
   for(const id of ['top','cta','card','labels','demo']){ const e=$(id); if(e) e.style.display='none'; }
   const stEl=document.createElement('div'); stEl.style.cssText='position:fixed;left:12px;top:12px;z-index:60;background:#fff;padding:10px 14px;border-radius:10px;font:600 14px system-ui;max-width:90vw'; document.body.appendChild(stEl);
@@ -1574,7 +1576,7 @@ async function startReel2(SC){
   // zarovnanie času: hlavná postava je v správnej fáze vo svojom zábere
   const segOf=name=>SC.segs.findIndex(s=>s.shot===name);
   const fsP=skiers.find(p=>p.run===FS&&p.ti!==3)||skiers.find(p=>p.run===FS);
-  const custP=byU('eliska_rigova')||byU('kristian132015')||skiers.find(p=>p.scHex)||people[0];
+  const custP=(SC.focus&&byU(SC.focus))||byU('eliska_rigova')||byU('kristian132015')||skiers.find(p=>p.scHex)||people[0];
   const liftP=skiers.find(p=>p.run===RUNS[0]&&TYPES[p.ti].lift&&p.i>0)||people[0];
   let T0;
   { let p, sname, want;
@@ -1690,8 +1692,8 @@ async function startReel2(SC){
     const segT=seg===0?t+0.3:t-bounds[seg];
     if(seg<NSEG){
       const s=SC.segs[seg];
-      if(s.ov==='comments'){ let y=760; REEL_COMMENTS.comments.forEach((c,i)=>{ const h=commentCard(c[0],c[1],90,y,900,segT,0.25+i*0.35); y+=(h||120)+26; }); }
-      if(s.ov==='liftComment'){ commentCard(REEL_COMMENTS.liftComment[0][0],REEL_COMMENTS.liftComment[0][1],90,760,900,segT,0.3); }
+      if(s.ov==='comments'){ let y=760; (SC.comments||REEL_COMMENTS.comments).forEach((c,i)=>{ const h=commentCard(c[0],c[1],90,y,900,segT,0.25+i*0.35); y+=(h||120)+26; }); }
+      if(s.ov==='liftComment'){ const lc=(SC.comment||REEL_COMMENTS.liftComment[0]); commentCard(lc[0],lc[1],90,760,900,segT,0.3); }
       if(s.ov==='custTag'){ const P=pos(custP,T); P.y+=SK*1.7; tagAt(P,'#'+custP.bib+' @'+custP.u,segT); }
       if(s.ov==='colors') colorsRow(segT);
       if(s.ov==='progress') progress(segT);
