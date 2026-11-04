@@ -2039,7 +2039,7 @@ async function startReel2(SC){
     g.restore();
   }
   function runPickOv(segT){ const k=Math.min(1,Math.max(0,segT/0.35)); if(k<=0) return; const y0=1180+(1-backOut(k))*60;
-    g.save(); g.globalAlpha=k; g.shadowColor='rgba(0,0,0,.3)'; g.shadowBlur=30; g.fillStyle='rgba(255,255,255,.96)'; rr(90,y0,900,480,40); g.fill(); g.shadowBlur=0;
+    g.save(); g.globalAlpha=k; g.shadowColor='rgba(0,0,0,.3)'; g.shadowBlur=30; g.fillStyle='rgba(255,255,255,.96)'; rr(90,y0,900,110+(RUNS.length+1)*90,40); g.fill(); g.shadowBlur=0;
     g.fillStyle='#22262d'; g.font='800 34px '+FONT; g.textAlign='left'; g.textBaseline='middle'; g.fillText('🔀 Vyber si svah · obmedzená kapacita',130,y0+52);
     const rows=RUNS.map((r,i)=>['Zjazdovka '+r.label+(['  · vlek','  · kľukatá','  · 8-sedačka'][i]||''),r.cnt,CAP]).concat([['Snowpark',FS.cnt,FS_CAP]]);
     rows.forEach((rw,i)=>{ const y=y0+100+i*90, full=rw[1]>=rw[2]; g.fillStyle=full?'#FBE3E7':'#EEF3F9'; rr(130,y,820,74,18); g.fill();
