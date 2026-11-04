@@ -231,7 +231,7 @@ const OWNER = window.FOLLOWERS[0];
 const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c.toUpperCase() : '';
 let rawSki = DATA && Array.isArray(DATA.skiers) ? DATA.skiers.slice() : window.FOLLOWERS.slice();
 if (!rawSki.length || rawSki[0].u !== OWNER.u) rawSki = [OWNER, ...rawSki.filter(p => p.u !== OWNER.u)];
-const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [] };
+const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [] };
 const roleOf = new Map();
 if (DATA && DATA.roles) for (const key of Object.keys(ROLES)) for (const u of (DATA.roles[key] || [])) if (u !== OWNER.u && !roleOf.has(u)) { roleOf.set(u, key); ROLES[key].push(u); }
 const rawById = new Map(rawSki.map(p => [p.u, p]));
@@ -266,7 +266,7 @@ try{ const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null'); if(o&&o.u){ cons
 for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
   if (seenU.has(u)) continue; seenU.add(u);
   const src = rawById.get(u) || {}, h = hash(u), i = people.length;
-  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31'})[key];
+  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31',police:'#123A75'})[key];
   people.push({ kind:'role', role:key, u, k:src.k||'', i, num:i+1, ti:0, c, h, phase:((h>>>4)%997)/997 });
 }
 const NROLE = people.length;
@@ -401,6 +401,7 @@ const ROLE_TXT = {
   snow:{ name:'zasnežovač', short:'❄️', icon:'❄️', place:'Snežné delá pri zjazdovke 1' },
   coach:{ name:'tréner skokov', short:'🏂', icon:'🏂', place:'Snowpark' },
   skuter:{ name:'jazdec na snežnom skútri', short:'🛷', icon:'🛷', place:'Pod svahom' },
+  police:{ name:'policajt na svahu', short:'👮', icon:'👮', place:'Pri hoteli Svah' },
 };
 function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
 function roleLive(p){
@@ -412,6 +413,7 @@ function roleLive(p){
   if (p.role==='snow') return 'zasnežuje zjazdovku 1 ❄️';
   if (p.role==='coach') return 'učí skoky v snowparku';
   if (p.role==='skuter') return 'jazdí na snežnom skútri pod svahom';
+  if (p.role==='police') return 'dohliada na poriadok na svahu 👮';
   return 'máva lyžiarom pri hoteli';
 }
 
@@ -537,6 +539,7 @@ function buildWorld(){
     const sideV=new THREE.Vector3(-fwd.z,0,fwd.x); V2.copy(base).addScaledVector(sideV,(k-(list.length-1)/2)*spread); V2.y=groundAt(V2.x,V2.z); add(p.i,V2,yaw,false,p.c); });
   const thH=Math.atan2(SPOT.hotel.z,SPOT.hotel.x), outH=down(thH);
   staff(ROLES.hotel, V3.copy(SPOT.hotel).addScaledVector(outH,19), outH, 3, Math.atan2(outH.x,outH.z));
+  staff(ROLES.police, V3.copy(SPOT.hotel).addScaledVector(outH,30), outH, 3, Math.atan2(outH.x,outH.z));
   const thP=Math.atan2(SPOT.pad.z,SPOT.pad.x), outP=down(thP);
   staff(ROLES.rescue, V3.copy(SPOT.pad).addScaledVector(outP,-15), outP, 3, Math.atan2(outP.x,outP.z));
   const thG=Math.atan2(SPOT.garage.z,SPOT.garage.x), outG=down(thG);
