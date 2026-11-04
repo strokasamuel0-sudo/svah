@@ -1,14 +1,14 @@
 {
  "align": "fs",
  "goal": [
-  2500,
+  3500,
   "Svah až na Everest 🏔️"
  ],
  "sents": [
   "Dvetisíc followerov! Splnili ste to!",
   "Sľúbili sme kaviareň na vrchole. Tu je!",
   "Ale svah je skoro plný, každá zjazdovka má len dvestopäťdesiat miest.",
-  "Ďalší cieľ: pri dvetisícpäťsto predĺžime svah až na Mount Everest!",
+  "Ďalší cieľ: pri tritisícpäťsto predĺžime svah až na Mount Everest!",
   "Označ kamoša, nech sa pridá, kým je ešte miesto!"
  ],
  "segs": [
@@ -44,7 +44,7 @@
   {
    "shot": "crane",
    "cap": [
-    "Ďalší cieľ: *2500*",
+    "Ďalší cieľ: *3500*",
     "svah až na *EVEREST* 🏔️"
    ],
    "y": 800,
@@ -61,7 +61,7 @@
  ],
  "end": [
   [
-   "Ďalší cieľ *2500* 🏔️"
+   "Ďalší cieľ *3500* 🏔️"
   ],
   [
    "Daj *follow* a napíš farbu bundy 👇"
