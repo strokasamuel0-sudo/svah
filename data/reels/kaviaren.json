@@ -1,0 +1,70 @@
+{
+ "align": "fs",
+ "goal": [
+  2500,
+  "Svah až na Everest 🏔️"
+ ],
+ "sents": [
+  "Dvetisíc followerov! Splnili ste to!",
+  "Sľúbili sme kaviareň na vrchole. Tu je!",
+  "Ale svah je skoro plný, každá zjazdovka má len dvestopäťdesiat miest.",
+  "Ďalší cieľ: pri dvetisícpäťsto predĺžime svah až na Mount Everest!",
+  "Označ kamoša, nech sa pridá, kým je ešte miesto!"
+ ],
+ "segs": [
+  {
+   "shot": "aerial",
+   "cap": [
+    "*2000+* followerov!",
+    "SPLNILI STE TO 🎉"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "cafe",
+   "cap": [
+    "Sľúbili sme *kaviareň*…",
+    "☕ *TU JE!*"
+   ],
+   "y": 1300,
+   "comment": [
+    "mara_repka",
+    "Udělej kavárnu u pumy"
+   ]
+  },
+  {
+   "shot": "slope",
+   "cap": [
+    "Svah je *skoro plný*",
+    "každý má len *250 miest*"
+   ],
+   "y": 800,
+   "ov": "runPick"
+  },
+  {
+   "shot": "crane",
+   "cap": [
+    "Ďalší cieľ: *2500*",
+    "svah až na *EVEREST* 🏔️"
+   ],
+   "y": 800,
+   "ov": "goal"
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Označ *kamoša* 👇",
+    "kým je ešte miesto!"
+   ],
+   "y": 900
+  }
+ ],
+ "end": [
+  [
+   "Ďalší cieľ *2500* 🏔️"
+  ],
+  [
+   "Daj *follow* a napíš farbu bundy 👇"
+  ]
+ ]
+}
