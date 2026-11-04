@@ -22,7 +22,7 @@
     "Toto nie je len video.",
     "*JE TO HRA!* 🎮"
    ],
-   "y": 1180
+   "y": 760
   },
   {
    "shot": "gameHigh",
@@ -39,7 +39,7 @@
     "Šípky alebo",
     "*nakloň mobil* 📱"
    ],
-   "y": 1230
+   "y": 760
   },
   {
    "shot": "game",
@@ -47,15 +47,15 @@
     "Vynecháš bránku?",
     "*+2 sekundy* ⏱"
    ],
-   "y": 1230
+   "y": 760
   },
   {
-   "shot": "gameHigh",
+   "shot": "game",
    "cap": [
     "Chceli ste *závody*?",
     "Tu sú! 🏁"
    ],
-   "y": 1300,
+   "y": 1480,
    "ov": "comments"
   },
   {
@@ -64,7 +64,7 @@
     "Pošli *svoj čas* do DM",
     "najrýchlejších vyhlásime 🏆"
    ],
-   "y": 1230
+   "y": 760
   },
   {
    "shot": "chairTop",
