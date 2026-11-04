@@ -385,6 +385,9 @@ function roleLive(p){
   if (p.role==='rescue') return heliState(t).flying ? 'letí vrtuľníkom na vrchol' : 'pohotovosť pri heliporte';
   if (p.role==='hotel') return 'víta hostí v hoteli';
   if (p.role==='lift') return 'obsluhuje vlek';
+  if (p.role==='snow') return 'zasnežuje zjazdovku 1 ❄️';
+  if (p.role==='coach') return 'učí skoky v snowparku';
+  if (p.role==='skuter') return 'jazdí na snežnom skútri pod svahom';
   return 'máva lyžiarom pri hoteli';
 }
 
@@ -528,7 +531,7 @@ function buildWorld(){
       runPt(R,s+.006,-(R.LL+4),V2); const C=runPt(R,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); }); }
   // 🏂 tréner v snowparku
   ROLES.coach.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=.32+.08*k;
-    runPt(FS,s,-(FS.LL+3),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
+    runPt(FS,s,-(FS.LL+9),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
   // 🛷 snežný skúter
   WORLD.skutre=[];
   ROLES.skuter.slice(0,3).forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
