@@ -130,6 +130,13 @@ Vyber 1 najžiadanejšiu vec z komentov (hospoda/bufet, snežné delá, boulová
 5. Najprv to vyskúšaj na `beta.html`, až potom daj na `index.html`.
 6. Po nasadení otvor web, pozri konzolu (`read_console_messages`, onlyErrors) a sprav screenshot.
 
+## 5. ODPOVEDE (každý beh)
+
+- **Správy (DM): odpovedz na všetky nové.** Ak niekto v DM alebo v odpovedi na storku napíše farbu, výbavu či prianie, zapíš ho priamo do `data/followers.json` (iba followerov) a odpovedz „Hotovo ✅ … už jazdíš na svahfollowerov.online“. Pri inom texte poďakuj a stručne odpovedz. Postup: `/direct/inbox/`, otvor vlákno, do `[role=textbox][contenteditable=true]` vlož text cez `document.execCommand('insertText',…)` a stlač Enter cez `computer` key.
+- **Komentáre: NEodpovedaj na bežné voľby** (farba bundy, lyže a pod.). Odpovedaj len na zaujímavé a špeciálne: otázky („kde som?“), nápady (reštika, boulová trať, skúter, preteky…), roly (ratrak, horská služba, hotel, vlekár), vtipné priania (sob, tučniak, stromček). Max ~60 za beh, rozostup 15–30 s.
+- Komentár cez web posielaj cez GraphQL mutáciu, ktorú web používa pri „Odpovedať“. Raz odpovedz ručne cez UI a zachyť POST na `/api/graphql` s premennými `{"data":{"comment_text","media_id","replied_to_comment_id"},"root_connections":[]}`. Potom ten istý formulár zopakuj s inými hodnotami (`replied_to_comment_id` je JSON číslo, skladaj ho ako text, nie cez JSON.parse).
+- Nesľubuj termíny. Píš „zapisujeme“ alebo „je na zozname noviniek“. Sľúbená je iba 8-sedačková lanovka, ktorú treba postaviť (1000 followerov prekročených 4. 11.).
+
 ## Prenos medzi kartami (recv.html)
 
 `https://svahfollowerov.online/recv.html` vie `{op:'put',items:[[kľúč,hodnota],…]}` (uloží do IDB 'svah'/'f' a odpovie `{op:'done'}`) a `{op:'get',keys:[…]}` (odpovie `{op:'got',items:[[k,v],…]}`). Popup musí otvoriť skutočný klik. Ak stránka prepísala `window.open`, vezmi ho z prázdneho iframe:
