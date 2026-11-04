@@ -219,7 +219,7 @@ const OWNER = window.FOLLOWERS[0];
 const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c.toUpperCase() : '';
 let rawSki = DATA && Array.isArray(DATA.skiers) ? DATA.skiers.slice() : window.FOLLOWERS.slice();
 if (!rawSki.length || rawSki[0].u !== OWNER.u) rawSki = [OWNER, ...rawSki.filter(p => p.u !== OWNER.u)];
-const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [] };
+const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [] };
 const roleOf = new Map();
 if (DATA && DATA.roles) for (const key of Object.keys(ROLES)) for (const u of (DATA.roles[key] || [])) if (u !== OWNER.u && !roleOf.has(u)) { roleOf.set(u, key); ROLES[key].push(u); }
 const rawById = new Map(rawSki.map(p => [p.u, p]));
@@ -252,7 +252,7 @@ const NSKI = people.length;
 for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
   if (seenU.has(u)) continue; seenU.add(u);
   const src = rawById.get(u) || {}, h = hash(u), i = people.length;
-  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B'})[key];
+  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31'})[key];
   people.push({ kind:'role', role:key, u, k:src.k||'', i, num:i+1, ti:0, c, h, phase:((h>>>4)%997)/997 });
 }
 const NROLE = people.length;
@@ -374,6 +374,9 @@ const ROLE_TXT = {
   hotel:{ name:'personál hotela Svah', short:'🏨', icon:'🏨', place:'Hotel Svah' },
   lift:{ name:'vlekár', short:'🎫', icon:'🎫', place:'Dolná stanica vleku' },
   mascot:{ name:'vianočný maskot', short:'⛄', icon:'⛄', place:'Pri hoteli Svah' },
+  snow:{ name:'zasnežovač', short:'❄️', icon:'❄️', place:'Snežné delá pri zjazdovke 1' },
+  coach:{ name:'tréner skokov', short:'🏂', icon:'🏂', place:'Snowpark' },
+  skuter:{ name:'jazdec na snežnom skútri', short:'🛷', icon:'🛷', place:'Pod svahom' },
 };
 function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
 function roleLive(p){
@@ -513,6 +516,31 @@ function buildWorld(){
   staff(ROLES.ratrak, V3.copy(SPOT.garage).addScaledVector(outG,12).addScaledVector(new THREE.Vector3(-outG.z,0,outG.x),12), outG, 2.6, Math.atan2(outG.x,outG.z));
   ROLES.lift.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const run=ALLRUNS[k%ALLRUNS.length]; runPt(run,1,run.LL-6,V2); add(p.i,V2,run.th+Math.PI/2,false,p.c); });
   ROLES.mascot.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; WORLD.mascotI=p.i; });
+  // ❄️ snežné delá + zasnežovači
+  { const R=RUNS[0], gm=new THREE.MeshLambertMaterial({color:'#9aa3ad'}), ym=new THREE.MeshLambertMaterial({color:'#F2B705'}), sm=new THREE.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.5,depthWrite:false});
+    WORLD.sprays=[];
+    [.3,.55,.8].forEach((s,k)=>{ const P=runPt(R,s,-(R.LL+6),new THREE.Vector3()), C=runPt(R,s,0,new THREE.Vector3()); const g=new THREE.Group(); g.position.copy(P);
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(.5,.8,1.4,8).translate(0,.7,0),gm);
+      const tube=new THREE.Mesh(new THREE.CylinderGeometry(.95,.7,2.6,12),ym); tube.rotation.x=1.0; tube.position.set(0,2.3,.7);
+      const spray=new THREE.Mesh(new THREE.ConeGeometry(4.5,16,12,1,true).rotateX(-Math.PI/2).translate(0,0,8),sm); spray.position.set(0,3.1,1.6); spray.rotation.x=-.35;
+      g.add(base,tube,spray); g.lookAt(C.x,P.y,C.z); scene.add(g); WORLD.sprays.push(spray); });
+    ROLES.snow.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=[.3,.55,.8][k%3]+.006*Math.floor(k/3);
+      runPt(R,s+.006,-(R.LL+4),V2); const C=runPt(R,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); }); }
+  // 🏂 tréner v snowparku
+  ROLES.coach.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=.32+.08*k;
+    runPt(FS,s,-(FS.LL+3),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
+  // 🛷 snežný skúter
+  WORLD.skutre=[];
+  ROLES.skuter.slice(0,3).forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
+    const g=new THREE.Group(), bm=new THREE.MeshLambertMaterial({color:['#C8102E','#1E5AA8','#2E9E5B'][k%3]}), dm=new THREE.MeshLambertMaterial({color:'#22262d'});
+    const body=new THREE.Mesh(new THREE.BoxGeometry(1.1,.7,2.6).translate(0,.75,0),bm), seat=new THREE.Mesh(new THREE.BoxGeometry(.7,.3,1.2).translate(0,1.25,-.5),dm);
+    const track=new THREE.Mesh(new THREE.BoxGeometry(.9,.5,1.8).translate(0,.3,-.6),dm), ski=new THREE.Mesh(new THREE.BoxGeometry(1.3,.08,1.2).translate(0,.05,1.3),dm);
+    const bar=new THREE.Mesh(new THREE.BoxGeometry(1.0,.08,.08).translate(0,1.65,.45),dm), wind=new THREE.Mesh(new THREE.BoxGeometry(.9,.5,.06).translate(0,1.55,.75),new THREE.MeshLambertMaterial({color:'#cfe6ff',transparent:true,opacity:.6}));
+    const jm2=new THREE.MeshLambertMaterial({color:p.c}), rider=new THREE.Group();
+    const tor=new THREE.Mesh(new THREE.BoxGeometry(.5,.62,.3).translate(0,1.75,-.45),jm2), hd=new THREE.Mesh(new THREE.SphereGeometry(.18,10,8).translate(0,2.25,-.45),new THREE.MeshLambertMaterial({color:'#2B2D31'}));
+    rider.add(tor,hd); g.add(body,seat,track,ski,bar,wind,rider); g.scale.setScalar(SK*.9); scene.add(g);
+    add(p.i,V2.set(0,-500,0),0,false,p.c); figs[figs.length-1].hide=true;
+    WORLD.skutre.push({g,i:p.i,ph:k*2.1}); });
   const n=Math.max(1,figs.length);
   const jm=new THREE.InstancedMesh(jg,new THREE.MeshLambertMaterial({vertexColors:true}),n), rm=new THREE.InstancedMesh(rgm,new THREE.MeshLambertMaterial({vertexColors:true}),n);
   figs.forEach((f,k)=>jm.setColorAt(k,f.col)); jm.count=rm.count=figs.length;
@@ -566,6 +594,11 @@ function updateWorld(t, now){
     if (p.role==='ratrak'){ const inCab=driver===p.u; if(inCab!==!!f.hide){ f.hide=inCab; needAll=true; } if(inCab){ positions[f.i*3]=rg.position.x; positions[f.i*3+1]=rg.position.y+4; positions[f.i*3+2]=rg.position.z; } }
     if (p.role==='rescue'){ const inH=hs.flying; if(inH!==!!f.hide){ f.hide=inH; needAll=true; } if(inH){ positions[f.i*3]=hg.position.x; positions[f.i*3+1]=hg.position.y+2; positions[f.i*3+2]=hg.position.z; } }
   }
+  if (WORLD.sprays) for (let k=0;k<WORLD.sprays.length;k++){ const sp=WORLD.sprays[k]; sp.scale.setScalar(.92+.08*Math.sin(t*6+k)); sp.material.opacity=.42+.1*Math.sin(t*4+k*2); }
+  if (WORLD.skutre) for (const sk of WORLD.skutre){ const a=(t*.12+sk.ph)%(Math.PI*2), th=R0.th-.05+.17*(.5+.5*Math.sin(a)), r=985+14*Math.cos(a*2);
+    const th2=R0.th-.05+.17*(.5+.5*Math.sin(a+.01)), r2=985+14*Math.cos((a+.01)*2);
+    polar(r,th,HP); polar(r2,th2,HQ); sk.g.position.copy(HP); sk.g.lookAt(HQ.x,HP.y,HQ.z);
+    positions[sk.i*3]=HP.x; positions[sk.i*3+1]=HP.y+3.5; positions[sk.i*3+2]=HP.z; }
   if (WORLD.mascotI!==undefined){ positions[WORLD.mascotI*3]=SPOT.mascot.x; positions[WORLD.mascotI*3+1]=SPOT.mascot.y+3; positions[WORLD.mascotI*3+2]=SPOT.mascot.z; }
   if (WORLD.mascotArm) WORLD.mascotArm.rotation.z=.5+Math.sin(t*3)*.45;
   // tanec v čakárni len keď je kamera blízko
