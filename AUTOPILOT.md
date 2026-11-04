@@ -18,9 +18,8 @@ Samuel (majiteľ @svah.followerov) chce, aby projekt bežal **úplne sám**. Pla
 ## Rozpis (Europe/Bratislava)
 
 - **Každý deň ~08:15 – SYNC**: noví followeri a komenty → `data/followers.json` → web.
-- **Každý deň ~17:30 – REEL**: sync, potom vymysli a vyrob 1 reel a zverejni ho medzi 18:00 a 18:30. Cez víkend môžeš pridať aj druhý o 11:00.
+- **Každý deň ~17:30 – SYNC + NOVINKA + REEL**: pridaj nových hráčov, postav do hry 1 vec, ktorú hráči v komentoch chcú najviac a ešte nie je hotová (sekcia 4), a sprav o nej pútavý reel. Zverejni ho medzi 18:00 a 18:30. Samuel nechce na novinky čakať do nedele, majú byť každý večer.
 - **Storky**: 1–2 denne. Vygeneruj ich pri REEL behu a pošli Samuelovi (SendUserFile + PushNotification). Text: „Pridaj túto storku teraz / o 20:00“.
-- **Nedeľa – FEATURE**: najžiadanejšiu vec z komentov dorob do hry (malé, bezpečné zmeny). Potom o nej sprav reel.
 - Míľniky: pri 1000 followeroch postav 8-sedačkovú lanovku (sľúbené v reeli, nápad od m4.t_y). Ďalšie míľniky si vymysli (napr. 1500 nočné lyžovanie, 2000 nová zjazdovka).
 
 ## 1. SYNC (IG → followers.json)
@@ -119,7 +118,7 @@ Otvor `https://svahfollowerov.online/?reel=1&script=<id>`. Karta musí byť **v 
 
 Generuj ich v kontajneri cez Python PIL, šablóna je `tools/story_template.py` v repe. Rozmer 1080×1920. Pozadie: modrý gradient so snehom, kopce, smreky. Hore tabuľa „Svah followerov / NA SVAHU n“. Veľký žltý nadpis s čiernym obrysom, biele kartičky s textom, modré tlačidlo dole. Font Poppins (`/usr/share/fonts/truetype/google-fonts/`). **Žiadne emoji ani šípky „→“, font ich nemá.** Pošli ich cez `SendUserFile` (status proactive) a `PushNotification`: „Pridaj storku: …“. Témy: odpočet k 1000, nový reel („pozri nový reel“), anketa („ktorú farbu bundy chceš?“, nápad na nálepku s anketou v IG), čakáreň, kto je dnes nový.
 
-## 4. FEATURE (nedeľa)
+## 4. NOVINKA (každý večer)
 
 Vyber 1 najžiadanejšiu vec z komentov (hospoda/bufet, snežné delá, boulová trať, skúter, nočné lyžovanie, preteky…). Implementuj ju malým bezpečným zásahom do `index.html`:
 
