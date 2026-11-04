@@ -44,6 +44,17 @@
   .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
   .acts button{flex:1;min-width:92px;border:0;border-radius:12px;padding:10px 8px;font-weight:800;font-size:13px;background:#EEF3F9;color:var(--ink);cursor:pointer}
   .acts button:active{transform:scale(.97)}
+  #runPick{display:none;margin-top:10px}
+  #runPick .rh{font-size:12px;font-weight:800;color:#5b6573;margin-bottom:6px}
+  #runPick button{position:relative;display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;border:0;border-radius:12px;padding:11px 12px 13px;margin-bottom:6px;background:#EEF3F9;font-weight:800;font-size:13px;color:var(--ink);cursor:pointer;overflow:hidden;text-align:left}
+  #runPick button span{position:relative}
+  #runPick button i{position:absolute;left:0;bottom:0;height:5px;background:#1E5AA8}
+  #runPick button.full{opacity:.6;cursor:not-allowed}
+  #runPick button.full i{background:#C8102E}
+  #runPick button.full .rc{color:#C8102E}
+  #runPick button.cur{background:#DDEBFA;cursor:default}
+  #runPick .rnote{font-size:11.5px;color:#5b6573;line-height:1.35}
+  #runPick .rnote a{color:#1E5AA8;font-weight:800}
   #card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   #toast{position:fixed;left:50%;bottom:30%;transform:translateX(-50%) translateY(20px);background:rgba(20,24,30,.92);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.25s;z-index:80;pointer-events:none;max-width:86vw;text-align:center}
   #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -165,7 +176,8 @@
   </div>
   <div class="comment" id="cComment"></div>
   <div class="hint" id="cHint"></div>
-  <div class="acts"><button id="bPhoto">📸 Moja fotka</button><button id="bShare">📤 Pošli kamošovi</button><button id="bRace">⏱ Zjazd na čas</button></div>
+  <div class="acts"><button id="bPhoto">📸 Moja fotka</button><button id="bShare">📤 Pošli kamošovi</button><button id="bRace">⏱ Zjazd na čas</button><button id="bRun">🔀 Zmeniť svah</button></div>
+  <div id="runPick"></div>
 </div>
 <div id="game"><div class="gtop"><b id="gTime">3</b><small>← → / ťukaj šípky / nakloň mobil · Esc koniec</small></div><button id="gL" class="gbtn" aria-label="doľava">◀</button><button id="gR" class="gbtn" aria-label="doprava">▶</button><div id="gEnd"><div id="gRes"></div><div class="gacts"><button id="gShot">📸 Uložiť výsledok</button><button id="gAgain">↻ Znova</button><button id="gQuit">Koniec</button></div></div></div>
 <div id="demo">UKÁŽKA · vymyslené mená</div>
@@ -244,11 +256,13 @@ for (const p of rawSki){
   let bib = +p.n > 0 && +p.n < 1000 ? +p.n : 0;
   if (!bib){ while (claimed.has(bibSeq)) bibSeq++; bib = bibSeq++; }
   const pcHex = hexOk(p.p), hcHex = hexOk(p.h), scHex = hexOk(p.s);
-  people.push({ kind:'ski', u:p.u, k:p.k||'', i, num:i+1, bib, ti, c, rainbow, h, vip:i<100, f:!!p.f, auto:!!(p.auto && (!p.t || !hexOk(p.c) && !rainbow)),
+  people.push({ kind:'ski', u:p.u, k:p.k||'', i, num:i+1, bib, ti, c, rainbow, h, vip:i<100, f:!!p.f, wantR:(p.r==='SP'?'SP':(+p.r>0?+p.r:0)), auto:!!(p.auto && (!p.t || !hexOk(p.c) && !rainbow)),
     pcHex, hcHex, scHex, pc:pcHex?lin(pcHex):null, hc:hcHex?lin(hcHex):null, sc:scHex?lin(scHex):null,
     lane: ((h>>>8)%1000)/1000*2-1, phase: ((h>>>4)%997)/997, cyc:0, down:0 });
 }
 const NSKI = people.length;
+const RUN_KEY='svah_run_pick';
+try{ const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null'); if(o&&o.u){ const q=people.find(x=>x.u===o.u&&x.kind==='ski'); if(q&&String(q.wantR)!==String(o.r)){ q.wantR=o.r; q.localR=true; } } }catch(e){}
 for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
   if (seenU.has(u)) continue; seenU.add(u);
   const src = rawById.get(u) || {}, h = hash(u), i = people.length;
@@ -277,7 +291,10 @@ const groundAt = (x,z) => height(Math.hypot(x,z), Math.atan2(z,x));
 const RINGS=[{n:12,start:80,off:0},{n:12,start:230,off:.5},{n:24,start:390,off:.25},{n:48,start:560,off:.125},{n:96,start:720,off:.0625}];
 const SLOTS=[];
 RINGS.forEach(rg=>{ for(let j=0;j<rg.n;j++) SLOTS.push({ th:(j+rg.off)/rg.n*Math.PI*2-Math.PI/2, r0:rg.start, len:Math.min(800,1480-rg.start) }); });
-const REG = skiers.filter(p => !p.f || p.i === 0);
+const FS_CAP=60;
+const wantFS = p => p.i!==0 && (p.wantR==='SP' || (!p.wantR && p.f));
+const fsList = skiers.filter(wantFS).slice(0,FS_CAP), fsSet=new Set(fsList);
+const REG = skiers.filter(p => !fsSet.has(p));
 const nRuns = Math.min(SLOTS.length, Math.max(3, Math.ceil(REG.length/CAP)));
 const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
   const w = k===1 ? 3 : k===2 ? 1 : 0;
@@ -285,12 +302,18 @@ const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
 });
 const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
 const ALLRUNS = [...RUNS, FS];
-REG.forEach((p,j) => { p.run = RUNS[j % RUNS.length]; });
+RUNS.forEach(r=>{ r.cnt=0; });
+{ const takeRun=(p,r)=>{ p.run=r; r.cnt++; };
+  REG.forEach(p=>{ if(p.i===0) takeRun(p,RUNS[0]); });
+  REG.forEach(p=>{ if(p.run) return; const k=+p.wantR; if(k>=1&&k<=RUNS.length&&RUNS[k-1].cnt<CAP) takeRun(p,RUNS[k-1]); });
+  let j=0; REG.forEach(p=>{ if(p.run) return; let best=null; for(let a=0;a<RUNS.length;a++){ const r=RUNS[(j+a)%RUNS.length]; if(r.cnt<CAP){ best=r; break; } } if(!best) best=RUNS.reduce((a,b)=>a.cnt<=b.cnt?a:b); takeRun(p,best); j++; }); }
+FS.cnt=fsList.length;
 skiers.forEach(p => {
   if (!p.run) p.run = FS;
   const opts = p.run === FS ? CYC_FS : CYC[p.ti];
   p.cyc = opts[p.h % opts.length];
   p.down = p.cyc - p.run.len/LIFT_V;
+  p.f = p.run === FS;
 });
 $('count').textContent = fmt(N);
 $('runsInfo').textContent = RUNS.length+' zjazdovky · 8-sedačka · snowpark';
@@ -1177,6 +1200,7 @@ function select(i, fly=true){
   if(p.kind==='ski'){ $('cDot').style.background=p.rainbow?'conic-gradient(#C8102E,#F2B705,#2E9E5B,#1E5AA8,#7A3FB8,#C8102E)':p.c; $('cColor').textContent=(p.rainbow?'dúhová':(COLOR_NAMES[p.c]||'vlastná'))+' bunda'; }
   updateCheerCount(); updateLive();
   $('cComment').textContent=p.k?'„'+p.k+'“':'';
+  $('runPick').style.display='none'; $('bRun').style.display=p.kind==='ski'?'':'none';
   $('cHint').textContent=p.kind==='wait'?'Zatiaľ si nenapísal, akého lyžiara chceš. Napíš pod reel farbu bundy a lyže / snowboard / sánky a pustíme ťa na vlek.':(p.auto?'Časť výberu sme ti doplnili. Ak chceš inú farbu alebo typ, napíš nový koment.':'');
   $('card').style.display='block'; $('cta').style.display='none';
   history.replaceState(null,'','#lyziar-'+p.num);
@@ -1312,7 +1336,7 @@ function updateDayNight(t, force){
 updateDayNight((Date.now()/1000)%86400, true);
 
 /* ---------- toast ---------- */
-function toast(msg){ let el=$('toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); } el.textContent=msg; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),2600); }
+function toast(msg,ms){ let el=$('toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); } el.textContent=msg; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),ms||2600); }
 
 /* ---------- 📤 Pošli kamošovi ---------- */
 $('bShare').onclick=async()=>{
@@ -1446,6 +1470,29 @@ addEventListener('deviceorientation',e=>{ if(!GAME.on||GAME.useTilt!==true||e.ga
 $('bRace').onclick=async()=>{ try{ if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){ const r=await DeviceOrientationEvent.requestPermission(); GAME.useTilt=r==='granted'; } else GAME.useTilt=false; }catch(e){ GAME.useTilt=false; } startGame(); };
 $('gAgain').onclick=()=>{ const u=GAME.useTilt; endGame(); GAME.useTilt=u; startGame(); };
 $('gQuit').onclick=endGame;
+/* ---------- 🔀 zmena svahu s kapacitou ---------- */
+const RUN_SUB=['vlek','kľukatá','8-sedačka'];
+function runOpts(){ return RUNS.map((r,k)=>({id:k+1,name:'Zjazdovka '+r.label,sub:RUN_SUB[k]||'',cnt:r.cnt,cap:CAP,run:r})).concat([{id:'SP',name:'Snowpark',sub:'skoky a triky',cnt:FS.cnt,cap:FS_CAP,run:FS}]); }
+function openRunPick(){ if(selected<0) return; const p=people[selected]; if(p.kind!=='ski') return; const box=$('runPick');
+  if(box.style.display==='block'){ box.style.display='none'; return; }
+  box.innerHTML=''; const h=document.createElement('div'); h.className='rh'; h.textContent='Vyber si svah · každý má obmedzenú kapacitu'; box.appendChild(h);
+  for(const o of runOpts()){ const cur=p.run===o.run, full=!cur&&o.cnt>=o.cap; const b=document.createElement('button'); b.disabled=full||cur;
+    const nm=document.createElement('span'); nm.textContent=o.name+(o.sub?' · '+o.sub:'')+(cur?' · tu jazdíš':'');
+    const rc=document.createElement('span'); rc.className='rc'; rc.textContent=(full?'PLNÁ ':'')+o.cnt+'/'+o.cap;
+    const bar=document.createElement('i'); bar.style.width=Math.min(100,Math.round(o.cnt/o.cap*100))+'%';
+    b.append(nm,rc,bar); if(full) b.classList.add('full'); if(cur) b.classList.add('cur');
+    b.onclick=()=>pickRun(p,o); box.appendChild(b); }
+  const note=document.createElement('div'); note.className='rnote'; note.append('Zmena sa hneď ukáže u teba. Aby ťa tam videli všetci, pošli nám DM s textom „svah 2“ (podľa čísla svahu) na ');
+  const a=document.createElement('a'); a.href='https://ig.me/m/svah.followerov'; a.target='_blank'; a.rel='noopener'; a.textContent='@svah.followerov'; note.append(a,'.'); box.appendChild(note);
+  box.style.display='block'; }
+$('bRun').onclick=openRunPick;
+function pickRun(p,o){ const msg='svah '+(o.id==='SP'?'snowpark':o.id);
+  try{ localStorage.setItem(RUN_KEY,JSON.stringify({u:p.u,r:o.id})); }catch(e){}
+  try{ navigator.clipboard&&navigator.clipboard.writeText(msg); }catch(e){}
+  try{ sessionStorage.setItem('svah_run_msg',o.name+'|'+msg); }catch(e){}
+  location.hash='lyziar-'+p.num; location.reload(); }
+{ let m=null; try{ m=sessionStorage.getItem('svah_run_msg'); sessionStorage.removeItem('svah_run_msg'); }catch(e){}
+  if(m){ const [nm,msg]=m.split('|'); setTimeout(()=>toast('Si na: '+nm+' ⛷️ Pošli nám DM „'+msg+'“ (máš ho skopírované) a uvidia ťa tam všetci.',7000),1500); } }
 $('gShot').onclick=async()=>{ if(!GAME.p) return; const i=GAME.p.i, tot=GAME.result; const b=await photoCard(i,'Zjazd na čas: '+tot.toFixed(2).replace('.',',')+' s (zjazdovka '+GAME.run.label+')'); shareImage(b,'svah-cas-'+GAME.p.u+'.jpg'); };
 
 /* ---------- slučka ---------- */
