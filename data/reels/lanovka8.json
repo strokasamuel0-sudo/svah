@@ -1,0 +1,65 @@
+{
+ "align": "chair",
+ "sents": [
+  "Toto je jediný svah, kde má každý follower vlastného lyžiara.",
+  "Pri tisíc followeroch sme vám sľúbili osemsedačkovú lanovku.",
+  "A je tu!",
+  "Teraz nás je skoro tisícpäťsto a každý jazdí po svojom.",
+  "Daj follow, napíš farbu bundy a vezieš sa s nami!"
+ ],
+ "segs": [
+  {
+   "shot": "aerial",
+   "cap": [
+    "Každý follower",
+    "má tu *vlastného lyžiara*"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "chairLine",
+   "cap": [
+    "Pri *1000* followeroch",
+    "sme sľúbili *lanovku*"
+   ],
+   "y": 1250,
+   "ov": "liftComment"
+  },
+  {
+   "shot": "chairRide",
+   "cap": [
+    "*A JE TU!* 🚡",
+    "8-sedačková lanovka"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "slope",
+   "cap": [
+    "Už nás je *{FOLN}*",
+    "a každý jazdí po svojom"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "crane",
+   "cap": [
+    "Daj *follow*",
+    "a napíš farbu bundy 👇"
+   ],
+   "y": 900
+  }
+ ],
+ "end": [
+  [
+   "Vezieš sa *s nami*?"
+  ],
+  [
+   "Daj *follow* 👇"
+  ]
+ ],
+ "comment": [
+  "m4.t_y",
+  "8 sedačkovou sedačku"
+ ]
+}
