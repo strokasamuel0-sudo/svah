@@ -1,5 +1,5 @@
 {
- "align": "cust",
+ "align": "fs",
  "focus": "risky_scrt_",
  "racer": "risky_scrt_",
  "goal": [
@@ -25,7 +25,7 @@
    "y": 1180
   },
   {
-   "shot": "cust",
+   "shot": "gameHigh",
    "cap": [
     "Nájdi svojho lyžiara",
     "a klikni na *⏱ Zjazd na čas*"
@@ -42,7 +42,7 @@
    "y": 1230
   },
   {
-   "shot": "gameHigh",
+   "shot": "game",
    "cap": [
     "Vynecháš bránku?",
     "*+2 sekundy* ⏱"
@@ -50,7 +50,7 @@
    "y": 1230
   },
   {
-   "shot": "game",
+   "shot": "gameHigh",
    "cap": [
     "Chceli ste *závody*?",
     "Tu sú! 🏁"
@@ -59,7 +59,7 @@
    "ov": "comments"
   },
   {
-   "shot": "game",
+   "shot": "gameFront",
    "cap": [
     "Pošli *svoj čas* do DM",
     "najrýchlejších vyhlásime 🏆"
