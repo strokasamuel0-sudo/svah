@@ -41,6 +41,25 @@
   #sug .tag{font-size:11px;color:var(--muted);margin-left:6px}
   .lbl.role{background:#F26B21}
   .lbl.wait{background:rgba(93,102,114,.85)}
+  .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .acts button{flex:1;min-width:92px;border:0;border-radius:12px;padding:10px 8px;font-weight:800;font-size:13px;background:#EEF3F9;color:var(--ink);cursor:pointer}
+  .acts button:active{transform:scale(.97)}
+  #card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #toast{position:fixed;left:50%;bottom:30%;transform:translateX(-50%) translateY(20px);background:rgba(20,24,30,.92);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.25s;z-index:80;pointer-events:none;max-width:86vw;text-align:center}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  #game{display:none;position:fixed;inset:0;z-index:30;pointer-events:none}
+  #game .gtop{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:var(--glass);border-radius:16px;padding:8px 18px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+  #gTime{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;display:block}
+  #game small{font-size:11px;color:var(--muted)}
+  .gbtn{pointer-events:auto;position:absolute;bottom:calc(24px + env(safe-area-inset-bottom,0px));width:92px;height:92px;border-radius:50%;border:0;background:rgba(255,255,255,.85);font-size:34px;box-shadow:0 4px 14px rgba(0,0,0,.2);touch-action:none;user-select:none;-webkit-user-select:none}
+  #gL{left:20px} #gR{right:20px}
+  #gEnd{display:none;pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:20px;flex-direction:column;gap:12px;min-width:280px;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  #gRes b{font-size:44px;display:block}
+  #gRes span{font-size:14px;color:var(--muted)}
+  .gacts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .gacts button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:var(--blue);color:#fff;cursor:pointer}
+  .gacts #gQuit{background:#e9edf2;color:var(--ink)}
+  body.night #card,body.night .board{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 30px rgba(0,0,0,.45)}
   .hint{margin-top:8px;font-size:13px;background:#FFF5D6;border-radius:10px;padding:8px 10px}
   .hint:empty{display:none}
 
@@ -146,7 +165,9 @@
   </div>
   <div class="comment" id="cComment"></div>
   <div class="hint" id="cHint"></div>
+  <div class="acts"><button id="bPhoto">📸 Moja fotka</button><button id="bShare">📤 Pošli kamošovi</button><button id="bRace">⏱ Zjazd na čas</button></div>
 </div>
+<div id="game"><div class="gtop"><b id="gTime">3</b><small>← → / ťukaj šípky / nakloň mobil · Esc koniec</small></div><button id="gL" class="gbtn" aria-label="doľava">◀</button><button id="gR" class="gbtn" aria-label="doprava">▶</button><div id="gEnd"><div id="gRes"></div><div class="gacts"><button id="gShot">📸 Uložiť výsledok</button><button id="gAgain">↻ Znova</button><button id="gQuit">Koniec</button></div></div></div>
 <div id="demo">UKÁŽKA · vymyslené mená</div>
 <div id="err"></div>
 
@@ -574,15 +595,16 @@ controls.enableDamping=true; controls.dampingFactor=.08;
 controls.maxPolarAngle=Math.PI*.48; controls.minDistance=8; controls.maxDistance=5000;
 
 const SUN_DIR=new THREE.Vector3(-.55,.62,.56).normalize();
-scene.add(new THREE.HemisphereLight('#f4f8ff','#93a6bd',1.05));
+const HEMI=new THREE.HemisphereLight('#f4f8ff','#93a6bd',1.05); scene.add(HEMI);
+const SKY_U={ sunDir:{value:SUN_DIR}, night:{value:0} };
 const sun=new THREE.DirectionalLight('#fff0d8',2.1); sun.position.copy(SUN_DIR).multiplyScalar(1000); scene.add(sun);
 
 /* obloha so slnkom */
 {
   const m=new THREE.ShaderMaterial({ side:THREE.BackSide, depthWrite:false, fog:false,
-    uniforms:{ sunDir:{value:SUN_DIR} },
+    uniforms:SKY_U,
     vertexShader:'varying vec3 vD; void main(){ vD=normalize(position); vec4 p=projectionMatrix*modelViewMatrix*vec4(position,1.); gl_Position=p.xyww; }',
-    fragmentShader:'uniform vec3 sunDir; varying vec3 vD; void main(){ float h=vD.y; vec3 top=vec3(.20,.47,.82), hor=vec3(.86,.91,.96), gr=vec3(.86,.9,.95); vec3 c=mix(hor,top,smoothstep(0.0,.55,h)); c=mix(c,gr,smoothstep(0.0,-.15,h)); float sd=max(dot(vD,sunDir),0.0); c+=vec3(1.,.93,.78)*(pow(sd,900.)*1.6+pow(sd,10.)*.22); gl_FragColor=vec4(c,1.); }' });
+    fragmentShader:'uniform vec3 sunDir; uniform float night; varying vec3 vD; void main(){ float h=vD.y; vec3 top=mix(vec3(.20,.47,.82),vec3(.02,.04,.11),night), hor=mix(vec3(.86,.91,.96),vec3(.10,.15,.27),night), gr=mix(vec3(.86,.9,.95),vec3(.06,.09,.16),night); vec3 c=mix(hor,top,smoothstep(0.0,.55,h)); c=mix(c,gr,smoothstep(0.0,-.15,h)); float sd=max(dot(vD,sunDir),0.0); c+=(1.0-night)*vec3(1.,.93,.78)*(pow(sd,900.)*1.6+pow(sd,10.)*.22); vec3 q=floor(vD*420.0); float st=fract(sin(dot(q,vec3(12.9898,78.233,37.719)))*43758.5453); c+=night*smoothstep(0.05,0.3,h)*step(0.9975,st)*vec3(1.0); float md=max(dot(vD,normalize(vec3(.5,.5,-.7))),0.0); c+=night*vec3(.9,.92,1.)*pow(md,1800.)*1.4; gl_FragColor=vec4(c,1.); }' });
   const sky=new THREE.Mesh(new THREE.SphereGeometry(12000,32,16),m); sky.frustumCulled=false; sky.renderOrder=-1; scene.add(sky);
 }
 
@@ -1211,6 +1233,185 @@ canvas.addEventListener('pointerup',e=>{
   if(best>=0) select(best);
 });
 
+/* ---------- deň a noc, svetlá na zjazdovkách ---------- */
+const LAMPS = (()=>{
+  const pts=[];
+  for (const run of ALLRUNS){ for (let d=20; d<run.len; d+=70) pts.push([run,d/run.len]); }
+  const n=pts.length;
+  const poleG=new THREE.CylinderGeometry(.18,.25,9,6).translate(0,4.5,0);
+  const headG=new THREE.SphereGeometry(.7,10,8).translate(0,9.2,0);
+  const poles=new THREE.InstancedMesh(poleG,new THREE.MeshLambertMaterial({color:'#4b525b'}),n);
+  const headMat=new THREE.MeshBasicMaterial({color:'#9aa3ad'});
+  const heads=new THREE.InstancedMesh(headG,headMat,n);
+  const cv=document.createElement('canvas'); cv.width=cv.height=128; const x=cv.getContext('2d');
+  const gr=x.createRadialGradient(64,64,4,64,64,64); gr.addColorStop(0,'rgba(255,226,160,.9)'); gr.addColorStop(.45,'rgba(255,214,140,.35)'); gr.addColorStop(1,'rgba(255,210,130,0)'); x.fillStyle=gr; x.fillRect(0,0,128,128);
+  const tx=new THREE.CanvasTexture(cv); tx.colorSpace=THREE.SRGBColorSpace;
+  const glowMat=new THREE.MeshBasicMaterial({map:tx,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:0,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8});
+  const glows=new THREE.InstancedMesh(new THREE.PlaneGeometry(46,46),glowMat,n);
+  const A=new THREE.Vector3(), Bv=new THREE.Vector3(), Cv=new THREE.Vector3(), nrm=new THREE.Vector3(), Z=new THREE.Vector3(0,0,1), q=new THREE.Quaternion(), one=new THREE.Vector3(1,1,1);
+  pts.forEach(([run,s],i)=>{
+    runPt(run,s,-27,A); M4.makeTranslation(A.x,A.y-.3,A.z); poles.setMatrixAt(i,M4); heads.setMatrixAt(i,M4);
+    runPt(run,s,-6,A); runPt(run,Math.min(1,s+.01),-6,Bv); runPt(run,s,-5,Cv);
+    nrm.crossVectors(Cv.sub(A),Bv.sub(A)).normalize(); if(nrm.y<0) nrm.negate();
+    q.setFromUnitVectors(Z,nrm); runPt(run,s,-6,A); A.addScaledVector(nrm,.35);
+    M4.compose(A,q,one); glows.setMatrixAt(i,M4);
+  });
+  glows.renderOrder=2; scene.add(poles,heads,glows);
+  return {headMat,glowMat};
+})();
+let dayLast=-1;
+const DAYC={ fogDay:new THREE.Color('#dbe7f3'), fogNight:new THREE.Color('#0c1424'), sunDay:new THREE.Color('#fff0d8'), sunNight:new THREE.Color('#8fa6ff'), hemDay:new THREE.Color('#f4f8ff'), hemNight:new THREE.Color('#5d6f9c'), lampOff:new THREE.Color('#9aa3ad'), lampOn:new THREE.Color('#ffe2a0') };
+function dayFactor(t){ const L=localSec(t)/3600; const ss=(a,b,x)=>{ const k=Math.min(1,Math.max(0,(x-a)/(b-a))); return k*k*(3-2*k); }; return ss(6.5,7.6,L)*(1-ss(16.1,17.2,L)); }
+function updateDayNight(t, force){
+  const s=Math.floor(t/5); if(!force && s===dayLast) return; dayLast=s;
+  const day=params.has('noc')?0:params.has('den')?1:dayFactor(t), night=1-day;
+  HEMI.intensity=.32+.73*day; HEMI.color.copy(DAYC.hemNight).lerp(DAYC.hemDay,day);
+  sun.intensity=.28+1.82*day; sun.color.copy(DAYC.sunNight).lerp(DAYC.sunDay,day);
+  scene.fog.color.copy(DAYC.fogNight).lerp(DAYC.fogDay,day);
+  renderer.toneMappingExposure=.9+.1*day;
+  SKY_U.night.value=night;
+  LAMPS.glowMat.opacity=Math.max(0,night*1.15-.1); LAMPS.headMat.color.copy(DAYC.lampOff).lerp(DAYC.lampOn,Math.min(1,night*1.4));
+  document.body.classList.toggle('night', night>.5);
+}
+updateDayNight((Date.now()/1000)%86400, true);
+
+/* ---------- toast ---------- */
+function toast(msg){ let el=$('toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.appendChild(el); } el.textContent=msg; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),2600); }
+
+/* ---------- 📤 Pošli kamošovi ---------- */
+$('bShare').onclick=async()=>{
+  if(selected<0) return; const p=people[selected];
+  const url=location.origin+'/#lyziar-'+p.num, text=(p.kind==='ski'?'Pozri, jazdím na svahu followerov! ⛷️ ':'Pozri svah followerov! ')+'@'+p.u;
+  try{ if(navigator.share){ await navigator.share({title:'Svah followerov',text,url}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{ await navigator.clipboard.writeText(text+' '+url); toast('Odkaz skopírovaný – pošli ho kamošovi 👍'); }catch(e){ prompt('Skopíruj odkaz:',url); }
+};
+
+/* ---------- 📸 Moja fotka (obrázok na storku) ---------- */
+const CN={'#1E5AA8':'modrá','#C8102E':'červená','#F2B705':'žltá','#2E9E5B':'zelená','#7A3FB8':'fialová','#F26B21':'oranžová','#0FA3B1':'tyrkysová','#E84A8A':'ružová','#2B2D31':'čierna','#F4F4F4':'biela','#6D4C41':'hnedá'};
+async function photoCard(i, extra){
+  const p=people[i], W=1080, H=1920;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const g=cv.getContext('2d');
+  // záber na lyžiara
+  const saveP=camera.position.clone(), saveT=controls.target.clone(), saveA=camera.aspect, saveF=camera.fov;
+  const tgt=new THREE.Vector3(positions[i*3],positions[i*3+1]+1.6,positions[i*3+2]);
+  let off=new THREE.Vector3(9,4.5,11);
+  if(p.kind==='ski'){ skierOrg(p,simT(),tmp); const b=new THREE.Vector3(); skierOrg(p,simT()+.5,b); const d=b.sub(tmp); d.y=0; if(d.lengthSq()>1e-4){ d.normalize(); off=new THREE.Vector3(d.x*9-d.z*5,4,d.z*9+d.x*5); } }
+  const w=renderer.domElement.width, h=renderer.domElement.height;
+  camera.aspect=w/h; camera.fov=40; camera.updateProjectionMatrix();
+  camera.position.copy(tgt).add(off); camera.lookAt(tgt); camera.updateMatrixWorld();
+  if(p.kind==='ski'){ const set=new Set([p.ro]); updatePositions(simT(),set); updateDetail(set); }
+  renderer.render(scene,camera);
+  const sc=Math.max(W/w,H/h), dw=w*sc, dh=h*sc; g.drawImage(renderer.domElement,(W-dw)/2,(H-dh)/2,dw,dh);
+  camera.position.copy(saveP); controls.target.copy(saveT); camera.aspect=saveA; camera.fov=saveF; camera.updateProjectionMatrix();
+  // grafika
+  const F='Poppins, system-ui, -apple-system, Arial, sans-serif';
+  const gr=g.createLinearGradient(0,1100,0,H); gr.addColorStop(0,'rgba(10,20,35,0)'); gr.addColorStop(1,'rgba(10,20,35,.75)'); g.fillStyle=gr; g.fillRect(0,1100,W,H-1100);
+  const gt=g.createLinearGradient(0,0,0,420); gt.addColorStop(0,'rgba(10,20,35,.55)'); gt.addColorStop(1,'rgba(10,20,35,0)'); g.fillStyle=gt; g.fillRect(0,0,W,420);
+  g.fillStyle='#1E5AA8'; g.beginPath(); g.roundRect(60,90,640,110,26); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
+  g.fillStyle='#fff'; g.font='800 46px '+F; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Svah followerov',92,146);
+  g.textAlign='right'; g.font='800 20px '+F; g.fillText('NA SVAHU',672,118); g.font='800 48px '+F; g.fillText(fmt(N),672,160);
+  // karta
+  g.fillStyle='rgba(255,255,255,.96)'; g.beginPath(); g.roundRect(60,1330,960,330,40); g.fill();
+  g.fillStyle='#F4F6F9'; g.strokeStyle='#22262d'; g.lineWidth=7; g.beginPath(); g.roundRect(100,1380,200,200,26); g.fill(); g.stroke();
+  g.fillStyle='#5d6672'; g.font='800 30px '+F; g.textAlign='center'; g.fillText(p.kind==='ski'?'ŠTART':'SVAH',200,1420);
+  g.fillStyle='#22262d'; g.font='800 86px '+F; g.fillText(p.kind==='ski'?String(p.bib):'★',200,1500);
+  g.textAlign='left'; g.fillStyle='#22262d'; let nm='@'+p.u; let fs=64; g.font='800 '+fs+'px '+F; while(g.measureText(nm).width>660&&fs>34){ fs-=4; g.font='800 '+fs+'px '+F; } g.fillText(nm,340,1430);
+  g.fillStyle='#5d6672'; g.font='600 38px '+F;
+  const l2 = extra ? extra : (p.kind==='ski' ? (TYPES[p.ti].name+(CN[p.c]?' · '+CN[p.c]+' bunda':'')) : p.kind==='wait' ? 'čakám v čakárni pod vlekom' : ROLE_TXT[p.role].name);
+  g.fillText(l2,340,1500);
+  g.fillStyle='#1E5AA8'; g.font='700 34px '+F; g.fillText('nájdi sa na svahfollowerov.online',340,1565);
+  g.fillStyle='#fff'; g.font='800 54px '+F; g.textAlign='center'; g.lineJoin='round'; g.lineWidth=12; g.strokeStyle='rgba(16,20,28,.9)';
+  const head = extra ? 'Môj čas na svahu!' : (p.kind==='ski' ? 'Toto som ja na svahu!' : 'Som na svahu followerov!');
+  g.strokeText(head,540,1240); g.fillStyle='#FFD23F'; g.fillText(head,540,1240);
+  g.fillStyle='#fff'; g.font='800 44px '+F; g.strokeText('Daj follow @svah.followerov',540,1760); g.fillText('Daj follow @svah.followerov',540,1760);
+  return await new Promise(r=>cv.toBlob(r,'image/jpeg',.92));
+}
+async function shareImage(blob, name){
+  const file=new File([blob],name,{type:'image/jpeg'});
+  try{ if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'Svah followerov',text:'@svah.followerov'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  toast('Obrázok stiahnutý – pridaj ho do storky a označ @svah.followerov 📸');
+}
+$('bPhoto').onclick=async()=>{ if(selected<0) return; const b=await photoCard(selected); shareImage(b,'svah-'+people[selected].u+'.jpg'); };
+
+/* ---------- ⏱ Zjazd na čas ---------- */
+const GAME={on:false};
+function buildRacer(p){
+  const grp=new THREE.Group(), jc=new THREE.MeshLambertMaterial({color:p.rainbow?'#E84A8A':p.c});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.5,.62,.3),jc); body.position.y=1.12;
+  const armL=new THREE.Mesh(new THREE.BoxGeometry(.15,.55,.16),jc); armL.position.set(-.33,1.1,.05);
+  const armR=armL.clone(); armR.position.x=.33;
+  const pm=new THREE.MeshLambertMaterial({color:p.pcHex||'#2f343c'});
+  const legL=new THREE.Mesh(new THREE.BoxGeometry(.19,.72,.22),pm); legL.position.set(-.12,.41,0); const legR=legL.clone(); legR.position.x=.12;
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.17,10,8),new THREE.MeshLambertMaterial({color:p.hcHex||'#eef1f5'})); head.position.y=1.6;
+  const gog=new THREE.Mesh(new THREE.BoxGeometry(.27,.09,.07),new THREE.MeshLambertMaterial({color:'#ff8a2a'})); gog.position.set(0,1.6,.14);
+  const sm=new THREE.MeshLambertMaterial({color:p.scHex||'#d64045'});
+  const board=p.ti===1;
+  const skiL=new THREE.Mesh(new THREE.BoxGeometry(board?.3:.09,.04,board?1.45:1.7),sm); skiL.position.set(board?0:-.12,.02,.1);
+  grp.add(body,armL,armR,legL,legR,head,gog,skiL);
+  if(!board){ const skiR=skiL.clone(); skiR.position.x=.12; grp.add(skiR); }
+  grp.scale.setScalar(SK); return grp;
+}
+function startGame(){
+  if(selected<0) return; const p=people[selected];
+  const run = p.kind==='ski' ? p.run : RUNS[0];
+  const nG=Math.max(6,Math.floor(run.len/70)), gates=[], grpG=new THREE.Group();
+  const poleG=new THREE.CylinderGeometry(.09,.09,3.2,6).translate(0,1.6,0), flagG=new THREE.BoxGeometry(.05,1,1.3).translate(0,2.6,.65);
+  for(let k=0;k<nG;k++){
+    const s=(k+1)/(nG+1), c=k%2?6:-6, col=k%2?'#1E5AA8':'#C8102E', mat=new THREE.MeshLambertMaterial({color:col});
+    for(const side of [-4.5,4.5]){ const P=runPt(run,s,c+side,new THREE.Vector3()); const m1=new THREE.Mesh(poleG,mat), m2=new THREE.Mesh(flagG,mat); m1.position.copy(P); m2.position.copy(P); grpG.add(m1,m2); }
+    gates.push({s,c,hit:null});
+  }
+  scene.add(grpG);
+  const racer=buildRacer(p.kind==='ski'?p:{c:'#1E5AA8',ti:0}); scene.add(racer);
+  Object.assign(GAME,{on:true,p,run,gates,grpG,racer,s:0,lat:-3,v:6,steer:0,t:0,pen:0,last:performance.now(),done:false,cnt:3.2});
+  $('card').style.display='none'; $('top').style.display='none'; $('labels').style.display='none';
+  $('game').style.display='block'; $('gEnd').style.display='none'; $('gTime').textContent='0,00';
+  controls.enabled=false;
+}
+function endGame(){
+  GAME.on=false; scene.remove(GAME.grpG); scene.remove(GAME.racer);
+  $('game').style.display='none'; $('top').style.display=''; $('labels').style.display='';
+  controls.enabled=true; if(selected>=0) select(selected); else showAll();
+}
+function finishGame(){
+  GAME.done=true; const tot=GAME.t+GAME.pen, key='svah_best_'+GAME.run.label;
+  let best=null; try{ best=parseFloat(localStorage.getItem(key)); }catch(e){}
+  const rec=!(best>0)||tot<best; if(rec){ try{ localStorage.setItem(key,String(tot)); }catch(e){} best=tot; }
+  const missed=GAME.gates.filter(g=>g.hit===false).length;
+  $('gRes').innerHTML=''; const b=document.createElement('b'); b.textContent=tot.toFixed(2).replace('.',',')+' s'; const sm=document.createElement('span');
+  sm.textContent=(rec?'🏆 Tvoj nový rekord! ':'Rekord: '+best.toFixed(2).replace('.',',')+' s · ')+(missed?'vynechané bránky: '+missed+' (+'+(missed*2)+' s)':'všetky bránky ✔');
+  $('gRes').append(b,sm); $('gEnd').style.display='flex';
+  GAME.result=tot;
+}
+function stepGame(now){
+  const G=GAME, dt=Math.min(.05,(now-G.last)/1000); G.last=now;
+  if(G.cnt>0){ G.cnt-=dt; $('gTime').textContent=G.cnt>.2?String(Math.ceil(G.cnt-.2)):'ŠTART!'; }
+  else if(!G.done){
+    G.t+=dt; G.v=Math.min(26,G.v+dt*3.2);
+    G.lat=Math.max(-20,Math.min(20,G.lat+G.steer*13*dt));
+    const prev=G.s; G.s+=G.v*dt/G.run.len;
+    for(const gt of G.gates) if(gt.hit===null && prev<gt.s && G.s>=gt.s){ gt.hit=Math.abs(G.lat-gt.c)<=4.5; if(!gt.hit){ G.pen+=2; toast('Vynechaná bránka +2 s'); } }
+    $('gTime').textContent=(G.t+G.pen).toFixed(2).replace('.',',');
+    if(G.s>=1){ G.s=1; finishGame(); }
+  }
+  const P=runPt(G.run,G.s,G.lat,new THREE.Vector3()), Q=runPt(G.run,Math.min(1,G.s+.004),G.lat+G.steer*1.5,new THREE.Vector3());
+  G.racer.position.copy(P); G.racer.position.y+=.25; G.racer.lookAt(Q.x,P.y+.25,Q.z); G.racer.rotateZ(-G.steer*.35); G.racer.rotateX(.18);
+  const dir=Q.clone().sub(P); dir.y=0; dir.normalize();
+  camera.position.copy(P).addScaledVector(dir,-11).add(new THREE.Vector3(0,5.5,0));
+  camera.lookAt(P.x+dir.x*10,P.y+1,P.z+dir.z*10);
+  controls.target.copy(P);
+}
+addEventListener('keydown',e=>{ if(!GAME.on) return; if(e.key==='ArrowLeft'||e.key==='a') GAME.steer=-1; if(e.key==='ArrowRight'||e.key==='d') GAME.steer=1; if(e.key==='Escape') endGame(); });
+addEventListener('keyup',e=>{ if(!GAME.on) return; if(['ArrowLeft','ArrowRight','a','d'].includes(e.key)) GAME.steer=0; });
+for(const [id,v] of [['gL',-1],['gR',1]]){ const el=$(id);
+  el.addEventListener('pointerdown',e=>{ e.preventDefault(); GAME.steer=v; }); for(const ev of ['pointerup','pointerleave','pointercancel']) el.addEventListener(ev,()=>{ if(GAME.steer===v) GAME.steer=0; }); }
+addEventListener('deviceorientation',e=>{ if(!GAME.on||GAME.useTilt!==true||e.gamma==null) return; const gm=e.gamma/20; GAME.steer=Math.max(-1,Math.min(1,Math.abs(gm)<.15?0:gm)); });
+$('bRace').onclick=async()=>{ try{ if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){ const r=await DeviceOrientationEvent.requestPermission(); GAME.useTilt=r==='granted'; } else GAME.useTilt=false; }catch(e){ GAME.useTilt=false; } startGame(); };
+$('gAgain').onclick=()=>{ const u=GAME.useTilt; endGame(); GAME.useTilt=u; startGame(); };
+$('gQuit').onclick=endGame;
+$('gShot').onclick=async()=>{ if(!GAME.p) return; const i=GAME.p.i, tot=GAME.result; const b=await photoCard(i,'Zjazd na čas: '+tot.toFixed(2).replace('.',',')+' s (zjazdovka '+GAME.run.label+')'); shareImage(b,'svah-cas-'+GAME.p.u+'.jpg'); };
+
 /* ---------- slučka ---------- */
 function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.fov=w/h<.8?60:45; camera.updateProjectionMatrix(); }
 addEventListener('resize',resize); resize();
@@ -1233,9 +1434,10 @@ function loop(now){
   }
   if(selected>=0 && people[selected].kind==='ski') nearRuns.add(people[selected].ro);
   updatePositions(t, nearRuns);
-  updateWorld(t, now);
+  updateWorld(t, now); updateDayNight(t);
   updateDetail(nearRuns);
-  if(flying){
+  if(GAME.on){ stepGame(now); }
+  else if(flying){
     const k=Math.min(1,(now-flying.start)/flying.dur), e=ease(k);
     if(selected>=0){ flying.t1.set(positions[selected*3],positions[selected*3+1]+1.5,positions[selected*3+2]); flying.p1.copy(flying.t1).add(followOff); }
     camera.position.lerpVectors(flying.p0,flying.p1,e); controls.target.lerpVectors(flying.t0,flying.t1,e);
@@ -1246,7 +1448,7 @@ function loop(now){
     if(d.lengthSq()<400){ camera.position.add(d); controls.target.add(d); }
     lastSel.copy(cur);
   }
-  controls.update();
+  if(!GAME.on) controls.update();
   const g=groundAt(camera.position.x,camera.position.z)+4;
   if(camera.position.y<g) camera.position.y=g;
   const sp=snow.geometry.attributes.position.array;
