@@ -1,0 +1,97 @@
+{
+ "align": "cust",
+ "focus": "risky_scrt_",
+ "racer": "risky_scrt_",
+ "goal": [
+  2000,
+  "Do kaviarne na vrchole ☕"
+ ],
+ "sents": [
+  "Stop! Toto už nie je len video. Je to hra!",
+  "Nájdi svojho lyžiara a klikni na Zjazd na čas.",
+  "Riadiš šípkami alebo naklonením mobilu.",
+  "Vynecháš bránku? Plus dve sekundy.",
+  "Chceli ste závody? Tak tu ich máte!",
+  "Svoj najlepší čas pošli do správ, najrýchlejších vyhlásime.",
+  "A pri dvetisíc followeroch staviame na vrchole kaviareň!"
+ ],
+ "segs": [
+  {
+   "shot": "game",
+   "cap": [
+    "Toto nie je len video.",
+    "*JE TO HRA!* 🎮"
+   ],
+   "y": 1180
+  },
+  {
+   "shot": "cust",
+   "cap": [
+    "Nájdi svojho lyžiara",
+    "a klikni na *⏱ Zjazd na čas*"
+   ],
+   "y": 820,
+   "ov": "tapRace"
+  },
+  {
+   "shot": "gameFront",
+   "cap": [
+    "Šípky alebo",
+    "*nakloň mobil* 📱"
+   ],
+   "y": 1230
+  },
+  {
+   "shot": "gameHigh",
+   "cap": [
+    "Vynecháš bránku?",
+    "*+2 sekundy* ⏱"
+   ],
+   "y": 1230
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "Chceli ste *závody*?",
+    "Tu sú! 🏁"
+   ],
+   "y": 1300,
+   "ov": "comments"
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "Pošli *svoj čas* do DM",
+    "najrýchlejších vyhlásime 🏆"
+   ],
+   "y": 1230
+  },
+  {
+   "shot": "chairTop",
+   "cap": [
+    "Pri *2000* followeroch",
+    "staviame *kaviareň* ☕"
+   ],
+   "y": 800,
+   "ov": "goal"
+  }
+ ],
+ "end": [
+  [
+   "*Zahraj si* ⏱"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio 👇"
+  ]
+ ],
+ "comments": [
+  [
+   "risky_scrt_",
+   "Udělejte red bull závody"
+  ],
+  [
+   "damianmarko10",
+   "Ja chcem preteky lebo som pretekar"
+  ]
+ ]
+}
