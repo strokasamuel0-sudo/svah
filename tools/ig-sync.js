@@ -43,7 +43,7 @@
     [/^(svetlo|bledo)\w*\s*zelen/, '#A6E3A1'], [/^(svetlo|bledo|pastel)\w*\s*fial/, '#C9A7EB'], [/^tmavo\w*\s*modr|^tmavomodr/, '#123A75'], [/^tmavo\w*\s*zelen/, '#1F5F3A'],
     [/^(ruz|pink|tuzov|ruzov)/, '#E84A8A'], [/^(cerven|red\b|cerveno)/, '#C8102E'], [/^(modr|blue)/, '#1E5AA8'],
     [/^citron/, '#F7E35A'], [/^(zlt|zlut|zut|yellow)/, '#F2B705'], [/^fosfor/, '#B6F03C'], [/^(pistac|postac|pisrac)/, '#93C572'],
-    [/^(zelen|green)/, '#2E9E5B'], [/^(fial|fual|purple|lila)/, '#7A3FB8'], [/^(oranz|orandz|orange)/, '#F26B21'], [/^tyrkys/, '#0FA3B1'],
+    [/^(zelen|green)/, '#2E9E5B'], [/^(fial|fual|filal|purple|lila)/, '#7A3FB8'], [/^(oranz|orandz|orange)/, '#F26B21'], [/^tyrkys/, '#0FA3B1'],
     [/^(ciern|cern|black)/, '#2B2D31'], [/^(biel|bil|white)/, '#F4F4F4'], [/^(hned|brown)/, '#6D4C41'], [/^(siv|sed|gray|grey)/, '#8A9099'],
     [/^(zlat|gold)/, '#D4AF37'], [/^(striebr|stribr|silver)/, '#C0C0C0'], [/^bezov/, '#D9C2A0'], [/^bordo/, '#7B1E3A'], [/^khaki/, '#7D7A3B']
   ];
@@ -57,7 +57,7 @@
   const isSki = w => /^(lyz|liz|lyž|lxz|ski$|lyzi|lyzar)/.test(w);
   const isSled = w => /^(sank|sane$|sanki|snky|sáne)/.test(w);
   const isBob = w => /^bob(y|ov)?$/.test(w);
-  const ROLE = [[/rolb|ratrak|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk/, 'lift'], [/maskot/, 'mascot']];
+  const ROLE = [[/rolb|ratrak|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk/, 'lift'], [/maskot/, 'mascot'], [/zasnez|starat o sn|obsluh\w* del/, 'snow'], [/trener|instrukt/, 'coach'], [/skut(r|er)|snowmobil/, 'skuter']];
   const FREE = /freest|snowpark|snow park|skok|skak|trik|jump|red ?bul|pasaz/;
 
   const per = new Map();
@@ -90,7 +90,7 @@
 
   // zostavenie
   const out = [{ u: OWNER, g: 'ski', t: 'lyziar', c: '#1E5AA8', k: 'Prvá stopa je moja. Kto ide so mnou?' }];
-  const roles = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [] };
+  const roles = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [] };
   const notFollowing = [];
   for (const e of [...per.values()].sort((a, b) => a.ts - b.ts)) {
     if (!fol.has(e.u)) { notFollowing.push(e.u); continue; }
