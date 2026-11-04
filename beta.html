@@ -554,7 +554,7 @@ function buildWorld(){
       g.add(new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,.15,10).translate(x,1.6,5.2),wht), new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1,6).translate(x,1.1,5.2),dark),
         new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,3.4,6).translate(x,2.4,5.2),dark), new THREE.Mesh(new THREE.ConeGeometry(1.8,.9,8).translate(x,4.3,5.2),um)); }
     g.scale.setScalar(1.6); scene.add(g); WORLD.cafe=g;
-    const s=makeSign(['☕ KAVIAREŇ','splnené pri 2000 followeroch'],'#6D4C41','#fff',768,200); s.scale.multiplyScalar(.5); s.position.set(P.x,P.y+22,P.z); scene.add(s); }
+    const s=makeSign(['☕ KAVIAREŇ','splnené pri 2000 followeroch'],'#6D4C41','#fff',768,200); s.scale.multiplyScalar(.3); s.position.set(P.x,P.y+21,P.z); scene.add(s); }
   // ❄️ snežné delá + zasnežovači
   { const R=RUNS[0], gm=new THREE.MeshLambertMaterial({color:'#9aa3ad'}), ym=new THREE.MeshLambertMaterial({color:'#F2B705'}), sm=new THREE.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.5,depthWrite:false});
     WORLD.sprays=[];
@@ -1952,7 +1952,7 @@ async function startReel2(SC){
   const figAt=u=>{ const p=people.find(q=>q.u===u); return p?V(positions[p.i*3],positions[p.i*3+1],positions[p.i*3+2]):null; };
   SH.tagCam=(t,T,k)=>{ const P=figAt(curSeg&&curSeg.tag)||SPOT.hotel.clone(); const a=(curSeg&&curSeg.ang||0)+.12*t, r=(curSeg&&curSeg.dist)||15; return { p:V(P.x+Math.cos(a)*r,P.y+6,P.z+Math.sin(a)*r), q:V(P.x,P.y+1.2,P.z) }; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
-  SH.cafe=(t,T,k)=>{ const C=SPOT.cafe, a=Math.atan2(C.z,C.x)+.25-.25*k; return { p:V(C.x+Math.cos(a)*48,C.y+20-6*k,C.z+Math.sin(a)*48), q:V(C.x,C.y+6,C.z) }; };
+  SH.cafe=(t,T,k)=>{ const C=SPOT.cafe, a=Math.atan2(C.z,C.x)+.25-.25*k; return { p:V(C.x+Math.cos(a)*78,C.y+30-8*k,C.z+Math.sin(a)*78), q:V(C.x,C.y+7,C.z) }; };
   SH.game=(t,T,k)=>{ const {P,dir}=gPose(t); return { p:P.clone().addScaledVector(dir,-11).add(V(0,5.5,0)), q:V(P.x+dir.x*10,P.y+1,P.z+dir.z*10) }; };
   SH.gameFront=(t,T,k)=>{ const {P,dir}=gPose(t); const sd=V(-dir.z,0,dir.x); return { p:P.clone().addScaledVector(dir,13).addScaledVector(sd,4).add(V(0,2.6,0)), q:P.clone().add(V(0,1.3,0)) }; };
   SH.gameHigh=(t,T,k)=>{ const {P,dir}=gPose(t); const sd=V(-dir.z,0,dir.x); return { p:P.clone().addScaledVector(dir,-9).addScaledVector(sd,-9).add(V(0,10,0)), q:P.clone().addScaledVector(dir,3).add(V(0,1,0)) }; };
