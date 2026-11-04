@@ -46,6 +46,15 @@ Rotuj témy podľa toho, čo sa deje:
 
 Háčik musí zaznieť v 1. sekunde. Dĺžka 12–25 s. Na konci výzva: follow + koment.
 
+### PRAVIDLO: každá novinka = vlastný reel s komentmi (Samuelova požiadavka)
+
+Keď na svahu pribudne nová vec (reštika, kaviareň, boulová trať, skúter…), vždy o nej vyjde **samostatný reel**, ktorý ukazuje, **kto ju chcel a čo napísal**:
+- Na začiatku háčik (napr. „Chceli ste kaviareň? Máte ju!“).
+- Hneď potom záber s `ov:"comments"` a `comments` = 2–4 **skutočné komentáre** (presné meno a text, ako ich napísali) od ľudí, ktorí to žiadali. Vyzerajú ako výstrižky komentárov z IG. Do hlasu daj vetu typu „Viacerí z vás písali, že chcú…“.
+- Potom záber na novú vec v hre (pridaj nový `shot` do `index.html` podľa vzoru existujúcich, napr. kamera na novú budovu), nakoniec `crane` a výzva follow + koment.
+- V popise reelu poďakuj ľuďom, ktorí to navrhli (@meno, max 3–4), a vyzvi: „Čo postavíme ďalej? Napíš do komentu 👇“.
+- Komenty ber z API komentárov pod reelmi (`window.__cm` zo SYNC), vyber tie najvýstižnejšie a najstaršie.
+
 ### Scenár → `data/reels/<id>.json`
 
 `<id>` = napr. `r20261105`. Vytvor súbor cez GitHub „new file“ (`https://github.com/strokasamuel0-sudo/svah/new/main?filename=data/reels/<id>.json`).
