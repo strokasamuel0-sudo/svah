@@ -1,0 +1,105 @@
+{
+ "align": "fs",
+ "racer": "tami030716",
+ "sents": [
+  "Písali ste nám, čo chcete. A my sme to splnili!",
+  "Stano sa chcel starať o zasnežovanie, tak má snežné delá!",
+  "Snežný skúter? Jazdia hneď traja!",
+  "Tréner skokov v snowparku? Hotovo!",
+  "Tami chcela vyberať svah. Teraz si každý vyberie svoj!",
+  "A hra je ľahšia, menej bránok a nikto ti nezavadzia.",
+  "Napíš, čo chceš ty, a možno to bude zajtra!"
+ ],
+ "segs": [
+  {
+   "shot": "aerial",
+   "cap": [
+    "Písali ste,",
+    "*my sme to splnili* ✅"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "tagCam",
+   "tag": "stan.peduzzi",
+   "dist": 20,
+   "cap": [
+    "❄️ *Zasnežovač*",
+    "snežné delá už strieľajú!"
+   ],
+   "y": 1300,
+   "comment": [
+    "stan.peduzzi",
+    "Ahoj mužu se starat o zasnežovani a sjezdovkách abi jsme mneli sníh k ližovani"
+   ]
+  },
+  {
+   "shot": "skuter",
+   "cap": [
+    "🛷 *Snežný skúter*",
+    "jazdia hneď traja!"
+   ],
+   "y": 1300,
+   "comment": [
+    "jedlitibor",
+    "Já chci mít sněžný skútr"
+   ]
+  },
+  {
+   "shot": "tagCam",
+   "tag": "jukin.12",
+   "dist": 16,
+   "ang": 1.2,
+   "cap": [
+    "🏂 *Tréner skokov*",
+    "v snowparku"
+   ],
+   "y": 1300,
+   "comment": [
+    "jukin.12",
+    "Můžu být snowboardový trenér na skoky"
+   ]
+  },
+  {
+   "shot": "slope",
+   "cap": [
+    "🔀 *Vyber si svah*"
+   ],
+   "y": 560,
+   "ov": "runPick",
+   "comment": [
+    "tami030716",
+    "Já bich ctela že si múžeme viberat svah"
+   ]
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "⏱ Hra je *ľahšia*",
+    "menej bránok, nik nezavadzia"
+   ],
+   "y": 1390,
+   "comment": [
+    "katusqa__",
+    "tam je tých bránok strašne veľa… nič nevidím 😅"
+   ]
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Napíš, čo chceš *ty* 👇",
+    "možno to bude *zajtra*"
+   ],
+   "y": 900
+  }
+ ],
+ "end": [
+  [
+   "*Vy chcete,*",
+   "*my staviame* 🛠️"
+  ],
+  [
+   "Napíš do komentu 👇"
+  ]
+ ]
+}
