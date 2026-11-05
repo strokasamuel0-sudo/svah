@@ -1989,7 +1989,7 @@ async function startReel2(SC){
   const figAt=u=>{ const p=people.find(q=>q.u===u); return p?V(positions[p.i*3],positions[p.i*3+1],positions[p.i*3+2]):null; };
   SH.tagCam=(t,T,k)=>{ const P=figAt(curSeg&&curSeg.tag)||SPOT.hotel.clone(); const a=(curSeg&&curSeg.ang||0)+.12*t, r=(curSeg&&curSeg.dist)||15; return { p:V(P.x+Math.cos(a)*r,P.y+6,P.z+Math.sin(a)*r), q:V(P.x,P.y+1.2,P.z) }; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
-  SH.evWide=(t,T,k)=>{ const E=WORLD.ev, mid=E.EC.clone().multiplyScalar(.5); return { p:mid.clone().addScaledVector(E.side,4300+300*k).add(V(0,650-80*k,0)).addScaledVector(E.toO,-400), q:mid.clone().add(V(0,420,0)) }; };
+  SH.evWide=(t,T,k)=>{ const E=WORLD.ev, d=E.EC.length(); return { p:E.EC.clone().addScaledVector(E.toO,d+1500-250*k).addScaledVector(E.side,500).setY(520-60*k), q:E.EC.clone().setY(560) }; };
   SH.evWide2=(t,T,k)=>{ const E=WORLD.ev, B=E.B; return { p:B.clone().addScaledVector(E.toO,700-150*k).addScaledVector(E.side,-500).add(V(0,260,0)), q:E.M.clone().add(V(0,150,0)) }; };
   SH.evTop=(t,T,k)=>{ const S=WORLD.ev.S, a=.18*t+1; return { p:V(S.x+Math.cos(a)*230,S.y+90,S.z+Math.sin(a)*230), q:S.clone().add(V(0,10,0)) }; };
   SH.evLift=(t,T,k)=>{ const E=WORLD.ev, cb=E.cabs[3], C=E.cables[cb.sec], d=C.A1.clone().sub(C.A0).normalize(), P=cb.g.position; return { p:P.clone().addScaledVector(d,-26).addScaledVector(E.side,22).add(V(0,6,0)), q:P.clone().addScaledVector(d,40) }; };
@@ -2030,7 +2030,7 @@ async function startReel2(SC){
   function board(){
     g.save(); g.fillStyle='#1E5AA8'; rr(40,240,640,110,26); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
     g.fillStyle='#fff'; g.font='800 44px '+FONT; g.textBaseline='middle'; g.textAlign='left'; g.fillText('Svah followerov',72,296);
-    g.textAlign='right'; g.font='800 20px '+FONT; g.fillText('NA SVAHU',652,272); g.font='800 50px '+FONT; g.fillText(String(N),652,316); g.restore();
+    g.textAlign='right'; g.font='800 20px '+FONT; g.fillText('NA SVAHU',652,272); g.font='800 50px '+FONT; g.fillText(String(SC.boardN||N),652,316); g.restore();
   }
   const AVC=['#E84A8A','#1E5AA8','#F26B21','#2E9E5B','#7A3FB8','#0FA3B1'];
   function commentCard(u,text,x,y,w,segT,delay){
