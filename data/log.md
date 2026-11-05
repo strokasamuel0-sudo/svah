@@ -27,3 +27,5 @@
 - 2026-11-04 17:10: zverejnené aj `priania` a `dnes` (na Samuelovu žiadosť hneď). DNES UŽ VYŠLI 4 VIDEÁ – žiadny ďalší beh dnes video nerobí. IG 2460 followerov.
 - NOVÉ PRAVIDLÁ (Samuel 17:09): každý večer ~22:00 nočný beh = všetky reely, všetky komenty a správy, odpovedať všetkým, pridať nových, splniť požiadavky; na svahu IBA followeri (nesledujúcim odpísať, nech dajú follow); veľké požiadavky = MÍĽNIKY podľa počtu followerov; nové zjazdovky podľa potreby. Videá len keď o ne Samuel napíše.
 - MÍĽNIKY: pri 3500 Everest (sľúbené vo videu).
+- 5. 11. 11:00 reel everest zverejnený; Everest postavený (míľnik 3500 splnený), ďalší míľnik 5000 – hlasovanie v komentoch.
+- 5. 11. 10:50: Everest sa dá lyžovať – zjazdovky E1/E2 (kapacita 60 každá) vo výbere svahu, DM/koment „svah everest 1/2“ → r=E1/E2; lyžiari sa vezu kabínkovou lanovkou. Asfaltka od hotela k dolnej stanici Everestu s autami.
