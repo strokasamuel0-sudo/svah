@@ -1,0 +1,75 @@
+{
+ "align": "fs",
+ "goal": [
+  5000,
+  "Ďalší cieľ 🎯"
+ ],
+ "sents": [
+  "Tritisícpäťsto followerov! Ďakujeme!",
+  "Sľúbili sme Mount Everest. A je tu!",
+  "Obrovský nový kopec, trikrát vyšší ako náš svah.",
+  "Dvojúseková kabínková lanovka až na vrchol.",
+  "A dve nové, superdlhé zjazdovky!",
+  "Ďalší cieľ je päťtisíc. Napíš do komentu, čo tam postavíme!"
+ ],
+ "segs": [
+  {
+   "shot": "evWide",
+   "cap": [
+    "*3500* followerov!",
+    "ĎAKUJEME ❤️"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "evTop",
+   "cap": [
+    "Sľúbili sme *EVEREST*…",
+    "🏔️ *A JE TU!*"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "evWide2",
+   "cap": [
+    "Nový kopec",
+    "*3× vyšší* ako náš svah"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "evLift",
+   "cap": [
+    "🚡 *Dvojúseková lanovka*",
+    "až na vrchol"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "evRun",
+   "sk": 2,
+   "cap": [
+    "⛷️ *2 nové zjazdovky*",
+    "najdlhšie na svahu"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "crowdWide",
+   "ov": "goal",
+   "cap": [
+    "Ďalší cieľ: *5000* 🎯",
+    "napíš, čo postavíme 👇"
+   ],
+   "y": 800
+  }
+ ],
+ "end": [
+  [
+   "Ďakujeme za *3500* ❤️"
+  ],
+  [
+   "Daj *follow* a napíš farbu bundy 👇"
+  ]
+ ]
+}
