@@ -71,6 +71,7 @@
     if (FREE.test(t)) e.f = 1;
     const sv = t.match(/(?:svah|zjazdovk\w*|sjezdovk\w*|trat\w*)\s*(?:c\.?\s*|cislo\s*)?([1-9])\b/); if (sv) e.r = +sv[1];
     if (/svah snowpark|do snowparku/.test(t)) { e.r = 'SP'; e.f = 1; }
+    const evm = t.match(/(?:svah|na|chcem) everest\s*([12])?/); if (evm) { e.r = 'E' + (evm[1] || '1'); delete e.f; }
     const num = t.match(/(?:cislo|cisl|number|c\.)\s*(\d{1,3})/); if (num && +num[1] > 0 && +num[1] !== 69) e.n = +num[1];
     const found = [];
     words.forEach((w, i) => {
