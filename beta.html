@@ -546,6 +546,37 @@ function buildWorld(){
   staff(ROLES.ratrak, V3.copy(SPOT.garage).addScaledVector(outG,12).addScaledVector(new THREE.Vector3(-outG.z,0,outG.x),12), outG, 2.6, Math.atan2(outG.x,outG.z));
   ROLES.lift.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const run=ALLRUNS[k%ALLRUNS.length]; runPt(run,1,run.LL-6,V2); add(p.i,V2,run.th+Math.PI/2,false,p.c); });
   ROLES.mascot.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; WORLD.mascotI=p.i; });
+  // 🏔️ MOUNT EVEREST (míľnik 3500 followerov)
+  { const EC=new THREE.Vector3(Math.cos(-0.45)*2650,0,Math.sin(-0.45)*2650), ER=1050, EH=1350;
+    const toO=new THREE.Vector3(-EC.x,0,-EC.z).normalize(), side=new THREE.Vector3(-toO.z,0,toO.x), aL=Math.atan2(toO.z,toO.x);
+    const adist=(a,b)=>{ let d=Math.abs(a-b)%(Math.PI*2); return d>Math.PI?Math.PI*2-d:d; };
+    const evY=(x,z)=>{ const dx=x-EC.x, dz=z-EC.z, rho=Math.hypot(dx,dz)/ER; if(rho>=1) return 0; const a=Math.atan2(dz,dx);
+      const dmp=Math.min(1,Math.max(0,(Math.min(adist(a,aL),adist(a,aL+.38),adist(a,aL-.38))-.05)/.1));
+      const n=(Math.sin(a*5+rho*7)*.6+Math.sin(a*11-rho*13)*.4)*75*rho*(1-rho)*4*dmp; return Math.max(0,EH*Math.pow(1-rho,1.15)+n); };
+    const RS=70, TS=128, pos=[], col=[], idx=[], c=new THREE.Color(), snow=new THREE.Color('#f4f8fc'), rock=new THREE.Color('#77818e'), rock2=new THREE.Color('#9aa5b2');
+    for(let i=0;i<=RS;i++){ const rho=i/RS; for(let j=0;j<TS;j++){ const a=j/TS*Math.PI*2, x=EC.x+Math.cos(a)*rho*ER, z=EC.z+Math.sin(a)*rho*ER, y=evY(x,z); pos.push(x,y,z);
+      const rk=.5+.5*Math.sin(a*9+rho*20)*Math.cos(a*4-rho*9); c.copy(y>EH*.6||rk<.58?snow:(rk>.8?rock:rock2)); col.push(c.r,c.g,c.b); } }
+    for(let i=0;i<RS;i++) for(let j=0;j<TS;j++){ const a=i*TS+j,b=i*TS+(j+1)%TS,cc=(i+1)*TS+j,d=(i+1)*TS+(j+1)%TS; idx.push(a,b,cc, b,d,cc); }
+    const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(col,3)); g.setIndex(idx); g.computeVertexNormals();
+    scene.add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true,side:THREE.DoubleSide})));
+    const PT=(rho,lat,dy)=>{ const x=EC.x+toO.x*rho*ER+side.x*lat, z=EC.z+toO.z*rho*ER+side.z*lat; return new THREE.Vector3(x,evY(x,z)+(dy||0),z); };
+    const B=PT(.93,0), M=PT(.5,0), S=PT(.05,0);
+    const steel=new THREE.MeshLambertMaterial({color:'#5b6573'}), red=new THREE.MeshLambertMaterial({color:'#C8102E'}), org=new THREE.MeshLambertMaterial({color:'#F26B21'}), glass=new THREE.MeshLambertMaterial({color:'#cfe6ff'});
+    for(const P of [B,M,S]){ const st=new THREE.Group(); st.add(new THREE.Mesh(new THREE.BoxGeometry(18,12,26).translate(0,6,0),red), new THREE.Mesh(new THREE.BoxGeometry(22,2,30).translate(0,13,0),steel)); st.position.copy(P); st.lookAt(EC.x,P.y,EC.z); scene.add(st); }
+    const cables=[], up=new THREE.Vector3(0,16,0);
+    for(const [P0,P1] of [[B,M],[M,S]]){ const A0=P0.clone().add(up), A1=P1.clone().add(up);
+      for(const off of [-5,5]){ const a=A0.clone().addScaledVector(side,off), b=A1.clone().addScaledVector(side,off), len=a.distanceTo(b); const cy=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,len,4),steel); cy.position.copy(a).lerp(b,.5); cy.lookAt(b); cy.rotateX(Math.PI/2); scene.add(cy); }
+      for(let k=1;k<7;k++){ const Q=A0.clone().lerp(A1,k/7), gy=evY(Q.x,Q.z), h=Math.max(4,Q.y-gy+1); const tw=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.8,h,6),steel); tw.position.set(Q.x,gy+h/2,Q.z); scene.add(tw);
+        const arm=new THREE.Mesh(new THREE.BoxGeometry(1.2,1,14),steel); arm.position.set(Q.x,Q.y+.6,Q.z); arm.lookAt(Q.x+side.x,Q.y+.6,Q.z+side.z); scene.add(arm); }
+      cables.push({A0,A1,len:A0.distanceTo(A1)}); }
+    const cabs=[]; cables.forEach((C,sec)=>{ for(const dir of [1,-1]) for(let k=0;k<12;k++){ const cg=new THREE.Group(); cg.add(new THREE.Mesh(new THREE.BoxGeometry(3.4,3,3.4).translate(0,-4,0),org), new THREE.Mesh(new THREE.BoxGeometry(3.5,1.2,3.5).translate(0,-3.4,0),glass), new THREE.Mesh(new THREE.BoxGeometry(.3,3,.3).translate(0,-1.2,0),steel)); cg.scale.setScalar(1.6); scene.add(cg); cabs.push({g:cg,sec,dir,ph:k/12}); } });
+    const pist=(p,rho,tt)=>{ const sg=p?1:-1; return PT(rho, sg*(110+260*rho)+70*Math.sin(rho*10+p)+(tt!==undefined?6*Math.sin(tt*.7):0), .35); };
+    const pm=new THREE.MeshLambertMaterial({color:'#ffffff',polygonOffset:true,polygonOffsetFactor:-2});
+    for(const p of [0,1]){ const pp=[], ii=[]; const NP=160; for(let k=0;k<=NP;k++){ const rho=.04+.92*k/NP, sg=p?1:-1, lat=sg*(110+260*rho)+70*Math.sin(rho*10+p); for(const w of [-13,13]){ const Q=PT(rho,lat+w,.5); pp.push(Q.x,Q.y,Q.z); } if(k<NP){ const a=k*2; ii.push(a,a+1,a+2, a+1,a+3,a+2); } }
+      const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.Float32BufferAttribute(pp,3)); pg.setIndex(ii); pg.computeVertexNormals(); scene.add(new THREE.Mesh(pg,new THREE.MeshLambertMaterial({color:'#ffffff',side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2}))); }
+    const sk=[]; for(let k=0;k<24;k++){ const src=skiers[(k*37+5)%Math.max(1,skiers.length)]||{c:'#1E5AA8',ti:0}; const gr=buildRacer(src); scene.add(gr); sk.push({g:gr,p:k%2,ph:k/24,v:.006+.002*(k%3)}); }
+    const s=makeSign(['🏔️ MOUNT EVEREST','splnené pri 3500 followeroch'],'#1E5AA8','#fff',768,200); s.scale.multiplyScalar(1.4); s.position.copy(B).add(new THREE.Vector3(0,48,0)); scene.add(s);
+    WORLD.ev={EC,ER,EH,B,M,S,side,toO,cables,cabs,sk,pist,PT}; }
   // ☕ kaviareň na vrchole (sľub pri 2000 followeroch)
   { const P=SPOT.cafe, th=Math.atan2(P.z,P.x), g=new THREE.Group(); g.position.copy(P); g.rotation.y=Math.atan2(Math.cos(th),Math.sin(th));
     const wood=new THREE.MeshLambertMaterial({color:'#8B5A2B'}), dark=new THREE.MeshLambertMaterial({color:'#5C3A1E'}), roofM=new THREE.MeshLambertMaterial({color:'#C8102E'}), glass=new THREE.MeshLambertMaterial({color:'#FFE9A8',emissive:'#5a4310'}), wht=new THREE.MeshLambertMaterial({color:'#ffffff'});
@@ -636,6 +667,9 @@ function updateWorld(t, now){
     if (p.role==='ratrak'){ const inCab=driver===p.u; if(inCab!==!!f.hide){ f.hide=inCab; needAll=true; } if(inCab){ positions[f.i*3]=rg.position.x; positions[f.i*3+1]=rg.position.y+4; positions[f.i*3+2]=rg.position.z; } }
     if (p.role==='rescue'){ const inH=hs.flying; if(inH!==!!f.hide){ f.hide=inH; needAll=true; } if(inH){ positions[f.i*3]=hg.position.x; positions[f.i*3+1]=hg.position.y+2; positions[f.i*3+2]=hg.position.z; } }
   }
+  if (WORLD.ev){ const E=WORLD.ev;
+    for(const cb of E.cabs){ const C=E.cables[cb.sec], u=((t*5/C.len)+cb.ph)%1, a=cb.dir>0?C.A0:C.A1, b=cb.dir>0?C.A1:C.A0; cb.g.position.copy(a).lerp(b,u).addScaledVector(E.side,cb.dir>0?5:-5); }
+    for(const s of E.sk){ const u=(t*s.v+s.ph)%1, rho=.06+.88*u, tt=t+s.ph*50, P=E.pist(s.p,rho,tt), Q=E.pist(s.p,Math.min(.99,rho+.004),tt+.4); s.g.position.copy(P); s.g.lookAt(Q.x,P.y,Q.z); s.g.rotateX(.25); } }
   if (WORLD.sprays) for (let k=0;k<WORLD.sprays.length;k++){ const sp=WORLD.sprays[k]; sp.scale.setScalar(.92+.08*Math.sin(t*6+k)); sp.material.opacity=.42+.1*Math.sin(t*4+k*2); }
   if (WORLD.skutre) for (const sk of WORLD.skutre){ const a=(t*.12+sk.ph)%(Math.PI*2), th=R0.th-.05+.17*(.5+.5*Math.sin(a)), r=985+14*Math.cos(a*2);
     const th2=R0.th-.05+.17*(.5+.5*Math.sin(a+.01)), r2=985+14*Math.cos((a+.01)*2);
@@ -1955,6 +1989,11 @@ async function startReel2(SC){
   const figAt=u=>{ const p=people.find(q=>q.u===u); return p?V(positions[p.i*3],positions[p.i*3+1],positions[p.i*3+2]):null; };
   SH.tagCam=(t,T,k)=>{ const P=figAt(curSeg&&curSeg.tag)||SPOT.hotel.clone(); const a=(curSeg&&curSeg.ang||0)+.12*t, r=(curSeg&&curSeg.dist)||15; return { p:V(P.x+Math.cos(a)*r,P.y+6,P.z+Math.sin(a)*r), q:V(P.x,P.y+1.2,P.z) }; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
+  SH.evWide=(t,T,k)=>{ const E=WORLD.ev, mid=E.EC.clone().multiplyScalar(.5); return { p:mid.clone().addScaledVector(E.side,4300+300*k).add(V(0,650-80*k,0)).addScaledVector(E.toO,-400), q:mid.clone().add(V(0,420,0)) }; };
+  SH.evWide2=(t,T,k)=>{ const E=WORLD.ev, B=E.B; return { p:B.clone().addScaledVector(E.toO,700-150*k).addScaledVector(E.side,-500).add(V(0,260,0)), q:E.M.clone().add(V(0,150,0)) }; };
+  SH.evTop=(t,T,k)=>{ const S=WORLD.ev.S, a=.18*t+1; return { p:V(S.x+Math.cos(a)*230,S.y+90,S.z+Math.sin(a)*230), q:S.clone().add(V(0,10,0)) }; };
+  SH.evLift=(t,T,k)=>{ const E=WORLD.ev, cb=E.cabs[3], C=E.cables[cb.sec], d=C.A1.clone().sub(C.A0).normalize(), P=cb.g.position; return { p:P.clone().addScaledVector(d,-26).addScaledVector(E.side,22).add(V(0,6,0)), q:P.clone().addScaledVector(d,40) }; };
+  SH.evRun=(t,T,k)=>{ const s=WORLD.ev.sk[curSeg&&curSeg.sk||0], P=s.g.position.clone(), d=V(0,0,1).applyQuaternion(s.g.quaternion); d.y=0; d.normalize(); return { p:P.clone().addScaledVector(d,-15).add(V(0,7,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
   SH.cafe=(t,T,k)=>{ const C=SPOT.cafe, a=Math.atan2(C.z,C.x)+.25-.25*k; return { p:V(C.x+Math.cos(a)*78,C.y+30-8*k,C.z+Math.sin(a)*78), q:V(C.x,C.y+7,C.z) }; };
   SH.game=(t,T,k)=>{ const {P,dir}=gPose(t); return { p:P.clone().addScaledVector(dir,-11).add(V(0,5.5,0)), q:V(P.x+dir.x*10,P.y+1,P.z+dir.z*10) }; };
   SH.gameFront=(t,T,k)=>{ const {P,dir}=gPose(t); const sd=V(-dir.z,0,dir.x); return { p:P.clone().addScaledVector(dir,13).addScaledVector(sd,4).add(V(0,2.6,0)), q:P.clone().add(V(0,1.3,0)) }; };
