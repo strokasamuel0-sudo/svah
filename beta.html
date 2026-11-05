@@ -1993,7 +1993,7 @@ async function startReel2(SC){
   SH.evWide2=(t,T,k)=>{ const E=WORLD.ev, B=E.B; return { p:B.clone().addScaledVector(E.toO,700-150*k).addScaledVector(E.side,-500).add(V(0,260,0)), q:E.M.clone().add(V(0,150,0)) }; };
   SH.evTop=(t,T,k)=>{ const S=WORLD.ev.S, a=.18*t+1; return { p:V(S.x+Math.cos(a)*230,S.y+90,S.z+Math.sin(a)*230), q:S.clone().add(V(0,10,0)) }; };
   SH.evLift=(t,T,k)=>{ const E=WORLD.ev, cb=E.cabs[3], C=E.cables[cb.sec], d=C.A1.clone().sub(C.A0).normalize(), P=cb.g.position; return { p:P.clone().addScaledVector(d,-26).addScaledVector(E.side,22).add(V(0,6,0)), q:P.clone().addScaledVector(d,40) }; };
-  SH.evRun=(t,T,k)=>{ const s=WORLD.ev.sk[curSeg&&curSeg.sk||0], P=s.g.position.clone(), d=V(0,0,1).applyQuaternion(s.g.quaternion); d.y=0; d.normalize(); return { p:P.clone().addScaledVector(d,-15).add(V(0,7,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
+  SH.evRun=(t,T,k)=>{ const s=WORLD.ev.sk[curSeg&&curSeg.sk||0], P=s.g.position.clone(), d=V(0,0,1).applyQuaternion(s.g.quaternion); d.y=0; d.normalize(); return { p:P.clone().addScaledVector(d,24).addScaledVector(WORLD.ev.side,8).add(V(0,14,0)), q:P.clone().add(V(0,2,0)) }; };
   SH.cafe=(t,T,k)=>{ const C=SPOT.cafe, a=Math.atan2(C.z,C.x)+.25-.25*k; return { p:V(C.x+Math.cos(a)*78,C.y+30-8*k,C.z+Math.sin(a)*78), q:V(C.x,C.y+7,C.z) }; };
   SH.game=(t,T,k)=>{ const {P,dir}=gPose(t); return { p:P.clone().addScaledVector(dir,-11).add(V(0,5.5,0)), q:V(P.x+dir.x*10,P.y+1,P.z+dir.z*10) }; };
   SH.gameFront=(t,T,k)=>{ const {P,dir}=gPose(t); const sd=V(-dir.z,0,dir.x); return { p:P.clone().addScaledVector(dir,13).addScaledVector(sd,4).add(V(0,2.6,0)), q:P.clone().add(V(0,1.3,0)) }; };
