@@ -561,7 +561,7 @@ function buildWorld(){
   staff(ROLES.rescue, V3.copy(SPOT.pad).addScaledVector(outP,-15), outP, 3, Math.atan2(outP.x,outP.z));
   const thG=Math.atan2(SPOT.garage.z,SPOT.garage.x), outG=down(thG);
   staff(ROLES.ratrak, V3.copy(SPOT.garage).addScaledVector(outG,12).addScaledVector(new THREE.Vector3(-outG.z,0,outG.x),12), outG, 2.6, Math.atan2(outG.x,outG.z));
-  ROLES.lift.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const run=ALLRUNS[k%ALLRUNS.length]; runPt(run,1,run.LL-6,V2); add(p.i,V2,run.th+Math.PI/2,false,p.c); });
+  ROLES.lift.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const run=ALLRUNS[k%ALLRUNS.length]; runPt(run,1,run.LL-6-3*Math.floor(k/ALLRUNS.length),V2); add(p.i,V2,run.th+Math.PI/2,false,p.c); });
   ROLES.mascot.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; WORLD.mascotI=p.i; });
   // 🏔️ MOUNT EVEREST (míľnik 3500 followerov)
   { const EC=new THREE.Vector3(Math.cos(-0.45)*2650,0,Math.sin(-0.45)*2650), ER=1050, EH=1350;
@@ -593,6 +593,7 @@ function buildWorld(){
       const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.Float32BufferAttribute(pp,3)); pg.setIndex(ii); pg.computeVertexNormals(); scene.add(new THREE.Mesh(pg,new THREE.MeshLambertMaterial({color:'#ffffff',side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2}))); }
     const real=people.filter(q=>q.kind==='ski'&&q.run&&q.run.ev).map(q=>{ const gr=buildRacer(q); scene.add(gr); return {p:q,g:gr}; });
     const sk=[]; for(let k=0;k<(real.length<10?24:0);k++){ const src=skiers[(k*37+5)%Math.max(1,skiers.length)]||{c:'#1E5AA8',ti:0}; const gr=buildRacer(src); scene.add(gr); sk.push({g:gr,p:k%2,ph:k/24,v:.006+.002*(k%3)}); }
+    { const g5=makeSign(['🎯 PRI 5000 FOLLOWEROCH','après-ski bar s DJ-om + stánky s jedlom'],'#F26B21','#fff',768,200); g5.scale.multiplyScalar(1.1); g5.position.copy(B).addScaledVector(toO,60).addScaledVector(side,45).add(new THREE.Vector3(0,28,0)); scene.add(g5); }
     const s=makeSign(['🏔️ MOUNT EVEREST','splnené pri 3500 followeroch'],'#1E5AA8','#fff',768,200); s.scale.multiplyScalar(1.4); s.position.copy(B).add(new THREE.Vector3(0,48,0)); scene.add(s);
     const hAt=(x,z)=>Math.max(groundAt(x,z),evY(x,z)), plat=(p,rho)=>(p?1:-1)*(110+260*rho)+70*Math.sin(rho*10+p);
     { const pp=[], ii=[], dash=[]; for(let k=0;k<ROAD.length;k++){ const P=ROAD[k], Q=ROAD[Math.min(ROAD.length-1,k+1)], R_=ROAD[Math.max(0,k-1)], d=Q.clone().sub(R_).setY(0).normalize(), n=new THREE.Vector3(-d.z,0,d.x);
@@ -626,11 +627,11 @@ function buildWorld(){
     ROLES.snow.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=[.3,.55,.8][k%3]+.006*Math.floor(k/3);
       runPt(R,s+.006,-(R.LL+4),V2); const C=runPt(R,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); }); }
   // 🏂 tréner v snowparku
-  ROLES.coach.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=.32+.08*k;
-    runPt(FS,s,-(FS.LL+9),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
+  ROLES.coach.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=.2+.07*(k%10)+.012*Math.floor(k/10);
+    runPt(FS,s,(k%2?1:-1)*(FS.LL+9),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
   // 🛷 snežný skúter
   WORLD.skutre=[];
-  ROLES.skuter.slice(0,3).forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
+  ROLES.skuter.slice(0,12).forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
     const g=new THREE.Group(), bm=new THREE.MeshLambertMaterial({color:['#C8102E','#1E5AA8','#2E9E5B'][k%3]}), dm=new THREE.MeshLambertMaterial({color:'#22262d'});
     const body=new THREE.Mesh(new THREE.BoxGeometry(1.1,.7,2.6).translate(0,.75,0),bm), seat=new THREE.Mesh(new THREE.BoxGeometry(.7,.3,1.2).translate(0,1.25,-.5),dm);
     const track=new THREE.Mesh(new THREE.BoxGeometry(.9,.5,1.8).translate(0,.3,-.6),dm), ski=new THREE.Mesh(new THREE.BoxGeometry(1.3,.08,1.2).translate(0,.05,1.3),dm);
