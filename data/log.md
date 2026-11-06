@@ -29,3 +29,9 @@
 - MÍĽNIKY: pri 3500 Everest (sľúbené vo videu).
 - 5. 11. 11:00 reel everest zverejnený; Everest postavený (míľnik 3500 splnený), ďalší míľnik 5000 – hlasovanie v komentoch.
 - 5. 11. 10:50: Everest sa dá lyžovať – zjazdovky E1/E2 (kapacita 60 každá) vo výbere svahu, DM/koment „svah everest 1/2“ → r=E1/E2; lyžiari sa vezu kabínkovou lanovkou. Asfaltka od hotela k dolnej stanici Everestu s autami.
+- 6. 11. ráno: veľký sync (12 reelov, ~2770 komentov, IG 4150 followerov). Na svahu 1734 lyžiarov + 2364 v čakárni. Nové roly: +10 ratrak, +3 záchranári, +2 hotel, +7 lanovkári (aj Everest), +4 tréneri, +2 skúter. Odpísané na všetky DM (žiadosti prijaté), DM úpravy: buchova.k a kolyyyy14 → E2, x_dawes_904 → svah 3, luci_2914 farby, veruvibes1 trénerka, vojtisek_ondrej + ado_8927 lanovka, txmik.07 hotel.
+- 6. 11.: index.html = v15 (rozostupy trénerov, až 12 skútrov, posun lanovkárov, tabuľa 🎯 PRI 5000 FOLLOWEROCH pri Evereste).
+- MÍĽNIK 5000 (najviac žiadané v komentoch): APRÈS-SKI BAR s DJ-om + stánky s jedlom. Ďalšie nápady: kotva v snowparku (sttq.fx.matus), vlastniť niečo na svahu (veruvibes1), štvorsedačka (janiga.adam), stánok hore (vinget_on_lejtwan).
+- Rebríček Zjazd na čas: 1. valocka.a 31,01 · 1. jakub._.siska 31,01 · cafis_edits 31,02 · peterkos_os 31,03 · _nati_12_ch_ 31,10.
+- Nesledujúcim, ktorí niečo chceli v komentoch, odpísané „daj follow @svah.followerov“ (25 ďalších; ostatní už odpoveď mali).
+- 6. 11. ~07:45: reel `pridani` ZVEREJNENÝ (+421 lyžiarov, priania splnené, ratrak/záchranári/lanovkári, tréneri+skútre, rekord valocka.a 31,01, cieľ 5000 = après-ski bar).
