@@ -35,3 +35,10 @@
 - Rebríček Zjazd na čas: 1. valocka.a 31,01 · 1. jakub._.siska 31,01 · cafis_edits 31,02 · peterkos_os 31,03 · _nati_12_ch_ 31,10.
 - Nesledujúcim, ktorí niečo chceli v komentoch, odpísané „daj follow @svah.followerov“ (25 ďalších; ostatní už odpoveď mali).
 - 6. 11. ~07:45: reel `pridani` ZVEREJNENÝ (+421 lyžiarov, priania splnené, ratrak/záchranári/lanovkári, tréneri+skútre, rekord valocka.a 31,01, cieľ 5000 = après-ski bar).
+- 6. 11. ~07:45 (oneskorený nočný beh): doplnkový sync – 12 reelov, 2796 komentov vrátane odpovedí. API zoznamu followerov IG po ~1875 menách zastavilo (presmerovanie) – nováčikovia brané z najnovších 1875, odhlásení sa tentokrát nekontrolovali (skontrolovať v ďalšom behu). IG 4155 followerov → na svahu 1744 lyžiarov, čakáreň 2356, roly 80 (+1 vlekár _f1li5_), 7 zjazdoviek.
+- Pridaní na svah (koment s voľbou, boli v čakárni): renata294578, gemzovalenka, b_marti43, adohakl, lin.dus12, a.m.i_cheer, mathias_66dac, always_depresed1, anetkaaa237.motejlovq_, dorotka_10 (snowboard). Zmeny: a._.sramkova (ružové nohavice, strieborné lyže), _f1li5_ (čierna bunda, červené lyže + vlekár), sttq.fx.matus (snowboard, snowpark). Nový follower bez komentu: imaginekubo_11 → čakáreň.
+- „Daj follow“ odpovede: 15 (cervena.zoja, mr.trebula, macka_and_daisy, goose.83149568, krystof.vasicek12973, lucia.chabadova, viktoria_michalova, misovic.boris, sofus_12_a, vojtqsss, sklenar.jaromir, a.n.i.c.k.a67, n1ghtmarcus, honzaq.33, _matousmanzel). Komentovanie ide cez GraphQL (zachytené z UI), starý REST /web/comments/ vracia 404.
+- DM: 2 odpovede (_nati_12_ch_ opravila čas na 31,01; veruvibes1 poďakovanie). Žiadosti o správy: žiadne.
+- MÍĽNIKY: pri 4500 kotva v snowparku + detský vlek s klzákmi (sttq.fx.matus, kikecik15_) · pri 5000 après-ski bar s DJ-om a stánkami (platí) · pri 6000 vlastné chatky followerov (veruvibes1 „vlastniť niečo“).
+- Rebríček Zjazd na čas: 1. valocka.a 31,01 · 1. jakub._.siska 31,01 · 1. _nati_12_ch_ 31,01 · cafis_edits 31,02 · peterkos_os 31,03.
+- POSLEDNÝ_KOMENT_TS: 2026-11-06T06:31:35Z
