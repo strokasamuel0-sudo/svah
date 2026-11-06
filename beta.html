@@ -303,7 +303,7 @@ const REG = skiers.filter(p => !fsSet.has(p) && !evSet.has(p));
 const nRuns = Math.min(SLOTS.length, Math.max(3, Math.ceil(REG.length/CAP)));
 const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
   const w = k===1 ? 3 : k===2 ? 1 : 0;
-  const cA = (w<=1 && k>0 && k<12 && k%3!==0) ? 20+((k*7)%11) : 0;
+  const cA = (w<=1 && k>0 && k<12 && k%3!==0) ? 34+((k*7)%12) : 0;
   return { ...s, k, w, cA, chair:w===1, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:w===1?36:34, TH: w===1?12:7.5 };
 });
 const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
@@ -729,7 +729,7 @@ renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1
 const SHADOWS=!params.has('lite');
 if(SHADOWS){ renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; }
 const scene=new THREE.Scene();
-scene.fog=new THREE.Fog('#d3e3f2', 1900, 10500);
+scene.fog=new THREE.Fog('#d3e3f2', 2200, 14000);
 const camera=new THREE.PerspectiveCamera(45,1,1,16000);
 const controls=new OrbitControls(camera,canvas);
 controls.enableDamping=true; controls.dampingFactor=.08;
@@ -762,14 +762,14 @@ if(SHADOWS){ const big=innerWidth>=700; sun.castShadow=true; sun.shadow.mapSize.
 
 /* vzdialené pohorie */
 {
-  const r=rng(11), geos=[], rock=new THREE.Color('#7f8fa6'), rock2=new THREE.Color('#5f6f88'), snowC=new THREE.Color('#f5f8fc'), cc=new THREE.Color();
-  for(let i=0;i<46;i++){
-    const th=i/46*Math.PI*2+r()*.1, d=4800+r()*3200, h=800+r()*1700, w=650+r()*900;
-    let g=new THREE.ConeGeometry(w,h,6+Math.floor(r()*3),4).toNonIndexed(); const p=g.attributes.position, seed=r()*100;
+  const r=rng(11), geos=[], rock=new THREE.Color('#a3b2c6'), rock2=new THREE.Color('#93a3b9'), snowC=new THREE.Color('#f7f9fc'), cc=new THREE.Color();
+  for(let i=0;i<40;i++){
+    const th=i/40*Math.PI*2+r()*.1, d=7200+r()*3000, h=650+r()*1100, w=900+r()*1100;
+    let g=new THREE.ConeGeometry(w,h,9+Math.floor(r()*4),5).toNonIndexed(); const p=g.attributes.position, seed=r()*100;
     const jit=(x,y,z)=>Math.sin(x*.013+seed)*Math.cos(z*.011-seed)*.5+Math.sin(y*.02+x*.007)*.5;
-    for(let k=0;k<p.count;k++){ const x=p.getX(k), y=p.getY(k), z=p.getZ(k); const f=(y+h/2)/h; if(f<.999){ const j=jit(x,y,z); p.setXYZ(k,x*(1+.28*j),y+h*.07*j*(1-f),z*(1+.28*Math.cos(j*3))); } }
+    for(let k=0;k<p.count;k++){ const x=p.getX(k), y=p.getY(k), z=p.getZ(k); const f=(y+h/2)/h; if(f<.999){ const j=jit(x,y,z); p.setXYZ(k,x*(1+.16*j),y+h*.05*j*(1-f),z*(1+.16*Math.cos(j*3))); } }
     g.computeVertexNormals(); const nr=g.attributes.normal, col=new Float32Array(p.count*3);
-    for(let k=0;k<p.count;k+=3){ let fy=0, ny=0; for(let q=0;q<3;q++){ fy+=(p.getY(k+q)+h/2)/h/3; ny+=nr.getY(k+q)/3; } const sn=fy>.55-.25*ny+.08*Math.sin(k*1.7)?1:0; cc.copy(sn?snowC:(k%2?rock:rock2)); for(let q=0;q<3;q++) col.set([cc.r,cc.g,cc.b],(k+q)*3); }
+    for(let k=0;k<p.count;k+=3){ let fy=0, ny=0; for(let q=0;q<3;q++){ fy+=(p.getY(k+q)+h/2)/h/3; ny+=nr.getY(k+q)/3; } const sn=fy>.42-.3*ny+.08*Math.sin(k*1.7)?1:0; cc.copy(sn?snowC:(k%2?rock:rock2)); for(let q=0;q<3;q++) col.set([cc.r,cc.g,cc.b],(k+q)*3); }
     g.setAttribute('color',new THREE.BufferAttribute(col,3)); if(g.attributes.uv) g.deleteAttribute('uv');
     g.translate(d*Math.cos(th),h/2-80,d*Math.sin(th)); geos.push(g);
   }
@@ -813,7 +813,7 @@ const cordTex=(()=>{
 
 function ribbon(run, latFrom, latTo, acrossSegs, fadeFrac, colorCenter){
   const along=Math.ceil(run.len/5), pos=[], col=[], uv=[], idx=[];
-  const cOff=new THREE.Color('#e3ebf4'), cIn=new THREE.Color(colorCenter), c=new THREE.Color(), P=new THREE.Vector3();
+  const cOff=new THREE.Color('#eaf0f7'), cIn=new THREE.Color(colorCenter), c=new THREE.Color(), P=new THREE.Vector3();
   for(let i=0;i<=along;i++){
     const s=i/along;
     for(let j=0;j<=acrossSegs;j++){
@@ -968,8 +968,8 @@ function inCorridor(rr,th,extra){
   }
   trees.count=caps.count=n; scene.add(trees,caps);
 
-  const RN=1100, rocks=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshLambertMaterial({color:'#6f7b8c',flatShading:true}),RN);
-  const rcap=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0).scale(.92,.35,.92).translate(0,.62,0),new THREE.MeshLambertMaterial({color:'#f6f9fc',flatShading:true}),RN);
+  const RN=1100, rocks=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshLambertMaterial({color:'#5d6878',flatShading:true}),RN);
+  const rcap=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0).scale(.7,.28,.7).translate(0,.72,0),new THREE.MeshLambertMaterial({color:'#f6f9fc',flatShading:true}),RN);
   n=0; guard=0; const eu=new THREE.Euler();
   while(n<RN && guard++<20000){
     const rr=30+Math.pow(r(),1.15)*1300, th=r()*Math.PI*2;
