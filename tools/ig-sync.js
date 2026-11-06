@@ -57,7 +57,7 @@
   const isSki = w => /^(lyz|liz|lyž|lxz|ski$|lyzi|lyzar)/.test(w);
   const isSled = w => /^(sank|sane$|sanki|snky|sáne)/.test(w);
   const isBob = w => /^bob(y|ov)?$/.test(w);
-  const ROLE = [[/rolb|ratrak|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk/, 'lift'], [/maskot/, 'mascot'], [/zasnez|starat o sn|obsluh\w* del/, 'snow'], [/trener|instrukt/, 'coach'], [/skut(r|er)|snowmobil/, 'skuter'], [/policaj|policist/, 'police']];
+  const ROLE = [[/rolb|ratrak|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk|spravc\w* vlek/, 'lift'], [/maskot/, 'mascot'], [/zasnez|starat o sn|obsluh\w* del/, 'snow'], [/trener|instrukt/, 'coach'], [/skut(r|er)|snowmobil/, 'skuter'], [/policaj|policist/, 'police']];
   const FREE = /freest|snowpark|snow park|skok|skak|trik|jump|red ?bul|pasaz/;
 
   const per = new Map();
