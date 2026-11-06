@@ -42,3 +42,4 @@
 - MÍĽNIKY: pri 4500 kotva v snowparku + detský vlek s klzákmi (sttq.fx.matus, kikecik15_) · pri 5000 après-ski bar s DJ-om a stánkami (platí) · pri 6000 vlastné chatky followerov (veruvibes1 „vlastniť niečo“).
 - Rebríček Zjazd na čas: 1. valocka.a 31,01 · 1. jakub._.siska 31,01 · 1. _nati_12_ch_ 31,01 · cafis_edits 31,02 · peterkos_os 31,03.
 - POSLEDNÝ_KOMENT_TS: 2026-11-06T06:31:35Z
+- 6. 11. ~09:30: v16 VZHĽAD (štýl „lepšia hra“, Samuel): tiene od slnka (PCFSoft, sledujú kameru; ?lite ich vypne), svietínajca obloha, modrastejšie tiene snehu, low-poly vzdialené štíty so snehom, 1100 skál so snehovými čiapkami, sýtejšie smreky, výraznejšie zjazdovky. ZATÁČAJÚCE ZJAZDOVKY: run.cA (34–45 m, 1 alebo 2 oblýky) pre w≤1, k%3≠0, k<12 – v JS aj GLSL runPt (cA zakódované v aRun.w ako desatinná časť), vlek/lanovka ostáva rovná.
