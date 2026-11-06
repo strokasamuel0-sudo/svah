@@ -1,0 +1,86 @@
+{
+ "align": "fs",
+ "racer": "valocka.a",
+ "goal": [
+  5000,
+  "Ďalší cieľ 🎯"
+ ],
+ "boardN": 4138,
+ "sents": [
+  "Cez noc pribudlo na svahu vyše štyristo nových lyžiarov!",
+  "Prešli sme všetky vaše komenty a správy a splnili sme ich.",
+  "Desať nových ratrakistov, záchranári aj lanovkári na Evereste.",
+  "Noví tréneri v snowparku a ďalšie snežné skútre.",
+  "A nový rekord v hre! Valocka dala tridsaťjeden celá nula jedna sekundy.",
+  "Ďalší cieľ je päťtisíc. Postavíme après-ski bar s DJ-om a stánkami s jedlom!"
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+421* nových",
+    "lyžiarov na svahu ⛷️"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "tagCam",
+   "tag": "simon.struhar",
+   "dist": 18,
+   "cap": [
+    "Splnili sme *vaše priania* ✅",
+    "farby, svahy, roly"
+   ],
+   "y": 1300,
+   "comment": [
+    "simon.struhar",
+    "Cerne lyze a cervena bunda"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "ratrak",
+   "cap": [
+    "🚜 *+10 ratrakistov*",
+    "🚑 záchranári · 🚡 lanovkári"
+   ],
+   "y": 1300
+  },
+  {
+   "shot": "tagCam",
+   "tag": "veruvibes1",
+   "dist": 16,
+   "ang": 1.2,
+   "cap": [
+    "🏂 *Noví tréneri*",
+    "🛷 a ďalšie skútre"
+   ],
+   "y": 1300
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "🏆 *NOVÝ REKORD*",
+    "valocka.a · 31,01 s"
+   ],
+   "y": 760
+  },
+  {
+   "shot": "evWide",
+   "ov": "goal",
+   "cap": [
+    "Pri *5000* 🎯",
+    "après-ski bar s DJ-om 🎧🍔"
+   ],
+   "y": 800
+  }
+ ],
+ "end": [
+  [
+   "Ďalší cieľ *5000* 🎯"
+  ],
+  [
+   "Daj *follow* a napíš farbu bundy 👇"
+  ]
+ ]
+}
