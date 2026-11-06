@@ -303,7 +303,8 @@ const REG = skiers.filter(p => !fsSet.has(p) && !evSet.has(p));
 const nRuns = Math.min(SLOTS.length, Math.max(3, Math.ceil(REG.length/CAP)));
 const RUNS = SLOTS.slice(0, nRuns).map((s,k)=>{
   const w = k===1 ? 3 : k===2 ? 1 : 0;
-  return { ...s, k, w, chair:w===1, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:w===1?36:34, TH: w===1?12:7.5 };
+  const cA = (w<=1 && k>0 && k<12 && k%3!==0) ? 20+((k*7)%11) : 0;
+  return { ...s, k, w, cA, chair:w===1, color:['#1E5AA8','#C8102E','#2B2D31'][k%3], label:String(k+1), LL: w===3?80:w===1?36:34, TH: w===1?12:7.5 };
 });
 const FS = { th:RUNS[1].th-.13, r0:850, len:300, k:90, w:2, chair:false, color:'#F26B21', label:'SP', LL:34, TH:7.5 };
 const ALLRUNS = [...RUNS, FS];
@@ -326,7 +327,7 @@ $('runsInfo').textContent = RUNS.length+' zjazdovky · 8-sedačka · snowpark';
 
 const _a=new THREE.Vector3(), _b=new THREE.Vector3();
 function runPt(run,s,lat,out){
-  const r=run.r0+s*run.len, cv=(run.w===3&&Math.abs(lat)<=40)?30*Math.sin(s*6.6+.4):0, t=run.th+(lat+cv)/r;
+  const cA=run.cA||0, r=run.r0+s*run.len, cv=(run.w===3&&Math.abs(lat)<=40)?30*Math.sin(s*6.6+.4):(cA&&lat>-40&&lat<26)?-cA*.5*(1-Math.cos(6.283185307*((cA%2)+1)*s)):0, t=run.th+(lat+cv)/r;
   return out.set(r*Math.cos(t),height(r,t),r*Math.sin(t));
 }
 function cabY(run,d,lat,TH){
@@ -724,52 +725,69 @@ const prFor=()=>Math.max(.75,Math.min(devicePixelRatio, innerWidth<700?1.5:1.75,
 let PR = prFor();
 renderer.setPixelRatio(PR);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+const SHADOWS=!params.has('lite');
+if(SHADOWS){ renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; }
 const scene=new THREE.Scene();
-scene.fog=new THREE.Fog('#dbe7f3', 2600, 11000);
+scene.fog=new THREE.Fog('#d3e3f2', 1900, 10500);
 const camera=new THREE.PerspectiveCamera(45,1,1,16000);
 const controls=new OrbitControls(camera,canvas);
 controls.enableDamping=true; controls.dampingFactor=.08;
 controls.maxPolarAngle=Math.PI*.48; controls.minDistance=8; controls.maxDistance=5000;
 
 const SUN_DIR=new THREE.Vector3(-.55,.62,.56).normalize();
-const HEMI=new THREE.HemisphereLight('#f4f8ff','#93a6bd',1.05); scene.add(HEMI);
+const HEMI=new THREE.HemisphereLight('#dcebff','#7d95b6',.9); scene.add(HEMI);
 const SKY_U={ sunDir:{value:SUN_DIR}, night:{value:0} };
-const sun=new THREE.DirectionalLight('#fff0d8',2.1); sun.position.copy(SUN_DIR).multiplyScalar(1000); scene.add(sun);
+const sun=new THREE.DirectionalLight('#fff1da',2.6); sun.position.copy(SUN_DIR).multiplyScalar(1000); scene.add(sun); scene.add(sun.target);
+if(SHADOWS){ const big=innerWidth>=700; sun.castShadow=true; sun.shadow.mapSize.set(big?2048:1024,big?2048:1024); sun.shadow.bias=-.0006; sun.shadow.normalBias=.6; sun.shadow.radius=3; sun.shadow.camera.near=10; sun.shadow.camera.far=2600; }
+{ const F=new THREE.Vector3(), C=new THREE.Vector3(); let shFrame=0, lastHalf=0;
+  scene.onBeforeRender=()=>{
+    if(!SHADOWS) return;
+    if((shFrame++%90)===0) scene.traverse(o=>{ if(o.userData.shOk||!(o.isMesh||o.isInstancedMesh)) return; o.userData.shOk=1; const m=o.material; if(!m||Array.isArray(m)||!(m.isMeshLambertMaterial||m.isMeshStandardMaterial)) return; o.receiveShadow=true; if(m.onBeforeCompile!==THREE.Material.prototype.onBeforeCompile||m.transparent) return; const g=o.geometry; if(!g.boundingSphere) g.computeBoundingSphere(); if(g.boundingSphere&&g.boundingSphere.radius<140) o.castShadow=true; });
+    camera.getWorldDirection(F); const hAbove=Math.max(4,camera.position.y-groundAt(camera.position.x,camera.position.z));
+    const D=Math.min(700,Math.max(45,hAbove*1.6)); C.copy(camera.position).addScaledVector(F,D); C.y=groundAt(C.x,C.z);
+    const half=Math.min(800,Math.max(110,D*1.1)), q=half/1024*4; C.x=Math.round(C.x/q)*q; C.z=Math.round(C.z/q)*q;
+    sun.target.position.copy(C); sun.position.copy(C).addScaledVector(SUN_DIR,1300); sun.target.updateMatrixWorld();
+    if(Math.abs(half-lastHalf)>half*.08){ lastHalf=half; const c=sun.shadow.camera; c.left=-half; c.right=half; c.top=half; c.bottom=-half; c.updateProjectionMatrix(); }
+  }; }
 
 /* obloha so slnkom */
 {
   const m=new THREE.ShaderMaterial({ side:THREE.BackSide, depthWrite:false, fog:false,
     uniforms:SKY_U,
     vertexShader:'varying vec3 vD; void main(){ vD=normalize(position); vec4 p=projectionMatrix*modelViewMatrix*vec4(position,1.); gl_Position=p.xyww; }',
-    fragmentShader:'uniform vec3 sunDir; uniform float night; varying vec3 vD; void main(){ float h=vD.y; vec3 top=mix(vec3(.20,.47,.82),vec3(.02,.04,.11),night), hor=mix(vec3(.86,.91,.96),vec3(.10,.15,.27),night), gr=mix(vec3(.86,.9,.95),vec3(.06,.09,.16),night); vec3 c=mix(hor,top,smoothstep(0.0,.55,h)); c=mix(c,gr,smoothstep(0.0,-.15,h)); float sd=max(dot(vD,sunDir),0.0); c+=(1.0-night)*vec3(1.,.93,.78)*(pow(sd,900.)*1.6+pow(sd,10.)*.22); vec3 q=floor(vD*420.0); float st=fract(sin(dot(q,vec3(12.9898,78.233,37.719)))*43758.5453); c+=night*smoothstep(0.05,0.3,h)*step(0.9975,st)*vec3(1.0); float md=max(dot(vD,normalize(vec3(.5,.5,-.7))),0.0); c+=night*vec3(.9,.92,1.)*pow(md,1800.)*1.4; gl_FragColor=vec4(c,1.); }' });
+    fragmentShader:'uniform vec3 sunDir; uniform float night; varying vec3 vD; void main(){ float h=vD.y; vec3 top=mix(vec3(.11,.36,.80),vec3(.02,.04,.11),night), mid=mix(vec3(.42,.66,.93),vec3(.05,.09,.2),night), hor=mix(vec3(.85,.92,.98),vec3(.10,.15,.27),night), gr=mix(vec3(.83,.89,.95),vec3(.06,.09,.16),night); vec3 c=mix(hor,mid,smoothstep(0.0,.18,h)); c=mix(c,top,smoothstep(.12,.75,h)); c=mix(c,gr,smoothstep(0.0,-.15,h)); float sd=max(dot(vD,sunDir),0.0); c+=(1.0-night)*vec3(1.,.93,.78)*(pow(sd,900.)*1.8+pow(sd,12.)*.28+pow(sd,3.)*.06); vec3 q=floor(vD*420.0); float st=fract(sin(dot(q,vec3(12.9898,78.233,37.719)))*43758.5453); c+=night*smoothstep(0.05,0.3,h)*step(0.9975,st)*vec3(1.0); float md=max(dot(vD,normalize(vec3(.5,.5,-.7))),0.0); c+=night*vec3(.9,.92,1.)*pow(md,1800.)*1.4; gl_FragColor=vec4(c,1.); }' });
   const sky=new THREE.Mesh(new THREE.SphereGeometry(12000,32,16),m); sky.frustumCulled=false; sky.renderOrder=-1; scene.add(sky);
 }
 
 /* vzdialené pohorie */
 {
-  const r=rng(11), geos=[], caps=[];
-  for(let i=0;i<34;i++){
-    const th=i/34*Math.PI*2+r()*.12, d=5200+r()*2200, h=500+r()*900, w=700+r()*900;
-    const g=new THREE.ConeGeometry(w,h,7,1); g.translate(d*Math.cos(th),h/2-60,d*Math.sin(th)); geos.push(g);
-    const c=new THREE.ConeGeometry(w*.34,h*.34,7,1); c.translate(d*Math.cos(th),h-h*.17-60+1,d*Math.sin(th)); caps.push(c);
+  const r=rng(11), geos=[], rock=new THREE.Color('#7f8fa6'), rock2=new THREE.Color('#5f6f88'), snowC=new THREE.Color('#f5f8fc'), cc=new THREE.Color();
+  for(let i=0;i<46;i++){
+    const th=i/46*Math.PI*2+r()*.1, d=4800+r()*3200, h=800+r()*1700, w=650+r()*900;
+    let g=new THREE.ConeGeometry(w,h,6+Math.floor(r()*3),4).toNonIndexed(); const p=g.attributes.position, seed=r()*100;
+    const jit=(x,y,z)=>Math.sin(x*.013+seed)*Math.cos(z*.011-seed)*.5+Math.sin(y*.02+x*.007)*.5;
+    for(let k=0;k<p.count;k++){ const x=p.getX(k), y=p.getY(k), z=p.getZ(k); const f=(y+h/2)/h; if(f<.999){ const j=jit(x,y,z); p.setXYZ(k,x*(1+.28*j),y+h*.07*j*(1-f),z*(1+.28*Math.cos(j*3))); } }
+    g.computeVertexNormals(); const nr=g.attributes.normal, col=new Float32Array(p.count*3);
+    for(let k=0;k<p.count;k+=3){ let fy=0, ny=0; for(let q=0;q<3;q++){ fy+=(p.getY(k+q)+h/2)/h/3; ny+=nr.getY(k+q)/3; } const sn=fy>.55-.25*ny+.08*Math.sin(k*1.7)?1:0; cc.copy(sn?snowC:(k%2?rock:rock2)); for(let q=0;q<3;q++) col.set([cc.r,cc.g,cc.b],(k+q)*3); }
+    g.setAttribute('color',new THREE.BufferAttribute(col,3)); if(g.attributes.uv) g.deleteAttribute('uv');
+    g.translate(d*Math.cos(th),h/2-80,d*Math.sin(th)); geos.push(g);
   }
-  scene.add(new THREE.Mesh(mergeGeometries(geos),new THREE.MeshLambertMaterial({color:'#9fb3ca',flatShading:true})));
-  scene.add(new THREE.Mesh(mergeGeometries(caps),new THREE.MeshLambertMaterial({color:'#f3f7fb',flatShading:true})));
+  scene.add(new THREE.Mesh(mergeGeometries(geos),new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true})));
 }
 
 /* terén */
 {
   const RS=150, TS=240, Rmax=4200;
   const pos=[], col=[], idx=[];
-  const off=new THREE.Color('#e3ebf4'), shade=new THREE.Color('#c7d5e5'), valley=new THREE.Color('#edf2f7'), c=new THREE.Color();
+  const off=new THREE.Color('#eef3f9'), shade=new THREE.Color('#bfd0e6'), valley=new THREE.Color('#f2f6fa'), c=new THREE.Color();
   for(let i=0;i<=RS;i++){
     const r=Math.pow(i/RS,1.7)*Rmax;
     for(let j=0;j<TS;j++){
       const th=j/TS*Math.PI*2, y=height(r,th);
       pos.push(r*Math.cos(th),y,r*Math.sin(th));
       const n=.5+.5*Math.sin(th*11+r*.013)*Math.cos(r*.021-th*3);
-      c.copy(off).lerp(shade,(1-Math.min(1,y/H))*.28*n).lerp(valley,Math.min(1,Math.max(0,(r-RAD)/600)));
+      c.copy(off).lerp(shade,(.35+.65*(1-Math.min(1,y/H)))*.42*n).lerp(valley,Math.min(1,Math.max(0,(r-RAD)/600))*.7);
       col.push(c.r,c.g,c.b);
     }
   }
@@ -923,7 +941,7 @@ function inCorridor(rr,th,extra){
   for(const run of ALLRUNS){
     if(rr<run.r0-40||rr>run.r0+run.len+60) continue;
     const dth=((th-run.th+Math.PI*3)%(Math.PI*2))-Math.PI, lat=dth*rr;
-    if(lat>-36-(run.w===3?32:0)-extra && lat<run.LL+24+extra) return true;
+    if(lat>-36-(run.w===3?32:0)-(run.cA||0)-extra && lat<run.LL+24+extra) return true;
   }
   const x=rr*Math.cos(th), z=rr*Math.sin(th);
   for(const zn of ZONES) if((x-zn.x)**2+(z-zn.z)**2<(zn.r+extra)**2) return true;
@@ -939,26 +957,27 @@ function inCorridor(rr,th,extra){
   const r=rng(42), COUNT=5000;
   const trees=new THREE.InstancedMesh(tg,new THREE.MeshLambertMaterial({color:'#ffffff'}),COUNT);
   const caps=new THREE.InstancedMesh(cg,new THREE.MeshLambertMaterial({color:'#ffffff'}),COUNT);
-  const tint=['#2f5d46','#2a5240','#365f4a','#284a3b'].map(h=>new THREE.Color(h)), sc=new THREE.Vector3();
+  const tint=['#1f5a3e','#246646','#1a4c36','#2d6b4c','#174230'].map(h=>new THREE.Color(h)), sc=new THREE.Vector3();
   let n=0, guard=0;
   while(n<COUNT && guard++<COUNT*10){
     const rr=420+Math.pow(r(),.85)*2600, th=r()*Math.PI*2;
     if(inCorridor(rr,th,0)) continue;
     const s=.65+r()*.9;
     V1.set(rr*Math.cos(th),height(rr,th)-.8,rr*Math.sin(th)); sc.set(s,s*(.85+r()*.35),s); Qn.setFromAxisAngle(YAX,r()*6);
-    M4.compose(V1,Qn,sc); trees.setMatrixAt(n,M4); caps.setMatrixAt(n,M4); trees.setColorAt(n,tint[n%4]); n++;
+    M4.compose(V1,Qn,sc); trees.setMatrixAt(n,M4); caps.setMatrixAt(n,M4); trees.setColorAt(n,tint[n%5]); n++;
   }
   trees.count=caps.count=n; scene.add(trees,caps);
 
-  const rocks=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),new THREE.MeshLambertMaterial({color:'#7c8591',flatShading:true}),400);
+  const RN=1100, rocks=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0),new THREE.MeshLambertMaterial({color:'#6f7b8c',flatShading:true}),RN);
+  const rcap=new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1,0).scale(.92,.35,.92).translate(0,.62,0),new THREE.MeshLambertMaterial({color:'#f6f9fc',flatShading:true}),RN);
   n=0; guard=0; const eu=new THREE.Euler();
-  while(n<400 && guard++<6000){
-    const rr=30+Math.pow(r(),1.3)*560, th=r()*Math.PI*2;
-    if(inCorridor(rr,th,4)) continue;
-    V1.set(rr*Math.cos(th),height(rr,th)-1.2,rr*Math.sin(th)); sc.set(3+r()*8,1.5+r()*4,3+r()*8);
-    Qn.setFromEuler(eu.set(r()*.5,r()*6,r()*.5)); M4.compose(V1,Qn,sc); rocks.setMatrixAt(n++,M4);
+  while(n<RN && guard++<20000){
+    const rr=30+Math.pow(r(),1.15)*1300, th=r()*Math.PI*2;
+    if(inCorridor(rr,th,6)) continue;
+    const big=rr<600?1:.7; V1.set(rr*Math.cos(th),height(rr,th)-1.4,rr*Math.sin(th)); sc.set((3+r()*9)*big,(2+r()*5)*big,(3+r()*9)*big);
+    Qn.setFromEuler(eu.set(r()*.4,r()*6,r()*.4)); M4.compose(V1,Qn,sc); rocks.setMatrixAt(n,M4); rcap.setMatrixAt(n,M4); n++;
   }
-  rocks.count=n; scene.add(rocks);
+  rocks.count=rcap.count=n; scene.add(rocks,rcap);
 }
 
 /* sneženie okolo kamery */
@@ -983,7 +1002,7 @@ uniform float uTime; uniform float uJumpId; uniform float uJumpT;
 uniform float uAmp[6]; uniform float uPer[6]; uniform float uUp[6];
 const float H_=430.0; const float R_=1600.0; const float LIFT_V=5.0; const float TAU_=6.28318530718; const float TSP=50.0; const float SK=1.9;
 float hgt(float r,float th){ float rr=max(r,95.0); float k=max(0.0,1.0-rr/R_); float w=smoothstep(95.0,165.0,r); float ridge=1.0+w*(0.06*sin(3.0*th+0.4)+0.045*sin(7.0*th+1.3)+0.025*sin(13.0*th)); return H_*pow(max(k,1e-6),1.35)*ridge+w*6.0*k*sin(r*0.012+th*5.0); }
-vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float cv=(abs(run.w-3.0)<0.5&&abs(lat)<=40.0)?30.0*sin(s*6.6+0.4):0.0; float t=run.x+(lat+cv)/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
+vec3 runPt(vec4 run,float s,float lat){ float r=run.y+s*run.z; float cA=floor((run.w-floor(run.w+0.5))*100.0+0.5); float cv=(abs(run.w-3.0)<0.5&&abs(lat)<=40.0)?30.0*sin(s*6.6+0.4):((cA>0.5&&lat>-40.0&&lat<26.0)?-cA*0.5*(1.0-cos(TAU_*(mod(cA,2.0)+1.0)*s)):0.0); float t=run.x+(lat+cv)/r; return vec3(r*cos(t),hgt(r,t),r*sin(t)); }
 float cabY(vec4 run,float d,float lat,float th){ float d0=floor(d/TSP)*TSP; float d1=min(run.z,d0+TSP); float f=d1>d0?(d-d0)/(d1-d0):0.0; float a=runPt(run,d0/run.z,lat).y; float b=runPt(run,d1/run.z,lat).y; return mix(a,b,f)+th-0.8*4.0*f*(1.0-f); }
 vec3 rX(vec3 v,float a){ float c=cos(a),s=sin(a); return vec3(v.x,v.y*c-v.z*s,v.y*s+v.z*c); }
 vec3 rY(vec3 v,float a){ float c=cos(a),s=sin(a); return vec3(v.x*c+v.z*s,v.y,-v.x*s+v.z*c); }
@@ -1137,7 +1156,7 @@ function instGeo(base, list, run){
   for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
   const n=list.length, aRun=new Float32Array(n*4), aP=new Float32Array(n*4), aId=new Float32Array(n), col=new Float32Array(n*3), c=new THREE.Color();
   list.forEach((p,j)=>{
-    aRun.set([run.th,run.r0,run.len,run.w],j*4);
+    aRun.set([run.th,run.r0,run.len,run.w+(run.cA||0)/100],j*4);
     aP.set([p.lane,p.phase,p.down,p.ti],j*4);
     aId[j]=p.i; col.set(jacketLin(p),j*3);
   });
@@ -1153,7 +1172,7 @@ function carrierGeo(run){
   const g=new THREE.InstancedBufferGeometry();
   for(const k in base.attributes) g.setAttribute(k,base.attributes[k]);
   const aRun=new Float32Array(n*4), aOff=new Float32Array(n);
-  for(let j=0;j<n;j++){ aRun.set([run.th,run.r0,run.len,run.w],j*4); aOff[j]=j*sp; }
+  for(let j=0;j<n;j++){ aRun.set([run.th,run.r0,run.len,run.w+(run.cA||0)/100],j*4); aOff[j]=j*sp; }
   g.setAttribute('aRun',new THREE.InstancedBufferAttribute(aRun,4));
   g.setAttribute('aOff',new THREE.InstancedBufferAttribute(aOff,1));
   g.instanceCount=n; return g;
@@ -1191,7 +1210,7 @@ function updateDetail(nearRuns){
       if(dx*dx+dy*dy+dz*dz>DET2 && i!==selected) continue;
       const p=people[i], D=detail[p.ti]; if(D.n>=MAXD) continue;
       const a=D.g.attributes, k=D.n++;
-      a.aRun.array.set([run.th,run.r0,run.len,run.w],k*4);
+      a.aRun.array.set([run.th,run.r0,run.len,run.w+(run.cA||0)/100],k*4);
       a.aP.array.set([p.lane,p.phase,p.down,p.ti],k*4);
       a.aId.array[k]=p.i; a.color.array.set(pColor[i],k*3);
       a.aPants.array.set(p.pc||NEG,k*3); a.aHelm.array.set(p.hc||NEG,k*3); a.aSki.array.set(p.sc||NEG,k*3);
@@ -1399,15 +1418,15 @@ const LAMPS = (()=>{
   return {headMat,glowMat};
 })();
 let dayLast=-1;
-const DAYC={ fogDay:new THREE.Color('#dbe7f3'), fogNight:new THREE.Color('#0c1424'), sunDay:new THREE.Color('#fff0d8'), sunNight:new THREE.Color('#8fa6ff'), hemDay:new THREE.Color('#f4f8ff'), hemNight:new THREE.Color('#5d6f9c'), lampOff:new THREE.Color('#9aa3ad'), lampOn:new THREE.Color('#ffe2a0') };
+const DAYC={ fogDay:new THREE.Color('#d3e3f2'), fogNight:new THREE.Color('#0c1424'), sunDay:new THREE.Color('#fff1da'), sunNight:new THREE.Color('#8fa6ff'), hemDay:new THREE.Color('#dcebff'), hemNight:new THREE.Color('#5d6f9c'), lampOff:new THREE.Color('#9aa3ad'), lampOn:new THREE.Color('#ffe2a0') };
 function dayFactor(t){ const L=localSec(t)/3600; const ss=(a,b,x)=>{ const k=Math.min(1,Math.max(0,(x-a)/(b-a))); return k*k*(3-2*k); }; return ss(6.5,7.6,L)*(1-ss(16.1,17.2,L)); }
 function updateDayNight(t, force){
   const s=Math.floor(t/5); if(!force && s===dayLast) return; dayLast=s;
   const day=params.has('noc')?0:params.has('den')?1:dayFactor(t), night=1-day;
-  HEMI.intensity=.58+.47*day; HEMI.color.copy(DAYC.hemNight).lerp(DAYC.hemDay,day);
-  sun.intensity=.5+1.6*day; sun.color.copy(DAYC.sunNight).lerp(DAYC.sunDay,day);
+  HEMI.intensity=.58+.32*day; HEMI.color.copy(DAYC.hemNight).lerp(DAYC.hemDay,day);
+  sun.intensity=.5+2.1*day; sun.color.copy(DAYC.sunNight).lerp(DAYC.sunDay,day);
   scene.fog.color.copy(DAYC.fogNight).lerp(DAYC.fogDay,day);
-  renderer.toneMappingExposure=.9+.1*day;
+  renderer.toneMappingExposure=.9+.15*day;
   SKY_U.night.value=night;
   LAMPS.glowMat.opacity=Math.max(0,night*1.15-.1); LAMPS.headMat.color.copy(DAYC.lampOff).lerp(DAYC.lampOn,Math.min(1,night*1.4));
   document.body.classList.toggle('night', night>.5);
