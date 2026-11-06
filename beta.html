@@ -780,7 +780,7 @@ if(SHADOWS){ const big=innerWidth>=700; sun.castShadow=true; sun.shadow.mapSize.
 {
   const RS=150, TS=240, Rmax=4200;
   const pos=[], col=[], idx=[];
-  const off=new THREE.Color('#eef3f9'), shade=new THREE.Color('#bfd0e6'), valley=new THREE.Color('#f2f6fa'), c=new THREE.Color();
+  const off=new THREE.Color('#e3ebf5'), shade=new THREE.Color('#b4c7e0'), valley=new THREE.Color('#edf2f8'), c=new THREE.Color();
   for(let i=0;i<=RS;i++){
     const r=Math.pow(i/RS,1.7)*Rmax;
     for(let j=0;j<TS;j++){
@@ -813,7 +813,7 @@ const cordTex=(()=>{
 
 function ribbon(run, latFrom, latTo, acrossSegs, fadeFrac, colorCenter){
   const along=Math.ceil(run.len/5), pos=[], col=[], uv=[], idx=[];
-  const cOff=new THREE.Color('#eaf0f7'), cIn=new THREE.Color(colorCenter), c=new THREE.Color(), P=new THREE.Vector3();
+  const cOff=new THREE.Color('#e3ebf5'), cIn=new THREE.Color(colorCenter), c=new THREE.Color(), P=new THREE.Vector3();
   for(let i=0;i<=along;i++){
     const s=i/along;
     for(let j=0;j<=acrossSegs;j++){
