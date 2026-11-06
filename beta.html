@@ -2074,6 +2074,8 @@ async function startReel2(SC){
   let curSeg=null;
   const figAt=u=>{ const p=people.find(q=>q.u===u); return p?V(positions[p.i*3],positions[p.i*3+1],positions[p.i*3+2]):null; };
   SH.tagCam=(t,T,k)=>{ const P=figAt(curSeg&&curSeg.tag)||SPOT.hotel.clone(); const a=(curSeg&&curSeg.ang||0)+.12*t, r=(curSeg&&curSeg.dist)||15; return { p:V(P.x+Math.cos(a)*r,P.y+6,P.z+Math.sin(a)*r), q:V(P.x,P.y+1.2,P.z) }; };
+  SH.kotva=(t,T,k)=>{ const C=KOTVA[4].clone().lerp(KOTVA[6],.5); return orbit(C,48,20,Math.atan2(C.z,C.x)+1.2,.1,t,5); };
+  SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
   SH.evWide=(t,T,k)=>{ const E=WORLD.ev, d=E.EC.length(); return { p:E.EC.clone().addScaledVector(E.toO,d+1500-250*k).addScaledVector(E.side,500).setY(520-60*k), q:E.EC.clone().setY(560) }; };
   SH.evWide2=(t,T,k)=>{ const E=WORLD.ev, B=E.B; return { p:B.clone().addScaledVector(E.toO,700-150*k).addScaledVector(E.side,-500).add(V(0,260,0)), q:E.M.clone().add(V(0,150,0)) }; };
