@@ -1,0 +1,81 @@
+{
+ "align": "fs",
+ "racer": "valocka.a",
+ "goal": [
+  5000,
+  "Ďalší cieľ 🎯"
+ ],
+ "sents": [
+  "Každý, kto dá follow tomuto profilu, dostane na svahu vlastného lyžiara.",
+  "Už nás je vyše štyritisíc na jednom svahu.",
+  "Vyberieš si farbu bundy, lyží aj zjazdovku.",
+  "Môžeš lyžovať aj na Mount Evereste.",
+  "A v hre si zajazdíš na čas. Rekord je tridsaťjeden sekúnd.",
+  "Daj follow a napíš do komentu svoju farbu!"
+ ],
+ "segs": [
+  {
+   "shot": "slope2",
+   "cap": [
+    "Daj follow 👉",
+    "a máš *vlastného lyžiara* ⛷️"
+   ],
+   "y": 760
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*4179* ľudí",
+    "na jednom svahu 🤯"
+   ],
+   "y": 900
+  },
+  {
+   "shot": "tagCam",
+   "tag": "alffotbal",
+   "dist": 16,
+   "cap": [
+    "Vyber si *farbu* 🎨",
+    "bundy, lyží aj zjazdovku"
+   ],
+   "y": 1300,
+   "comment": [
+    "alffotbal",
+    "Žlutá a žlutá"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "evRun",
+   "cap": [
+    "Lyžuj aj na",
+    "*Mount Everest* 🏔️"
+   ],
+   "y": 760
+  },
+  {
+   "shot": "game",
+   "cap": [
+    "Zajazdi si *na čas* 🏆",
+    "rekord 31,01 s"
+   ],
+   "y": 760
+  },
+  {
+   "shot": "aerial",
+   "cap": [
+    "Daj *follow*",
+    "a napíš farbu 👇"
+   ],
+   "y": 800
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* 👉 @svah.followerov"
+  ],
+  [
+   "a napíš do komentu *farbu* 👇"
+  ]
+ ]
+}
