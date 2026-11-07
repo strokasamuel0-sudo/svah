@@ -364,6 +364,9 @@ SPOT.kids = polar(1085, R0.th - .02);
 ZONES.push({x:SPOT.kids.x, z:SPOT.kids.z, r:44});
 const KOTVA=[]; for(let k=0;k<=10;k++) KOTVA.push(runPt(FS,.03+.94*k/10,-(FS.LL+22),new THREE.Vector3()));
 KOTVA.forEach(P=>ZONES.push({x:P.x,z:P.z,r:7}));
+/* 🛹 halfpipe + boulová trať (míľnik 5500) */
+const HP_LAT=-95; for(let s=.04;s<=.98;s+=.03){ const P=runPt(FS,s,HP_LAT,new THREE.Vector3()); ZONES.push({x:P.x,z:P.z,r:25}); }
+{ const P=polar(990, R0.th+.12); ZONES.push({x:P.x,z:P.z,r:6}); }
 
 /* JS kópia pohybu z GPU (na menovky, kameru a ťuknutie) */
 let JUMP_ID=-1, JUMP_T=-99;
@@ -601,7 +604,28 @@ function buildWorld(){
       const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.Float32BufferAttribute(pp,3)); pg.setIndex(ii); pg.computeVertexNormals(); scene.add(new THREE.Mesh(pg,new THREE.MeshLambertMaterial({color:'#ffffff',side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2}))); }
     const real=people.filter(q=>q.kind==='ski'&&q.run&&q.run.ev).map(q=>{ const gr=buildRacer(q); scene.add(gr); return {p:q,g:gr}; });
     const sk=[]; for(let k=0;k<(real.length<10?24:0);k++){ const src=skiers[(k*37+5)%Math.max(1,skiers.length)]||{c:'#1E5AA8',ti:0}; const gr=buildRacer(src); scene.add(gr); sk.push({g:gr,p:k%2,ph:k/24,v:.006+.002*(k%3)}); }
-    { const g5=makeSign(['🎯 PRI 5000 FOLLOWEROCH','après-ski bar s DJ-om + stánky s jedlom'],'#F26B21','#fff',768,200); g5.scale.multiplyScalar(1.1); g5.position.copy(B).addScaledVector(toO,60).addScaledVector(side,45).add(new THREE.Vector3(0,28,0)); scene.add(g5); }
+    { // 🎉 après-ski bar s DJ-om + stánky (míľnik 5000)
+      const A=B.clone().addScaledVector(toO,80).addScaledVector(side,72); A.y=hAt(A.x,A.z);
+      const G=new THREE.Group(); G.position.copy(A); G.lookAt(A.x+toO.x*100,A.y,A.z+toO.z*100); scene.add(G);
+      const L=c=>new THREE.MeshLambertMaterial({color:c}), wood=L('#8a5a34'), dark=L('#3a2a20'), snw=L('#f4f8fc'), blk=L('#22262d'), red=L('#C8102E'), blu=L('#1E5AA8'), metal=L('#9aa3ad'), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
+      const box=(w,h,d,m,x,y,z)=>{ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m); o.position.set(x,y,z); G.add(o); return o; };
+      box(34,3,30,snw,0,-1.4,6);
+      box(26,9,14,wood,0,4.5,-10); const rf=new THREE.Mesh(new THREE.ConeGeometry(17,6,4).rotateY(Math.PI/4),dark); rf.scale.set(1.1,1,.65); rf.position.set(0,12,-10); G.add(rf);
+      const cp=new THREE.Mesh(new THREE.ConeGeometry(17,6,4).rotateY(Math.PI/4),snw); cp.scale.set(1.13,.42,.68); cp.position.set(0,13.9,-10); G.add(cp);
+      for(const x of [-8,0,8]) box(4,3,.3,glow,x,5.2,-2.9);
+      box(20,2.2,2.4,wood,0,1.1,-1); box(21,.35,2.9,dark,0,2.35,-1);
+      for(let k=0;k<5;k++){ const st=new THREE.Mesh(new THREE.CylinderGeometry(.5,.4,1.6,8),L(['#F2B705','#C8102E','#2E9E5B','#1E5AA8','#E84A8A'][k])); st.position.set(-8+k*4,3.4,-1.2); G.add(st); }
+      box(16,1.6,10,blk,24,.8,4); box(6,2.2,2,L('#2B2D31'),24,2.7,2); box(2.6,6.5,2.6,blk,16.5,4.8,1); box(2.6,6.5,2.6,blk,31.5,4.8,1);
+      box(.6,13,.6,metal,15.5,6.5,-.6); box(.6,13,.6,metal,32.5,6.5,-.6); box(17.6,.7,.7,metal,24,13,-.6);
+      const lights=[]; for(let k=0;k<7;k++){ const m=new THREE.Mesh(new THREE.SphereGeometry(.55,8,6),new THREE.MeshBasicMaterial({color:'#ff3c8a'})); m.position.set(17.5+k*2.2,12.3,-.6); G.add(m); lights.push(m); }
+      const dj=buildRacer({c:'#111111',ti:0,pcHex:'#111111',hcHex:'#F2B705'}); dj.position.set(24,1.6,.4); G.add(dj);
+      const dj2=makeSign(['🎧 DJ'],'#111','#fff',256,96); dj2.scale.multiplyScalar(.22); dj2.position.set(24,15.2,-.6); G.add(dj2);
+      ['🍕 PIZZA','LANGOŠ','🌭 HOT DOG','☕ PUNČ'].forEach((nm,k)=>{ const x=-31+k*10.5, z=12; box(8,4.4,6,wood,x,2.2,z); box(9,.7,7,k%2?red:blu,x,5.5,z); box(9.2,.3,7.2,snw,x,6,z); const t=makeSign([nm],'#ffffff','#222222',320,96); t.scale.multiplyScalar(.2); t.position.set(x,8.3,z); G.add(t); });
+      for(let k=0;k<6;k++){ const x=-7+(k%3)*7.5, z=9+Math.floor(k/3)*7; box(4.4,.3,2.2,wood,x,2.1,z); box(.4,2,.4,dark,x,1,z); box(4.4,.3,.8,wood,x,1.2,z-1.8); box(4.4,.3,.8,wood,x,1.2,z+1.8); }
+      for(let k=0;k<=12;k++){ const m=new THREE.Mesh(new THREE.SphereGeometry(.3,6,4),new THREE.MeshBasicMaterial({color:['#F2B705','#C8102E','#2E9E5B','#1E5AA8','#E84A8A'][k%5]})); m.position.set(-14+k*2.4,8.5-1.2*Math.sin(Math.PI*k/12),2); G.add(m); }
+      const dancers=[]; for(let k=0;k<16;k++){ const src=skiers[(k*53+11)%Math.max(1,skiers.length)]||{c:'#1E5AA8',ti:0}; const g=buildRacer(src); g.position.set(18.5+(k%4)*3.4,0,9+Math.floor(k/4)*3.2); g.rotation.y=Math.PI; G.add(g); dancers.push({g,ph:k*.7}); }
+      const s5=makeSign(['🎉 APRÈS-SKI BAR','splnené pri 5000 followeroch'],'#F26B21','#fff',768,200); s5.scale.multiplyScalar(.45); s5.position.copy(A).add(new THREE.Vector3(0,27,0)); scene.add(s5);
+      WORLD.apres={dancers,lights,C:A.clone(),a0:Math.atan2(toO.z,toO.x)}; }
     const s=makeSign(['🏔️ MOUNT EVEREST','splnené pri 3500 followeroch'],'#1E5AA8','#fff',768,200); s.scale.multiplyScalar(1.4); s.position.copy(B).add(new THREE.Vector3(0,48,0)); scene.add(s);
     const hAt=(x,z)=>Math.max(groundAt(x,z),evY(x,z)), plat=(p,rho)=>(p?1:-1)*(110+260*rho)+70*Math.sin(rho*10+p);
     { const pp=[], ii=[], dash=[]; for(let k=0;k<ROAD.length;k++){ const P=ROAD[k], Q=ROAD[Math.min(ROAD.length-1,k+1)], R_=ROAD[Math.max(0,k-1)], d=Q.clone().sub(R_).setY(0).normalize(), n=new THREE.Vector3(-d.z,0,d.x);
@@ -647,6 +671,23 @@ function buildWorld(){
     const hangers=[]; for(let k=0;k<14;k++){ const g=new THREE.Group(); g.add(new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,5.5,4).translate(0,-2.75,0),dm), new THREE.Mesh(new THREE.BoxGeometry(1.6,.18,.18).translate(0,-5.5,0),om)); scene.add(g); hangers.push({g,ph:k/14}); }
     const s=makeSign(['🪝 KOTVA','splnené pri 4500 followeroch'],'#F26B21','#fff',768,200); s.scale.multiplyScalar(.3); s.position.copy(KOTVA[KOTVA.length-1]).add(new THREE.Vector3(0,15,0)); scene.add(s);
     WORLD.kotva={path,lens,L:lens[lens.length-1],hangers}; }
+  // 🛹 halfpipe + ⛷️ boulová trať (míľnik 5500)
+  { const sm=new THREE.MeshLambertMaterial({color:'#eef4fb',side:THREE.DoubleSide}), cm=new THREE.MeshLambertMaterial({color:'#1E5AA8'}), om=new THREE.MeshLambertMaterial({color:'#F26B21'}), V=new THREE.Vector3();
+    const hpY=x=>{ const a=Math.abs(x); if(a>16) return 7*Math.max(0,(20-a)/4); if(a>12) return 7; const u=a/12; return u<.45?0:7*Math.pow((u-.45)/.55,2); };
+    const XS=[-20,-16]; for(let j=0;j<=16;j++) XS.push(-12+24*j/16); XS.push(16,20);
+    const N=44,M=XS.length,pp=[],ii=[];
+    for(let k=0;k<=N;k++){ const s=.06+.44*k/N; for(const x of XS){ runPt(FS,s,HP_LAT+x,V); pp.push(V.x,V.y+hpY(x)+.06,V.z); } if(k<N) for(let j=0;j<M-1;j++){ const a=k*M+j, b=a+M; ii.push(a,b,a+1, a+1,b,b+1); } }
+    const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pp,3)); g.setIndex(ii); g.computeVertexNormals(); scene.add(new THREE.Mesh(g,sm));
+    for(const x of [-12,12]){ const pts=[]; for(let k=0;k<=N;k+=2){ runPt(FS,.06+.44*k/N,HP_LAT+x,V); pts.push(V.clone().setY(V.y+7.1)); } for(let k=0;k<pts.length-1;k++){ const a=pts[k],b=pts[k+1],len=a.distanceTo(b); const cy=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,len,5),cm); cy.position.copy(a).lerp(b,.5); cy.lookAt(b); cy.rotateX(Math.PI/2); scene.add(cy); } }
+    const riders=[]; for(let k=0;k<3;k++){ const src=skiers[(k*97+3)%Math.max(1,skiers.length)]||{c:'#F26B21'}; const rg=buildRacer({...src,ti:1}); scene.add(rg); riders.push({g:rg,ph:k/3}); }
+    const mg=new THREE.SphereGeometry(1.8,10,6); mg.scale(1,.42,1.25); const im=new THREE.InstancedMesh(mg,new THREE.MeshLambertMaterial({color:'#f1f6fc'}),160); let n=0; const M4=new THREE.Matrix4();
+    for(let row=0;row<28;row++){ const s=.56+.38*row/27; for(let j=-2;j<=2;j++){ runPt(FS,s,HP_LAT+j*4.4+(row%2?2.2:0),V); M4.makeTranslation(V.x,V.y+.15,V.z); im.setMatrixAt(n++,M4); } } im.count=n; scene.add(im);
+    for(let row=0;row<28;row+=3) for(const x of [-13,13]){ runPt(FS,.56+.38*row/27,HP_LAT+x,V); const m=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.4,5).translate(0,1.2,0),om); m.position.copy(V); scene.add(m); }
+    const s1=makeSign(['🛹 HALFPIPE','splnené pri 5500 followeroch'],'#1E5AA8','#fff',768,200); s1.scale.multiplyScalar(.32); runPt(FS,.05,HP_LAT,s1.position); s1.position.y+=18; scene.add(s1);
+    const s2=makeSign(['⛷️ BOULOVÁ TRAŤ','splnené pri 5500 followeroch'],'#2B2D31','#fff',768,200); s2.scale.multiplyScalar(.32); runPt(FS,.55,HP_LAT,s2.position); s2.position.y+=14; scene.add(s2);
+    const s3=makeSign(['🎯 PRI 6000 FOLLOWEROCH','vlastné chatky followerov'],'#F26B21','#fff',768,200); s3.scale.multiplyScalar(.4); polar(990, R0.th+.12, s3.position); s3.position.y+=24; scene.add(s3);
+    { const pl=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,24,6).translate(0,12,0),new THREE.MeshLambertMaterial({color:'#9aa3ad'})); polar(990, R0.th+.12, pl.position); scene.add(pl); }
+    WORLD.hp={riders,hpY,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
   // 👶 detský svah s pásom a klzákmi (míľnik 4500)
   { const P=SPOT.kids, th=Math.atan2(P.z,P.x), out=down(th), side=new THREE.Vector3(-out.z,0,out.x);
     const at=(a,b,o=new THREE.Vector3())=>{ const x=P.x+out.x*a+side.x*b, z=P.z+out.z*a+side.z*b; return o.set(x,groundAt(x,z),z); };
@@ -736,6 +777,8 @@ function updateWorld(t, now){
     { const n=ROAD.length; for(const c of E.cars){ let u=((t*12/(n*10))+c.ph)%1; if(c.dir<0) u=1-u; const f=u*(n-1), i=Math.min(n-2,Math.floor(f)), w=f-i, A=ROAD[i], Bq=ROAD[i+1]; const x=A.x+(Bq.x-A.x)*w, z=A.z+(Bq.z-A.z)*w, dx=(Bq.x-A.x)*c.dir, dz=(Bq.z-A.z)*c.dir, dl=Math.hypot(dx,dz)||1; const ox=-dz/dl*2.2, oz=dx/dl*2.2; c.g.position.set(x+ox,E.hAt(x+ox,z+oz)+.3,z+oz); c.g.lookAt(x+ox+dx,c.g.position.y,z+oz+dz); } }
     for(const s of E.sk){ if(s.v===undefined) continue; const u=(t*s.v+s.ph)%1, rho=.06+.88*u, tt=t+s.ph*50, P=E.pist(s.p,rho,tt), Q=E.pist(s.p,Math.min(.99,rho+.004),tt+.4); s.g.position.copy(P); s.g.lookAt(Q.x,P.y,Q.z); s.g.rotateX(.25); } }
   if (WORLD.kotva){ const K=WORLD.kotva; for(const h of K.hangers){ const d=K.L*(1-((t*2.6/K.L+h.ph)%1)); let i=1; while(i<K.lens.length-1&&K.lens[i]<d) i++; const f=(d-K.lens[i-1])/((K.lens[i]-K.lens[i-1])||1); h.g.position.copy(K.path[i-1]).lerp(K.path[i],f); h.g.rotation.y=Math.atan2(K.path[i].x-K.path[i-1].x,K.path[i].z-K.path[i-1].z); } }
+  if (WORLD.apres){ const P=WORLD.apres; for(const d of P.dancers){ d.g.position.y=Math.abs(Math.sin(t*5+d.ph))*.9; d.g.rotation.y=Math.PI+.4*Math.sin(t*2+d.ph); } P.lights.forEach((l,i)=>l.material.color.setHSL((t*.3+i/7)%1,1,.55)); }
+  if (WORLD.hp){ const Hh=WORLD.hp; for(const r of Hh.riders){ const u=(t*.018+r.ph)%1, s=.07+.42*u, ph=t*1.25+r.ph*7, x=10.6*Math.sin(ph); runPt(FS,s,HP_LAT+x,Hh.v1); r.g.position.set(Hh.v1.x,Hh.v1.y+Hh.hpY(x)+.3,Hh.v1.z); runPt(FS,Math.min(.5,s+.008),HP_LAT+10.6*Math.sin(ph+.12),Hh.v2); r.g.lookAt(Hh.v2.x,Hh.v2.y+Hh.hpY(10.6*Math.sin(ph+.12))+.3,Hh.v2.z); r.g.rotateZ(-x/12*.8); } }
   if (WORLD.kids){ const K=WORLD.kids; for(const c of K.list){ const u=(t*.03+c.ph)%1; let a,b,up; if(u<.62){ a=25-55*(u/.62); b=-9; up=1; } else { const f=(u-.62)/.38; a=-30+55*f*f*(3-2*f); b=c.lane; up=0; }
       K.at(a,b,K.v1); K.at(a+(up?-1:1),b,K.v2); c.g.position.copy(K.v1); c.g.position.y+=up?.3:.05; c.g.lookAt(K.v2.x,c.g.position.y,K.v2.z); c.g.children[5].visible=!up; } }
   if (WORLD.sprays) for (let k=0;k<WORLD.sprays.length;k++){ const sp=WORLD.sprays[k]; sp.scale.setScalar(.92+.08*Math.sin(t*6+k)); sp.material.opacity=.42+.1*Math.sin(t*4+k*2); }
@@ -2076,6 +2119,9 @@ async function startReel2(SC){
   SH.tagCam=(t,T,k)=>{ const P=figAt(curSeg&&curSeg.tag)||SPOT.hotel.clone(); const a=(curSeg&&curSeg.ang||0)+.12*t, r=(curSeg&&curSeg.dist)||15; return { p:V(P.x+Math.cos(a)*r,P.y+6,P.z+Math.sin(a)*r), q:V(P.x,P.y+1.2,P.z) }; };
   SH.kotva=(t,T,k)=>{ const a=KOTVA[1], b=KOTVA[8]; const sd=Pr(FS,.5,0,0).sub(KOTVA[5]).setY(0).normalize(); const p=a.clone().lerp(b,.18+.1*k).addScaledVector(sd,9); p.y+=19; const q=a.clone().lerp(b,.6).addScaledVector(sd,-2); q.y+=6; return {p,q}; };
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
+  SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
+  SH.hp=(t,T,k)=>{ const p=Pr(FS,.1+.08*k,HP_LAT+26,16), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
+  SH.moguls=(t,T,k)=>{ const p=Pr(FS,.6+.06*k,HP_LAT+20,11), q=Pr(FS,.78,HP_LAT,0); return {p,q}; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
   SH.evWide=(t,T,k)=>{ const E=WORLD.ev, d=E.EC.length(); return { p:E.EC.clone().addScaledVector(E.toO,d+1500-250*k).addScaledVector(E.side,500).setY(520-60*k), q:E.EC.clone().setY(560) }; };
   SH.evWide2=(t,T,k)=>{ const E=WORLD.ev, B=E.B; return { p:B.clone().addScaledVector(E.toO,700-150*k).addScaledVector(E.side,-500).add(V(0,260,0)), q:E.M.clone().add(V(0,150,0)) }; };
