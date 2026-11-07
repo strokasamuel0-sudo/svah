@@ -63,3 +63,10 @@
 - TIP: follow sa dá overiť aj bez pk – fetch('/<user>/') HTML obsahuje "profile_id" → /api/v1/friendships/show/<id>/. DM žiadosť: Accept → dialóg „Primárne“.
 - Reel `m55` ZVEREJNENÝ (5000+5500: après-ski bar, halfpipe, boulová trať, +218 lyžiarov, cieľ 6000 chatky).
 - POSLEDNÝ_KOMENT_TS: 2026-11-07T23:00:00Z
+- 8. 11. ~00:30–01:00 (plánovaný nočný beh, deň po Samuelovom behu): API zoznamu followerov ZNOVA FUNGUJE (/api/v1/friendships/40406379974/followers/, 25 na stranu, ~5 min) – stiahnutý CELÝ zoznam 5591. 16 reelov (treba scrollnúť profil, inak sa načíta len 12), 3490 komentov vrátane všetkých odpovedí.
+- Odhlásení odstránení: 24 lyžiarov, 29 z čakárne, 2 roly (sebo_jaros17, ma_u_gli). +18 nových lyžiarov (väčšina dala follow po našej „daj follow“ odpovedi: do_minik1329, cervena.zoja, macka_and_daisy, sklenar.jaromir, _matousmanzel, david_is_firee, vojtak_chelsak, _han1cka_…; julia_obsatnikova ružová), +ratrak janisss_02, +1060 followerov bez komentu do čakárne (prvý úplný zoznam od 6. 11.).
+- Stav: IG 5591 · web NA SVAHU 5592 · 2140 lyžiarov · 104 rolí · čakáreň 3363 · 9 zjazdoviek (overené na webe).
+- DM: žiadne nové správy ani žiadosti (všetko zodpovedané v predošlom behu). „Daj follow“ odpovede: 17 (jan9132262, ma_u_gli, zverina.dominik, spiskova.magda, k1ko0kdkdjdjdnn, renata294578, jarda_xzcz, pre.smazakgk, mmaru_nnka, pavl1k_13, ne.luss, toriii.aa.va.go.ov.a_8, echo_flux14, baru.papcunova, m.tobiasssss, tj.saminoo, p_konyarik_) – väčšinou ľudia, čo prestali sledovať.
+- GraphQL komentovanie: friendly name usePolarisCommentCreateMutation, doc_id 39617891021192323, premenné {data:{comment_text,media_id,replied_to_comment_fbid (string)},root_connections:[]} – POZOR, kľúč je replied_to_comment_fbid. Komentár s @menom cez UI: Enter otvorí našepkávač, klikni „Uverejniť“. Konkrétny koment otvorí /p/<kód>/c/<comment_id>/.
+- MÍĽNIKY bez zmeny: 6000 vlastné chatky followerov · 6500 čierna back-country zjazdovka + horúca čokoláda. Rebríček bez zmeny.
+- POSLEDNÝ_KOMENT_TS: 2026-11-07T23:45:00Z
