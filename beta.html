@@ -605,7 +605,7 @@ function buildWorld(){
     const real=people.filter(q=>q.kind==='ski'&&q.run&&q.run.ev).map(q=>{ const gr=buildRacer(q); scene.add(gr); return {p:q,g:gr}; });
     const sk=[]; for(let k=0;k<(real.length<10?24:0);k++){ const src=skiers[(k*37+5)%Math.max(1,skiers.length)]||{c:'#1E5AA8',ti:0}; const gr=buildRacer(src); scene.add(gr); sk.push({g:gr,p:k%2,ph:k/24,v:.006+.002*(k%3)}); }
     { // 🎉 après-ski bar s DJ-om + stánky (míľnik 5000)
-      const A=B.clone().addScaledVector(toO,80).addScaledVector(side,72); A.y=hAt(A.x,A.z);
+      const A=B.clone().addScaledVector(toO,80).addScaledVector(side,72); A.y=Math.max(groundAt(A.x,A.z),evY(A.x,A.z));
       const G=new THREE.Group(); G.position.copy(A); G.lookAt(A.x+toO.x*100,A.y,A.z+toO.z*100); scene.add(G);
       const L=c=>new THREE.MeshLambertMaterial({color:c}), wood=L('#8a5a34'), dark=L('#3a2a20'), snw=L('#f4f8fc'), blk=L('#22262d'), red=L('#C8102E'), blu=L('#1E5AA8'), metal=L('#9aa3ad'), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
       const box=(w,h,d,m,x,y,z)=>{ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m); o.position.set(x,y,z); G.add(o); return o; };
