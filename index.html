@@ -367,6 +367,9 @@ SPOT.kids = polar(1085, R0.th - .02);
 ZONES.push({x:SPOT.kids.x, z:SPOT.kids.z, r:44});
 const KOTVA=[]; for(let k=0;k<=10;k++) KOTVA.push(runPt(FS,.03+.94*k/10,-(FS.LL+22),new THREE.Vector3()));
 KOTVA.forEach(P=>ZONES.push({x:P.x,z:P.z,r:7}));
+/* 🏠 chatky followerov (míľnik 6000) – pozdĺž cesty k Everestu */
+const CHATKY=[]; { const n=ROAD.length, big=ZONES.filter(z=>z.r>12); for(let k=10;k<n-3&&CHATKY.length<24;k+=3){ const A=ROAD[k], B=ROAD[k+1], dx=B.x-A.x, dz=B.z-A.z, L=Math.hypot(dx,dz)||1, sx=-dz/L, sz=dx/L, sg=CHATKY.length%2?1:-1, x=A.x+sx*22*sg, z=A.z+sz*22*sg;
+  if(big.some(q=>(q.x-x)**2+(q.z-z)**2<(q.r+14)**2)) continue; if(CHATKY.some(c=>(c.x-x)**2+(c.z-z)**2<18*18)) continue; CHATKY.push({x,z,yaw:Math.atan2(-sx*sg,-sz*sg)}); } CHATKY.forEach(c=>ZONES.push({x:c.x,z:c.z,r:10})); }
 /* 🛹 halfpipe + boulová trať (míľnik 5500) */
 const HP_LAT=-95; for(let s=.04;s<=.98;s+=.03){ const P=runPt(FS,s,HP_LAT,new THREE.Vector3()); ZONES.push({x:P.x,z:P.z,r:25}); }
 { const P=polar(990, R0.th+.12); ZONES.push({x:P.x,z:P.z,r:6}); }
@@ -693,9 +696,21 @@ function buildWorld(){
     for(let row=0;row<22;row+=3) for(const x of [-13,13]){ runPt(FS,.77+.21*row/21,HP_LAT+x,V); const m=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.4,5).translate(0,1.2,0),om); m.position.copy(V); scene.add(m); }
     const s1=makeSign(['🛹 HALFPIPE','splnené pri 5500 followeroch'],'#1E5AA8','#fff',768,200); s1.scale.multiplyScalar(.32); runPt(FS,.05,HP_LAT,s1.position); s1.position.y+=18; scene.add(s1);
     const s2=makeSign(['⛷️ BOULOVÁ TRAŤ','splnené pri 5500 followeroch'],'#2B2D31','#fff',768,200); s2.scale.multiplyScalar(.32); runPt(FS,.76,HP_LAT,s2.position); s2.position.y+=14; scene.add(s2);
-    const s3=makeSign(['🎯 PRI 6000 FOLLOWEROCH','vlastné chatky followerov'],'#F26B21','#fff',768,200); s3.scale.multiplyScalar(.4); polar(990, R0.th+.12, s3.position); s3.position.y+=24; scene.add(s3);
+    const s3=makeSign(['🎯 PRI 6500 FOLLOWEROCH','čierna back-country zjazdovka + horúca čokoláda'],'#F26B21','#fff',768,200); s3.scale.multiplyScalar(.4); polar(990, R0.th+.12, s3.position); s3.position.y+=24; scene.add(s3);
     { const pl=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,24,6).translate(0,12,0),new THREE.MeshLambertMaterial({color:'#9aa3ad'})); polar(990, R0.th+.12, pl.position); scene.add(pl); }
     WORLD.hp={riders,hpY,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
+  // 🏠 chatky followerov (míľnik 6000)
+  if(CHATKY.length){ const owners=((DATA&&DATA.chatky)||[]).slice(0,CHATKY.length), woods=['#8a5a34','#7a4a2a','#9b6a3c','#6e4428'], roofs=['#3a2a20','#7B1E3A','#1F5F3A','#123A75'], L=col=>new THREE.MeshLambertMaterial({color:col}), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
+    CHATKY.forEach((c,i)=>{ const y=groundAt(c.x,c.z), G=new THREE.Group(); G.position.set(c.x,y,c.z); G.rotation.y=c.yaw; scene.add(G);
+      G.add(new THREE.Mesh(new THREE.BoxGeometry(9,5.5,8).translate(0,2.75,0),L(woods[i%4])));
+      const rf=new THREE.Mesh(new THREE.ConeGeometry(7.2,4.5,4).rotateY(Math.PI/4),L(roofs[i%4])); rf.scale.set(1,1,.86); rf.position.y=7.7; G.add(rf);
+      const cp=new THREE.Mesh(new THREE.ConeGeometry(7.3,4.5,4).rotateY(Math.PI/4),L('#f4f8fc')); cp.scale.set(1.02,.45,.88); cp.position.y=9.3; G.add(cp);
+      G.add(new THREE.Mesh(new THREE.BoxGeometry(1.8,3.2,.2).translate(0,1.6,4.05),L('#3a2a20')));
+      for(const x of [-2.9,2.9]) G.add(new THREE.Mesh(new THREE.BoxGeometry(1.8,1.6,.2).translate(x,3,4.05),glow));
+      G.add(new THREE.Mesh(new THREE.BoxGeometry(1,3,1).translate(2.4,9,-1.5),L('#5a5f66')));
+      const o=owners[i]; const s=makeSign([o?'🏠 @'+o:'🏠 VOĽNÁ – napíš „chcem chatku“'],o?'#ffffff':'#F26B21',o?'#222222':'#ffffff',640,96); s.scale.multiplyScalar(.15); s.position.set(c.x,y+14.5,c.z); scene.add(s); });
+    const m=CHATKY[Math.floor(CHATKY.length/2)], my=groundAt(m.x,m.z); const s=makeSign(['🏠 CHATKY FOLLOWEROV','splnené pri 6000 followeroch'],'#2E9E5B','#fff',768,200); s.scale.multiplyScalar(.3); s.position.set(m.x,my+27,m.z); scene.add(s);
+    WORLD.chatky={C:new THREE.Vector3(m.x,my,m.z)}; }
   // 👶 detský svah s pásom a klzákmi (míľnik 4500)
   { const P=SPOT.kids, th=Math.atan2(P.z,P.x), out=down(th), side=new THREE.Vector3(-out.z,0,out.x);
     const at=(a,b,o=new THREE.Vector3())=>{ const x=P.x+out.x*a+side.x*b, z=P.z+out.z*a+side.z*b; return o.set(x,groundAt(x,z),z); };
@@ -2129,6 +2144,7 @@ async function startReel2(SC){
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
   SH.hp=(t,T,k)=>{ const p=Pr(FS,.14+.06*k,HP_LAT+32,26), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
+  SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,46-8*k,15,Math.atan2(P.C.z,P.C.x)+.6,.14,t,5); };
   SH.moguls=(t,T,k)=>{ const p=Pr(FS,.8+.04*k,HP_LAT+18,10), q=Pr(FS,.93,HP_LAT,0); return {p,q}; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
   SH.evWide=(t,T,k)=>{ const E=WORLD.ev, d=E.EC.length(); return { p:E.EC.clone().addScaledVector(E.toO,d+1500-250*k).addScaledVector(E.side,500).setY(520-60*k), q:E.EC.clone().setY(560) }; };
