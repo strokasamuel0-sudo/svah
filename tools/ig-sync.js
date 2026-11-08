@@ -57,7 +57,7 @@
   const isSki = w => /^(lyz|liz|lyž|lxz|ski$|lyzi|lyzar)/.test(w);
   const isSled = w => /^(sank|sane$|sanki|snky|sáne)/.test(w);
   const isBob = w => /^bob(y|ov)?$/.test(w);
-  const ROLE = [[/rolb|ratrak|ratrac|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk|spravc\w* vlek|lift ?operat|starat o lanovk/, 'lift'], [/maskot/, 'mascot'], [/zasnez|starat o sn|obsluh\w* del/, 'snow'], [/detsk\w* (svah|vlek|instrukt|trener)|(instrukt|trener)\w* (pre |na )?det|(ucit|trenovat|ucila|ucil) deti|deti (budem )?(ucit|trenovat)/, 'kids'], [/trener|instrukt/, 'coach'], [/skut(r|er)|snowmobil/, 'skuter'], [/policaj|policist/, 'police']];
+  const ROLE = [[/rolb|ratrak|ratrac|rolovat|upravova|lobar/, 'ratrak'], [/horsk\w* sluzb|zachran/, 'rescue'], [/hotel|kuchar/, 'hotel'], [/vlekar|lanovkar|budk|spravc\w* vlek|lift ?operat|starat o lanovk/, 'lift'], [/maskot/, 'mascot'], [/zasnez|starat o sn|obsluh\w* del/, 'snow'], [/detsk\w* (svah|vlek|instrukt|trener)|(instrukt|trener)\w* (pre |na )?det|(ucit|trenovat|ucila|ucil) deti|deti (budem )?(ucit|trenovat)/, 'kids'], [/trener|instrukt/, 'coach'], [/skut(r|er)|snowmobil/, 'skuter'], [/policaj|policist/, 'police'], [/\bdj\b|didzej|dydzej|dydzey/, 'dj']];
   const FREE = /freest|snowpark|snow park|skok|skak|trik|jump|red ?bul|pasaz/;
 
   const per = new Map();
@@ -93,7 +93,7 @@
 
   // zostavenie
   const out = [{ u: OWNER, g: 'ski', t: 'lyziar', c: '#1E5AA8', k: 'Prvá stopa je moja. Kto ide so mnou?' }];
-  const roles = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [] };
+  const roles = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [], dj: [] };
   const notFollowing = [];
   for (const e of [...per.values()].sort((a, b) => a.ts - b.ts)) {
     if (!fol.has(e.u)) { notFollowing.push(e.u); continue; }
