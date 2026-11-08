@@ -70,3 +70,4 @@
 - GraphQL komentovanie: friendly name usePolarisCommentCreateMutation, doc_id 39617891021192323, premenné {data:{comment_text,media_id,replied_to_comment_fbid (string)},root_connections:[]} – POZOR, kľúč je replied_to_comment_fbid. Komentár s @menom cez UI: Enter otvorí našepkávač, klikni „Uverejniť“. Konkrétny koment otvorí /p/<kód>/c/<comment_id>/.
 - MÍĽNIKY bez zmeny: 6000 vlastné chatky followerov · 6500 čierna back-country zjazdovka + horúca čokoláda. Rebríček bez zmeny.
 - POSLEDNÝ_KOMENT_TS: 2026-11-07T23:45:00Z
+- 8. 11. ~01:20 (Samuel): NOVÁ ROLA dj 🎧 = DJ v après-ski bare (stoja za DJ pultom, max 3). roles.dj: lietajuci_blazon, miklovict. index+beta (ROLES, ROLE_TXT, roleLive) + tools/ig-sync.js rozpoznáva „dj/dídžej“. Ďalší záujemcovia o DJ z 6. 11.: matusm126, anetk.a.0, samosovcik (pri veľkom záujme striedanie).
