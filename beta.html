@@ -133,6 +133,9 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
+<!-- 📊 návštevnosť (GoatCounter, bez cookies) -->
+<script>window.goatcounter={no_onload:/reel=/.test(location.search)};</script>
+<script data-goatcounter="https://svahfollowerov.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <canvas id="c"></canvas>
@@ -1597,7 +1600,7 @@ function buildRacer(p){
   grp.scale.setScalar(SK); return grp;
 }
 function startGame(){
-  if(selected<0) return; const p=people[selected];
+  if(selected<0) return; const p=people[selected]; try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'hra-start',title:'Zjazd na čas – štart',event:true}); }catch(e){}
   const run = p.kind==='ski' && !p.run.ev ? p.run : RUNS[0];
   const nG=Math.max(5,Math.floor(run.len/120)), gates=[], grpG=new THREE.Group();
   const poleG=new THREE.CylinderGeometry(.09,.09,3.2,6).translate(0,1.6,0), flagG=new THREE.BoxGeometry(.05,1,1.3).translate(0,2.6,.65);
@@ -1620,7 +1623,7 @@ function endGame(){
   controls.enabled=true; if(selected>=0) select(selected); else showAll();
 }
 function finishGame(){
-  GAME.done=true; const tot=GAME.t+GAME.pen, key='svah_best_'+GAME.run.label;
+  try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'hra-ciel',title:'Zjazd na čas – cieľ',event:true}); }catch(e){} GAME.done=true; const tot=GAME.t+GAME.pen, key='svah_best_'+GAME.run.label;
   let best=null; try{ best=parseFloat(localStorage.getItem(key)); }catch(e){}
   const rec=!(best>0)||tot<best; if(rec){ try{ localStorage.setItem(key,String(tot)); }catch(e){} best=tot; }
   const missed=GAME.gates.filter(g=>g.hit===false).length;
@@ -1672,7 +1675,7 @@ function openRunPick(){ if(selected<0) return; const p=people[selected]; if(p.ki
   box.style.display='block'; }
 $('bRun').onclick=openRunPick;
 function pickRun(p,o){ const msg=o.id==='SP'?'svah snowpark':String(o.id).charAt(0)==='E'?'svah everest '+String(o.id).slice(1):'svah '+o.id;
-  try{ localStorage.setItem(RUN_KEY,JSON.stringify({u:p.u,r:o.id})); }catch(e){}
+  try{ localStorage.setItem(RUN_KEY,JSON.stringify({u:p.u,r:o.id})); }catch(e){} try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'vyber-svahu',title:'Výber zjazdovky',event:true}); }catch(e){}
   try{ navigator.clipboard&&navigator.clipboard.writeText(msg); }catch(e){}
   try{ sessionStorage.setItem('svah_run_msg',o.name+'|'+msg); }catch(e){}
   location.hash='lyziar-'+p.num; location.reload(); }
