@@ -2144,7 +2144,7 @@ async function startReel2(SC){
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
   SH.hp=(t,T,k)=>{ const p=Pr(FS,.14+.06*k,HP_LAT+32,26), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
-  SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,85-15*k,34,Math.atan2(P.C.z,P.C.x)+.25,.1,t,4); };
+  SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,46-8*k,15,Math.atan2(P.C.z,P.C.x)+.6,.14,t,5); };
   SH.moguls=(t,T,k)=>{ const p=Pr(FS,.8+.04*k,HP_LAT+18,10), q=Pr(FS,.93,HP_LAT,0); return {p,q}; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
   SH.evWide=(t,T,k)=>{ const E=WORLD.ev, d=E.EC.length(); return { p:E.EC.clone().addScaledVector(E.toO,d+1500-250*k).addScaledVector(E.side,500).setY(520-60*k), q:E.EC.clone().setY(560) }; };
