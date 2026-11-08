@@ -71,3 +71,13 @@
 - MÍĽNIKY bez zmeny: 6000 vlastné chatky followerov · 6500 čierna back-country zjazdovka + horúca čokoláda. Rebríček bez zmeny.
 - POSLEDNÝ_KOMENT_TS: 2026-11-07T23:45:00Z
 - 8. 11. ~01:20 (Samuel): NOVÁ ROLA dj 🎧 = DJ v après-ski bare (stoja za DJ pultom, max 3). roles.dj: lietajuci_blazon, miklovict. index+beta (ROLES, ROLE_TXT, roleLive) + tools/ig-sync.js rozpoznáva „dj/dídžej“. Ďalší záujemcovia o DJ z 6. 11.: matusm126, anetk.a.0, samosovcik (pri veľkom záujme striedanie).
+- 8. 11. ~21:55 NOČNÝ BEH (autopilot): ÚPLNÝ SYNC – 17 reelov, 3810 komentov vrátane odpovedí (307 nových od 7. 11. 23:45Z, 248 ľudí), CELÝ zoznam followerov 6124 (API /friendships/…/followers/ funguje).
+- Stav po sync: IG 6124 followerov · web NA SVAHU 6125 · 2327 lyžiarov · 113 rolí · čakáreň 3709 · 9 zjazdoviek (overené na webe). Odhlásení odstránení: 16 lyžiarov. +199 nových lyžiarov z komentov, 14 úprav, +389 do čakárne.
+- Nové roly: maskot luckaqq30 (biela líška, svetlomodrá), skúter klari_klarus, ratrak matu_s1212 + matiskokan, DJ alexej_k8, zasnežovanie jantolak_simon_, záchranár agent_misko. Ručne doplnené emoji/nejasné farby (patrikesasek dúhová, uhrin_alex fosforová, jirka_sirka216, sarka41685).
+- DM: prijatých 8 žiadostí, 13 odpovedí. Úpravy: vr__mtb čierna bunda + ružové lyže, flouwer.girls.offc fialová čiapka + boby, adr1._.nn biela bunda + sivé lyže + freestyle (chce byť vo videu), sarahrambalova kráľovsky modrá, lara_05608 lyže (ružová/fialová). _mates_3212 a adr1._.nn chcú byť označení v ďalšom videu. klarcii.privatek – vysvetlené, ako sa dostať na Everest.
+- „Daj follow" odpovede na komenty: 7 (14.matus, niky1234547, anna_official202, dz1.dzi.11, emmahrenkova, lau_6_lau, jakub_vysocky).
+- 🎉 MÍĽNIK 6000 SPLNENÝ: chatky followerov – paralelná relácia ich práve stavia v beta.html (CHATKY pozdĺž cesty k Everestu, data.chatky = majitelia; „chcem chatku" → zapísať do data.chatky). Majitelia: veruvibes1, k3vinz_z, kaja_skier, sttq.fx.matus, teneidam; ďalší záujemca rozova.mia (svetlomodrý domček).
+- MÍĽNIKY: 6500 čierna back-country zjazdovka + horúca čokoláda (platí) · 7000 ČIERNY SNOWPARK NA EVERESTE (klarcii.privatek) + bežkárska trať (klari_klarus) · 7500 hasičská stanica (_.dejw0._).
+- Nápady: predávačka punču v après-ski (t.pavlovaaa_), lekár v kabínke (jeankosturik), ovládať svojho lyžiara + nákupy za body (vitezslavlala), skokánky (marek_elias), bufet (natyxdanielova), 100-sedačková lanovka (jakub_vysocky).
+- Rebríček Zjazd na čas: 1. peterkos_os 31,00 · 2. valocka.a 31,01 · jakub._.siska 31,01 · _nati_12_ch_ 31,01 · martin._.vojta 31,01 · ancis.xoxo 31,01 (DM) · cafis_edits 31,02 · peterkos_os 31,03.
+- POSLEDNÝ_KOMENT_TS: 2026-11-08T20:39:56Z
