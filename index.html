@@ -231,7 +231,7 @@ const OWNER = window.FOLLOWERS[0];
 const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c.toUpperCase() : '';
 let rawSki = DATA && Array.isArray(DATA.skiers) ? DATA.skiers.slice() : window.FOLLOWERS.slice();
 if (!rawSki.length || rawSki[0].u !== OWNER.u) rawSki = [OWNER, ...rawSki.filter(p => p.u !== OWNER.u)];
-const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [] };
+const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [], dj: [] };
 const roleOf = new Map();
 if (DATA && DATA.roles) for (const key of Object.keys(ROLES)) for (const u of (DATA.roles[key] || [])) if (u !== OWNER.u && !roleOf.has(u)) { roleOf.set(u, key); ROLES[key].push(u); }
 const rawById = new Map(rawSki.map(p => [p.u, p]));
@@ -266,7 +266,7 @@ try{ const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null'); if(o&&o.u){ cons
 for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
   if (seenU.has(u)) continue; seenU.add(u);
   const src = rawById.get(u) || {}, h = hash(u), i = people.length;
-  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31',police:'#123A75',kids:'#E84A8A'})[key];
+  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31',police:'#123A75',kids:'#E84A8A',dj:'#111111'})[key];
   people.push({ kind:'role', role:key, u, k:src.k||'', i, num:i+1, ti:0, c, h, phase:((h>>>4)%997)/997 });
 }
 const NROLE = people.length;
@@ -429,6 +429,7 @@ const ROLE_TXT = {
   skuter:{ name:'jazdec na snežnom skútri', short:'🛷', icon:'🛷', place:'Pod svahom' },
   police:{ name:'policajt na svahu', short:'👮', icon:'👮', place:'Pri hoteli Svah' },
   kids:{ name:'inštruktor na detskom svahu', short:'👶', icon:'👶', place:'Detský svah' },
+  dj:{ name:'DJ v après-ski bare', short:'🎧', icon:'🎧', place:'Après-ski bar pri Evereste' },
 };
 function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
 function roleLive(p){
@@ -442,6 +443,7 @@ function roleLive(p){
   if (p.role==='skuter') return 'jazdí na snežnom skútri pod svahom';
   if (p.role==='police') return 'dohliada na poriadok na svahu 👮';
   if (p.role==='kids') return 'učí deti na detskom svahu 👶';
+  if (p.role==='dj') return 'hrá v après-ski bare pri Evereste 🎧';
   return 'máva lyžiarom pri hoteli';
 }
 
@@ -618,7 +620,9 @@ function buildWorld(){
       box(16,1.6,10,blk,24,.8,4); box(6,2.2,2,L('#2B2D31'),24,2.7,2); box(2.6,6.5,2.6,blk,16.5,4.8,1); box(2.6,6.5,2.6,blk,31.5,4.8,1);
       box(.6,13,.6,metal,15.5,6.5,-.6); box(.6,13,.6,metal,32.5,6.5,-.6); box(17.6,.7,.7,metal,24,13,-.6);
       const lights=[]; for(let k=0;k<7;k++){ const m=new THREE.Mesh(new THREE.SphereGeometry(.55,8,6),new THREE.MeshBasicMaterial({color:'#ff3c8a'})); m.position.set(17.5+k*2.2,12.3,-.6); G.add(m); lights.push(m); }
-      const dj=buildRacer({c:'#111111',ti:0,pcHex:'#111111',hcHex:'#F2B705'}); dj.position.set(24,1.6,.4); G.add(dj);
+      G.updateMatrixWorld(true); const djs=ROLES.dj.map(u=>people.find(q=>q.u===u&&q.kind==='role')).filter(Boolean).slice(0,3);
+      if(djs.length) djs.forEach((p,k)=>{ const Pd=G.localToWorld(new THREE.Vector3(24+(k-(djs.length-1)/2)*2.8,1.6,.6)); add(p.i,Pd,Math.atan2(toO.x,toO.z),false,p.c); });
+      else { const dj=buildRacer({c:'#111111',ti:0,pcHex:'#111111',hcHex:'#F2B705'}); dj.position.set(24,1.6,.4); G.add(dj); }
       const dj2=makeSign(['🎧 DJ'],'#111','#fff',256,96); dj2.scale.multiplyScalar(.22); dj2.position.set(24,15.2,-.6); G.add(dj2);
       ['🍕 PIZZA','LANGOŠ','🌭 HOT DOG','☕ PUNČ'].forEach((nm,k)=>{ const x=-31+k*10.5, z=12; box(8,4.4,6,wood,x,2.2,z); box(9,.7,7,k%2?red:blu,x,5.5,z); box(9.2,.3,7.2,snw,x,6,z); const t=makeSign([nm],'#ffffff','#222222',320,96); t.scale.multiplyScalar(.2); t.position.set(x,8.3,z); G.add(t); });
       for(let k=0;k<6;k++){ const x=-7+(k%3)*7.5, z=9+Math.floor(k/3)*7; box(4.4,.3,2.2,wood,x,2.1,z); box(.4,2,.4,dark,x,1,z); box(4.4,.3,.8,wood,x,1.2,z-1.8); box(4.4,.3,.8,wood,x,1.2,z+1.8); }
