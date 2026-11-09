@@ -82,3 +82,9 @@
 - Rebríček Zjazd na čas: 1. peterkos_os 31,00 · 2. valocka.a 31,01 · jakub._.siska 31,01 · _nati_12_ch_ 31,01 · martin._.vojta 31,01 · ancis.xoxo 31,01 (DM) · cafis_edits 31,02 · peterkos_os 31,03.
 - POSLEDNÝ_KOMENT_TS: 2026-11-08T20:39:56Z
 - 8. 11. ~22:05 (Samuelov večerný beh, beží súbežne s nočným autopilotom): IG 6128 → 🎉 MÍĽNIK 6000 SPLNENÝ – CHATKY FOLLOWEROV UŽ POSTAVENÉ v beta.html (CHATKY pozdĺž cesty k Everestu, max 24, názvy z data.chatky, voľné majú „napíš chcem chatku“; záber `chatky`). NESTAVAŤ ZNOVA. data.chatky: veruvibes1, k3vinz_z, kaja_skier, sttq.fx.matus, teneidam. Nový míľnik na tabuli: 6500 čierna back-country zjazdovka + horúca čokoláda. VIDEO o míľniku robí Samuelov beh. sarahrambalova bunda kráľovská modrá #2F5BD9 (DM). _mates_3212 sme sľúbili, že bude v dnešnom videu.
+
+## 9.11. 12:45 – VIRÁLNY REEL „Veľký závod followerov“ (Claude, na žiadosť Samuela)
+- Analýza: naše top reels = skoré novinkové/interaktívne (46,5k / 15,8k / 15,6k / 12,2k), posledné update-reels len 2–7k. Podobné virálne formáty: „marble race – komentuj meno a budeš v ďalšom závode“ (súťaž, napätie, víťaz až na konci, výzva na komentár).
+- Nový systém závodu v index/beta: SC.raceNames (prvý = víťaz, predbieha na konci), raceN, raceSeed, raceT0, raceDur; zábery raceStart, raceTop, raceChase, raceDuel, raceFinish. Pády náhodných pretekárov.
+- Reel: 150 followerov, víťaz @alffotbal (celý žltý), súper @peterkos_os; v závode aj valocka.a, adeleckaaa, tadiox_sk, _nati_12_ch_, adr1._.nn (sľub splnený). Hlas Brian. Zverejnené na IG svah.followerov.
+- CTA: daj follow + napíš farbu → budeš v ďalšom závode. Ďalší závod: vybrať mená z nových komentov pod týmto reelom.
