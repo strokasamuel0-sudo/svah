@@ -726,9 +726,9 @@ function buildWorld(){
         new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.2).translate(-.12,.25,0),dm), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.2).translate(.12,.25,0),dm),
         new THREE.Mesh(new THREE.CylinderGeometry(.55,.5,.1,14).translate(0,.05,0),new THREE.MeshLambertMaterial({color:k%2?'#C8102E':'#1E5AA8'})));
       g.scale.setScalar(SK*.85); scene.add(g); list.push({g,ph:k/kcol.length,lane:-2+((k*7)%5)*3.2}); });
-    ROLES.kids.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; at(27,-6+k*3,V2); const C=at(0,0); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
+    const kins=[]; ROLES.kids.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; at(27,-6+k*3,V2); const C=at(0,0); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); const F=figs[figs.length-1]; F.mov=1; const kid=list[(k*3)%list.length]; kins.push({F,ph:kid.ph-.012,lane:kid.lane+1.6}); });
     const s=makeSign(['👶 DETSKÝ SVAH','splnené pri 4500 followeroch'],'#E84A8A','#fff',768,200); s.scale.multiplyScalar(.3); at(-36,0,s.position); s.position.y+=14; scene.add(s);
-    WORLD.kids={at,list,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
+    WORLD.kids={at,list,kins,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
   // 🛷 snežný skúter
   WORLD.skutre=[];
   ROLES.skuter.slice(0,12).forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return;
@@ -752,7 +752,7 @@ const _q=new THREE.Quaternion(), _s=new THREE.Vector3(), _e=new THREE.Euler();
 function placeFigs(t, all){
   const {figs,jm,rm}=WORLD;
   for (let k=0;k<figs.length;k++){
-    const f=figs[k]; if(!all && !f.bounce) continue;
+    const f=figs[k]; if(!all && !f.bounce && !f.mov) continue;
     let y=f.y, rz=0;
     if (f.bounce){ const ph=f.i*1.7; y+=Math.abs(Math.sin(t*4.2+ph))*.45; rz=Math.sin(t*2.1+ph)*.12; }
     _q.setFromEuler(_e.set(0,f.yaw,rz)); _s.setScalar(f.hide?0.0001:SK);
@@ -803,7 +803,10 @@ function updateWorld(t, now){
   if (WORLD.apres){ const P=WORLD.apres; for(const d of P.dancers){ d.g.position.y=Math.abs(Math.sin(t*5+d.ph))*.9; d.g.rotation.y=Math.PI+.4*Math.sin(t*2+d.ph); } P.lights.forEach((l,i)=>l.material.color.setHSL((t*.3+i/7)%1,1,.55)); }
   if (WORLD.hp){ const Hh=WORLD.hp; for(const r of Hh.riders){ const u=(t*.018+r.ph)%1, s=.07+.42*u, ph=t*1.25+r.ph*7, x=10.6*Math.sin(ph); runPt(FS,s,HP_LAT+x,Hh.v1); r.g.position.set(Hh.v1.x,Hh.v1.y+Hh.hpY(x)+.3,Hh.v1.z); runPt(FS,Math.min(.5,s+.008),HP_LAT+10.6*Math.sin(ph+.12),Hh.v2); r.g.lookAt(Hh.v2.x,Hh.v2.y+Hh.hpY(10.6*Math.sin(ph+.12))+.3,Hh.v2.z); r.g.rotateZ(-x/12*.8); } }
   if (WORLD.kids){ const K=WORLD.kids; for(const c of K.list){ const u=(t*.03+c.ph)%1; let a,b,up; if(u<.62){ a=25-55*(u/.62); b=-9; up=1; } else { const f=(u-.62)/.38; a=-30+55*f*f*(3-2*f); b=c.lane; up=0; }
-      K.at(a,b,K.v1); K.at(a+(up?-1:1),b,K.v2); c.g.position.copy(K.v1); c.g.position.y+=up?.3:.05; c.g.lookAt(K.v2.x,c.g.position.y,K.v2.z); c.g.children[5].visible=!up; } }
+      K.at(a,b,K.v1); K.at(a+(up?-1:1),b,K.v2); c.g.position.copy(K.v1); c.g.position.y+=up?.3:.05; c.g.lookAt(K.v2.x,c.g.position.y,K.v2.z); c.g.children[5].visible=!up; }
+    // 👶 inštruktori jazdia s deťmi (Aneta 9.11.)
+    for(const c of K.kins){ const u=(t*.03+c.ph+1)%1; let a,b,up; if(u<.62){ a=25-55*(u/.62); b=-7.6; up=1; } else { const f=(u-.62)/.38; a=-30+55*f*f*(3-2*f); b=c.lane; up=0; }
+      K.at(a,b,K.v1); K.at(a+(up?-1:1),b,K.v2); const F=c.F; F.x=K.v1.x; F.y=K.v1.y+(up?.3:.05); F.z=K.v1.z; F.yaw=Math.atan2(K.v2.x-K.v1.x,K.v2.z-K.v1.z); } }
   if (WORLD.sprays) for (let k=0;k<WORLD.sprays.length;k++){ const sp=WORLD.sprays[k]; sp.scale.setScalar(.92+.08*Math.sin(t*6+k)); sp.material.opacity=.42+.1*Math.sin(t*4+k*2); }
   if (WORLD.skutre) for (const sk of WORLD.skutre){ const a=(t*.12+sk.ph)%(Math.PI*2), th=R0.th-.05+.17*(.5+.5*Math.sin(a)), r=985+14*Math.cos(a*2);
     const th2=R0.th-.05+.17*(.5+.5*Math.sin(a+.01)), r2=985+14*Math.cos((a+.01)*2);
