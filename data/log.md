@@ -99,3 +99,11 @@
 - MÍĽNIKY: 6500 čierna back-country + horúca čokoláda (chýba 140) · 7000 čierny snowpark na Evereste + bežkárska trať · 7500 hasičská stanica (_.dejw0._, pýta už 2 dni) · 8000 VEĽKÁ CHATA pre všetkých lyžiarov (damianmarko10). Nápady: snowboardcross trať (michal.reisinger13), back-country inštruktór (olino35ko), skokanky (big_tomi_7).
 - VIDEO: reel dnes0911 „Chceli ste chatky? Máte celú osadu“ (chatky + komentáre misa_cz77/balwarestauracia/_r.majerech_, inštruktori, +156, cieľ 6500). Dnešné „ieľ video“ = závod 12:45.
 - POSLEDNÝ_KOMENT_TS: 2026-11-09T22:18:18Z
+
+## 9.11. ~23:30 – nočný autopilot (oneskorený, beží po Samuelovom behu)
+- ÚPLNÝ SYNC: 19 príspevkov, 4009 komentov vrátane odpovedí (219 od 8. 11. 20:40Z, nič nové po 22:09Z – všetko už spracoval Samuelov beh). IG 6373 followerov · web NA SVAHU 6362 · lyžiari 2480 · roly 122 · čakáreň 3835 (+1 _mat1sko_19) · chatky 62/84 · 10 zjazdoviek (overené na webe).
+- API zoznamu followerov znova zablokované po 4029 menách (vracia HTML). Noví followeri brané z najnovších 4029; follow komentujúcich overený cez friendships/show (31 áno, 7 nie). Odhlásení sa tentokrát NEKONTROLOVALI – skúsiť v ďalšom behu.
+- „Daj follow“ odpovede cez GraphQL (funguje, aj keď UI hlási chybu): 6 – naty_vojtillova_, filip_leo_markowski, emaviktoriamartinkova, michal.reisinger13, svorcovalivia, erik_strauch13 (všetci zo zoznamu NEODPÍSANÝCH – vybavené).
+- DM: žiadne nové žiadosti; 1 odpoveď (damianmarko10). Ostatné vlákna zodpovedané Samuelovým behom.
+- Míľniky a rebríček bez zmeny (6500 back-country + čokoláda · 7000 čierny snowpark Everest + bežky · 7500 hasiči · 8000 veľká chata).
+- POSLEDNÝ_KOMENT_TS: 2026-11-09T22:18:18Z
