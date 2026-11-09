@@ -33,7 +33,7 @@
     if (!r.ok) break; const j = await r.json();
     for (const u of j.users || []) followers.push(u.username);
     max = j.next_max_id; pages++; await sleep(800);
-  } while (max && pages < 100);
+  } while (max && pages < 400);
   const fol = new Set(followers);
 
   // parser
