@@ -368,7 +368,7 @@ ZONES.push({x:SPOT.kids.x, z:SPOT.kids.z, r:44});
 const KOTVA=[]; for(let k=0;k<=10;k++) KOTVA.push(runPt(FS,.03+.94*k/10,-(FS.LL+22),new THREE.Vector3()));
 KOTVA.forEach(P=>ZONES.push({x:P.x,z:P.z,r:7}));
 /* 🏠 chatky followerov (míľnik 6000) – pozdĺž cesty k Everestu */
-const CHATKY=[]; { const n=ROAD.length, big=ZONES.filter(z=>z.r>12); for(let k=10;k<n-3&&CHATKY.length<24;k+=3){ const A=ROAD[k], B=ROAD[k+1], dx=B.x-A.x, dz=B.z-A.z, L=Math.hypot(dx,dz)||1, sx=-dz/L, sz=dx/L, sg=CHATKY.length%2?1:-1, x=A.x+sx*22*sg, z=A.z+sz*22*sg;
+const CHATKY=[]; { const n=ROAD.length, big=ZONES.filter(z=>z.r>12); for(let q=20;q<2*(n-3)&&CHATKY.length<84;q+=3){ const k=q>>1; const A=ROAD[k], B=ROAD[k+1], dx=B.x-A.x, dz=B.z-A.z, L=Math.hypot(dx,dz)||1, sx=-dz/L, sz=dx/L, sg=q%2?1:-1, x=A.x+sx*22*sg, z=A.z+sz*22*sg;
   if(big.some(q=>(q.x-x)**2+(q.z-z)**2<(q.r+14)**2)) continue; if(CHATKY.some(c=>(c.x-x)**2+(c.z-z)**2<18*18)) continue; CHATKY.push({x,z,yaw:Math.atan2(-sx*sg,-sz*sg)}); } CHATKY.forEach(c=>ZONES.push({x:c.x,z:c.z,r:10})); }
 /* 🛹 halfpipe + boulová trať (míľnik 5500) */
 const HP_LAT=-95; for(let s=.04;s<=.98;s+=.03){ const P=runPt(FS,s,HP_LAT,new THREE.Vector3()); ZONES.push({x:P.x,z:P.z,r:25}); }
@@ -726,7 +726,7 @@ function buildWorld(){
         new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.2).translate(-.12,.25,0),dm), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.2).translate(.12,.25,0),dm),
         new THREE.Mesh(new THREE.CylinderGeometry(.55,.5,.1,14).translate(0,.05,0),new THREE.MeshLambertMaterial({color:k%2?'#C8102E':'#1E5AA8'})));
       g.scale.setScalar(SK*.85); scene.add(g); list.push({g,ph:k/kcol.length,lane:-2+((k*7)%5)*3.2}); });
-    const kins=[]; ROLES.kids.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; at(27,-6+k*3,V2); const C=at(0,0); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); const F=figs[figs.length-1]; F.mov=1; const kid=list[(k*3)%list.length]; kins.push({F,ph:kid.ph-.012,lane:kid.lane+1.6}); });
+    const kins=[]; ROLES.kids.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; at(27,-6+k*3,V2); const C=at(0,0); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); const F=figs[figs.length-1]; F.mov=1; F.k=figs.length-1; const kid=list[(k*3)%list.length]; kins.push({F,ph:kid.ph-.012,lane:kid.lane+1.6}); });
     const s=makeSign(['👶 DETSKÝ SVAH','splnené pri 4500 followeroch'],'#E84A8A','#fff',768,200); s.scale.multiplyScalar(.3); at(-36,0,s.position); s.position.y+=14; scene.add(s);
     WORLD.kids={at,list,kins,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
   // 🛷 snežný skúter
@@ -761,6 +761,7 @@ function placeFigs(t, all){
   }
   jm.instanceMatrix.needsUpdate=rm.instanceMatrix.needsUpdate=true;
 }
+function placeMov(){ const {figs,jm,rm}=WORLD; for(const c of WORLD.kids.kins){ const f=c.F; _q.setFromEuler(_e.set(0,f.yaw,0)); _s.setScalar(f.hide?0.0001:SK); M4.compose(V3.set(f.x,f.y,f.z),_q,_s); jm.setMatrixAt(f.k,M4); rm.setMatrixAt(f.k,M4); positions[f.i*3]=f.x; positions[f.i*3+1]=f.y+.25; positions[f.i*3+2]=f.z; } jm.instanceMatrix.needsUpdate=rm.instanceMatrix.needsUpdate=true; }
 let lastHud=-1, wFrame=0, needAll=false;
 const HP=new THREE.Vector3(), HQ=new THREE.Vector3();
 function updateWorld(t, now){
@@ -816,7 +817,7 @@ function updateWorld(t, now){
   if (WORLD.mascotArm) WORLD.mascotArm.rotation.z=.5+Math.sin(t*3)*.45;
   // tanec v čakárni len keď je kamera blízko
   const cd=camera.position.distanceTo(SPOT.crowd);
-  if (needAll){ needAll=false; placeFigs(t,true); } else if (cd<900 || wFrame<3) placeFigs(t,false);
+  if (needAll){ needAll=false; placeFigs(t,true); } else if (cd<900 || wFrame<3) placeFigs(t,false); else if (WORLD.kids&&WORLD.kids.kins.length) placeMov();
   // HUD raz za sekundu
   const sec=Math.floor(t);
   if (sec!==lastHud){ lastHud=sec; const L=localSec(t);
