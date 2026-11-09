@@ -88,3 +88,14 @@
 - Nový systém závodu v index/beta: SC.raceNames (prvý = víťaz, predbieha na konci), raceN, raceSeed, raceT0, raceDur; zábery raceStart, raceTop, raceChase, raceDuel, raceFinish. Pády náhodných pretekárov.
 - Reel: 150 followerov, víťaz @alffotbal (celý žltý), súper @peterkos_os; v závode aj valocka.a, adeleckaaa, tadiox_sk, _nati_12_ch_, adr1._.nn (sľub splnený). Hlas Brian. Zverejnené na IG svah.followerov.
 - CTA: daj follow + napíš farbu → budeš v ďalšom závode. Ďalší závod: vybrať mená z nových komentov pod týmto reelom.
+
+## 9.11. ~23:20 – Samuelov večerný beh (nočný autopilot dnes NEBEŽAL – pozastavený, device_absent)
+- IG 6360 followerov · lyžiari 2480 (+156) · čakáreň 3834 · roly 120 · odstránených 18 (unfollow). Pozor: API followerov vracia 25/stránku – treba ~260 strán (v tools/ig-sync.js limit 100 strán nestačí!).
+- 🏠 CHATKY rozšírené na osadu (max 84, obe strany cesty k Everestu): 62 majiteľov v data.chatky (55 nových „chcem chatku“ z komentov + vr__mtb, adr1._.nn z DM).
+- 👶 Inštruktori detského svahu (kids) už jazdia s deťmi (pás hore, svah dole) – žiadosť aneta.schwarzova (DM). Kód: WORLD.kids.kins + placeMov().
+- DM: prijaté 4 žiadosti (ondra_czlis, matej__________s, m.letkovaa, kry_1_bk), odpísané všetkým (aneta.schwarzova, vr__mtb freeride+Everest+chatka, lara_05608 zrušený omylom skúter → Everest, adr1._.nn chatka, _gaspierickaqaa_ bordová bunda+čierny snowboard, damianmarko10, sarahrambalova, _mates_3212, m.letkovaa čierna bunda+čierne lyže). lara_05608 NIE JE skúter (parser ju tam dáva z komentu – nevracať).
+- Rebríček Zjazd na čas: 1. peterkos_os 31,00 · ondra_czlis 31,00 (DM) · 2. valocka.a 31,01 · … · kry_1_bk 31,03 (DM).
+- „Daj follow“ odpovede: IG blokuje komentáre („Komentár sa nepodarilo uverejniť“). NEODPÍSANÉ nesledujúce žiadosti: naty_vojtillova_, filip_leo_markowski, emaviktoriamartinkova, michal.reisinger13, svorcovalivia, erik_strauch13 – skúsiť ďalší beh.
+- MÍĽNIKY: 6500 čierna back-country + horúca čokoláda (chýba 140) · 7000 čierny snowpark na Evereste + bežkárska trať · 7500 hasičská stanica (_.dejw0._, pýta už 2 dni) · 8000 VEĽKÁ CHATA pre všetkých lyžiarov (damianmarko10). Nápady: snowboardcross trať (michal.reisinger13), back-country inštruktór (olino35ko), skokanky (big_tomi_7).
+- VIDEO: reel dnes0911 „Chceli ste chatky? Máte celú osadu“ (chatky + komentáre misa_cz77/balwarestauracia/_r.majerech_, inštruktori, +156, cieľ 6500). Dnešné „ieľ video“ = závod 12:45.
+- POSLEDNÝ_KOMENT_TS: 2026-11-09T22:18:18Z
