@@ -107,3 +107,14 @@
 - DM: žiadne nové žiadosti; 1 odpoveď (damianmarko10). Ostatné vlákna zodpovedané Samuelovým behom.
 - Míľniky a rebríček bez zmeny (6500 back-country + čokoláda · 7000 čierny snowpark Everest + bežky · 7500 hasiči · 8000 veľká chata).
 - POSLEDNÝ_KOMENT_TS: 2026-11-09T22:18:18Z
+
+## 10.11. ~23:30 – 11.11. ~00:45 – Samuelov večerný beh
+- Sync: IG 6599 followerov (zoznam 6600 cez API), 3747 komentov, 177 nových od 9. 11. 22:18Z (132 ľudí s voľbou, 4 nesledujú: brunolangmaier, aneta_velkova, tomas.gubo, emax_x_x_x – „daj follow" NEODPÍSANÉ).
+- POZOR: prvý merge zhodil roles/chatky/waiting a 4041 ľudí bez komentu dal na svah (commit d992039) – OPRAVENÉ ďalším commitom z pôvodného súboru. Pri merge VŽDY zachovaj všetky kľúče (skiers, waiting, roles, notFollowing, chatky).
+- Stav: lyžiari 2551 (+83 z komentov, 36 úprav) · čakáreň 4004 (+263 noví bez komentu) · roly 121 · chatky 84/84 (+22, osada plná – ďalší záujemcovia o chatku sa už nezmestia, treba rozšíriť) · odhlásení: 12 lyžiarov, 11 z čakárne.
+- DM: cruisingwithtomkoo oranžová bunda + snowboard + chatka (odpísané). Ostatné vlákna zodpovedané. Žiadosti prázdne.
+- 🎉 MÍĽNIK 6500 SPLNENÝ a NASADENÝ (beta→index): čierna back-country lajna z vrcholu Everestu (tmavý pás, čierne stĺpy s červenými vlajkami, 5 jazdcov), stánok ☕ HORÚCA ČOKOLÁDA dole, tabuľa „splnené pri 6500". Nová tabuľa 🎯 PRI 7000 – čierny snowpark na Evereste + bežecká trasa. Nové zábery reelu: bc, bcWide, cocoa, chatky2 (parametre window.__reelDbg.CP).
+- 🎬 REEL `dnes1011` ZVEREJNENÝ v štýle najsledovanejšieho reelu (DfT_bSTN891 „Jeden z vás chce: 8-sedačku" → „1000 = lanovka"): „Jeden z vás chcel:" + koment olino35ko → „6500 = BACK-COUNTRY" → čokoláda (kovi.cz) → +22 chatiek (slusnak_miso_9) → +226 followerov → „7000 = čierny snowpark na Evereste + bežky" s lištou 6599/7000 → výzva. Hlas Brian, 18,6 s, orezanie Pôvodné, ?den. ElevenLabs: ostáva ~45 kreditov – na ďalší hlas treba dobiť!
+- Ranné slideshow video „10.11 update" sa na profile neobjavilo (zrejme nezverejnené) – nevadí.
+- MÍĽNIKY: 7000 čierny snowpark Everest + bežkárska trať · 7500 hasičská stanica · 8000 veľká chata.
+- POSLEDNÝ_KOMENT_TS: 2026-11-10T20:52:36Z (1794343956)
