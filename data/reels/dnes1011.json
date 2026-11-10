@@ -1,0 +1,98 @@
+{
+ "align": "chair",
+ "boardN": 6599,
+ "goal": [
+  7000,
+  "Do snowparku na Evereste 🏂"
+ ],
+ "sents": [
+  "Jeden z vás chcel čiernu back-country zjazdovku.",
+  "Je tu! Pri šesťtisíc päťsto followeroch sme ju postavili.",
+  "A dole čaká stánok s horúcou čokoládou.",
+  "Pribudlo aj dvadsaťdva nových chatiek a osada je plná.",
+  "Za jeden deň dvestodvadsaťšesť nových followerov.",
+  "Pri sedemtisíc staviame čierny snowpark na Evereste a bežkársku trať.",
+  "Daj follow a napíš farbu bundy, budeš na svahu aj ty."
+ ],
+ "segs": [
+  {
+   "shot": "bcWide",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "olino35ko",
+    "back country čierna lajna 🖤"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "bc",
+   "cap": [
+    "*6500* = *BACK-COUNTRY* ⚫",
+    "splnené ✅"
+   ],
+   "y": 620
+  },
+  {
+   "shot": "cocoa",
+   "cap": [
+    "☕ *Horúca čokoláda*",
+    "hneď pod zjazdovkou"
+   ],
+   "y": 560,
+   "comment": [
+    "kovi.cz",
+    "horúca čokoláda ☕"
+   ],
+   "cy": 1350
+  },
+  {
+   "shot": "chatky",
+   "cap": [
+    "*+22* nových *chatiek* 🏠",
+    "osada je plná: 84/84"
+   ],
+   "y": 560,
+   "comment": [
+    "slusnak_miso_9",
+    "Ja si prosím chatku s vírivkou a najlepším výhľadom"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+226* followerov",
+    "za jeden deň 🔥"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*7000* = čierny *snowpark*",
+    "na Evereste + *bežky* 🎿"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "crane",
+   "cap": [
+    "Daj *follow* a napíš",
+    "*farbu bundy* 👇"
+   ],
+   "y": 900
+  }
+ ],
+ "end": [
+  [
+   "*6599* na svahu"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
