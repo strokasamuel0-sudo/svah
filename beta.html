@@ -2181,9 +2181,11 @@ async function startReel2(SC){
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
   SH.hp=(t,T,k)=>{ const p=Pr(FS,.14+.06*k,HP_LAT+32,26), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
-  SH.bc=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const g0=B.sk[0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-15).addScaledVector(sd,6).add(V(0,7,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
-  SH.bcWide=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const r=.3+.12*k; const p=B.bcPT(r,-230,140), q=B.bcPT(r+.25,0,0); return {p,q}; };
-  SH.cocoa=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const C=B.HC, a=Math.atan2(C.z,C.x)+.4+.15*t; return { p:V(C.x+Math.cos(a)*(34-6*k),C.y+11,C.z+Math.sin(a)*(34-6*k)), q:V(C.x,C.y+6,C.z) }; };
+  const CP=Object.assign({bcB:16,bcU:9,bcS:10,wR:.25,wO:-60,wH:260,wQ:.55,cR:58,cH:22,cA:.4},window.__cp||{}); window.__reelDbg={WORLD,V,camera,CP};
+  const evCl=p=>{ const E=WORLD.ev; if(E){ const h=E.hAt(p.x,p.z)+3; if(p.y<h) p.y=h; } return p; };
+  SH.bc=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const g0=B.sk[0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:evCl(P.clone().addScaledVector(d,-CP.bcB).addScaledVector(sd,CP.bcS).add(V(0,CP.bcU,0))), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
+  SH.bcWide=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const r=CP.wR+.08*k; return { p:evCl(B.bcPT(r,CP.wO,CP.wH)), q:B.bcPT(r+CP.wQ,0,0) }; };
+  SH.cocoa=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const C=B.HC, a=Math.atan2(C.z,C.x)+CP.cA+.12*t, R=CP.cR-8*k; return { p:evCl(V(C.x+Math.cos(a)*R,C.y+CP.cH,C.z+Math.sin(a)*R)), q:V(C.x,C.y+6,C.z) }; };
   SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,46-8*k,15,Math.atan2(P.C.z,P.C.x)+.6,.14,t,5); };
   SH.moguls=(t,T,k)=>{ const p=Pr(FS,.8+.04*k,HP_LAT+18,10), q=Pr(FS,.93,HP_LAT,0); return {p,q}; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
