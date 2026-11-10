@@ -696,9 +696,41 @@ function buildWorld(){
     for(let row=0;row<22;row+=3) for(const x of [-13,13]){ runPt(FS,.77+.21*row/21,HP_LAT+x,V); const m=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.4,5).translate(0,1.2,0),om); m.position.copy(V); scene.add(m); }
     const s1=makeSign(['🛹 HALFPIPE','splnené pri 5500 followeroch'],'#1E5AA8','#fff',768,200); s1.scale.multiplyScalar(.32); runPt(FS,.05,HP_LAT,s1.position); s1.position.y+=18; scene.add(s1);
     const s2=makeSign(['⛷️ BOULOVÁ TRAŤ','splnené pri 5500 followeroch'],'#2B2D31','#fff',768,200); s2.scale.multiplyScalar(.32); runPt(FS,.76,HP_LAT,s2.position); s2.position.y+=14; scene.add(s2);
-    const s3=makeSign(['🎯 PRI 6500 FOLLOWEROCH','čierna back-country zjazdovka + horúca čokoláda'],'#F26B21','#fff',768,200); s3.scale.multiplyScalar(.4); polar(990, R0.th+.12, s3.position); s3.position.y+=24; scene.add(s3);
+    const s3=makeSign(['🎯 PRI 7000 FOLLOWEROCH','čierny snowpark na Evereste + bežecká trasa'],'#F26B21','#fff',768,200); s3.scale.multiplyScalar(.4); polar(990, R0.th+.12, s3.position); s3.position.y+=24; scene.add(s3);
     { const pl=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,24,6).translate(0,12,0),new THREE.MeshLambertMaterial({color:'#9aa3ad'})); polar(990, R0.th+.12, pl.position); scene.add(pl); }
     WORLD.hp={riders,hpY,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
+  // ⛷️⚫ back-country zjazdovka + ☕ horúca čokoláda (míľnik 6500)
+  { const E=WORLD.ev;
+    const bcLat=(rho,off)=> -(180+300*rho)+90*Math.sin(rho*9+1.6)+(off||0);
+    const bcPT=(rho,off,bump)=>E.PT(rho, bcLat(rho,off), (bump||0)+.5+2*Math.abs(Math.sin(rho*17+(off||0)*.3)));
+    // narrow piste mesh (gray/rocky backcountry)
+    const pp2=[], ii2=[]; const BCN=100;
+    for(let k=0;k<=BCN;k++){ const rho=.04+.92*k/BCN;
+      for(const w of [-8,8]){ const P=bcPT(rho,w*1.4,.4); pp2.push(P.x,P.y,P.z); }
+      if(k<BCN){ const a=k*2; ii2.push(a,a+1,a+2, a+1,a+3,a+2); } }
+    const bcg=new THREE.BufferGeometry(); bcg.setAttribute('position',new THREE.Float32BufferAttribute(pp2,3)); bcg.setIndex(ii2); bcg.computeVertexNormals();
+    scene.add(new THREE.Mesh(bcg, new THREE.MeshLambertMaterial({color:'#5d6b7a',side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2})));
+    // black danger poles with red flags
+    const dkm=new THREE.MeshLambertMaterial({color:'#2B2D31'}), rkm=new THREE.MeshLambertMaterial({color:'#C8102E'});
+    for(let k=0;k<7;k++){ const rho=.08+.82*k/6, Pp=bcPT(rho,0); const pole=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,4.5,5).translate(0,2.25,0),dkm); pole.position.copy(Pp); scene.add(pole); const fl=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.4,.06).translate(1.2,.7,0),rkm); fl.position.set(Pp.x,Pp.y+3.4,Pp.z); scene.add(fl); }
+    // hot chocolate stand at the bottom of back-country
+    const HCA=E.PT(.88, bcLat(.88,22), 0); HCA.y=E.hAt(HCA.x,HCA.z)+.1;
+    { const G=new THREE.Group(); G.position.copy(HCA); const fwd=new THREE.Vector3(E.toO.x,0,E.toO.z);
+      G.lookAt(HCA.x+fwd.x*30,HCA.y,HCA.z+fwd.z*30);
+      const L=c=>new THREE.MeshLambertMaterial({color:c}), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
+      G.add(new THREE.Mesh(new THREE.BoxGeometry(10,6,8).translate(0,3,0),L('#8a5a34')));
+      const rf=new THREE.Mesh(new THREE.ConeGeometry(7.5,4,4).rotateY(Math.PI/4),L('#7B1E3A')); rf.position.set(0,7.5,0); G.add(rf);
+      const cp=new THREE.Mesh(new THREE.ConeGeometry(3.4,1.8,4).rotateY(Math.PI/4),L('#f4f8fc')); cp.position.set(0,8.65,0); G.add(cp);
+      G.add(new THREE.Mesh(new THREE.BoxGeometry(8,2.5,.2).translate(0,2.5,4.1),glow));
+      G.add(new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,5,6).translate(2.5,8.5,0),L('#5a5f66')));
+      for(const x of [-2.5,0,2.5]) G.add(new THREE.Mesh(new THREE.CylinderGeometry(.55,.45,1.4,8).translate(x,4.5,3.5),L('#6D4C41')));
+      const hs=makeSign(['☕ HORÚCA ČOKOLÁDA'],'#6D4C41','#f4f8fc',512,96); hs.scale.multiplyScalar(.18); hs.position.set(0,10,4.2); G.add(hs);
+      G.scale.setScalar(1.4); scene.add(G); }
+    // BC milestone sign
+    const bs=makeSign(['⛷️⚫ BACK-COUNTRY','splnené pri 6500 followeroch'],'#2B2D31','#f4f8fc',768,200); bs.scale.multiplyScalar(.42); const bsPt=bcPT(.12,0); bs.position.set(bsPt.x,bsPt.y+26,bsPt.z); scene.add(bs);
+    // BC background skiers (animated in update loop)
+    const bcSk=[]; for(let k=0;k<5;k++){ const src=skiers[(k*113+7)%Math.max(1,skiers.length)]||{c:'#2B2D31',ti:0}; const rg=buildRacer(src); scene.add(rg); bcSk.push({g:rg,ph:k/5,off:(k%3-1)*5}); }
+    WORLD.bc={HC:HCA,sk:bcSk,bcPT,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; }
   // 🏠 chatky followerov (míľnik 6000)
   if(CHATKY.length){ const owners=((DATA&&DATA.chatky)||[]).slice(0,CHATKY.length), woods=['#8a5a34','#7a4a2a','#9b6a3c','#6e4428'], roofs=['#3a2a20','#7B1E3A','#1F5F3A','#123A75'], L=col=>new THREE.MeshLambertMaterial({color:col}), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
     CHATKY.forEach((c,i)=>{ const y=groundAt(c.x,c.z), G=new THREE.Group(); G.position.set(c.x,y,c.z); G.rotation.y=c.yaw; scene.add(G);
@@ -802,6 +834,7 @@ function updateWorld(t, now){
     for(const s of E.sk){ if(s.v===undefined) continue; const u=(t*s.v+s.ph)%1, rho=.06+.88*u, tt=t+s.ph*50, P=E.pist(s.p,rho,tt), Q=E.pist(s.p,Math.min(.99,rho+.004),tt+.4); s.g.position.copy(P); s.g.lookAt(Q.x,P.y,Q.z); s.g.rotateX(.25); } }
   if (WORLD.kotva){ const K=WORLD.kotva; for(const h of K.hangers){ const d=K.L*(1-((t*2.6/K.L+h.ph)%1)); let i=1; while(i<K.lens.length-1&&K.lens[i]<d) i++; const f=(d-K.lens[i-1])/((K.lens[i]-K.lens[i-1])||1); h.g.position.copy(K.path[i-1]).lerp(K.path[i],f); h.g.rotation.y=Math.atan2(K.path[i].x-K.path[i-1].x,K.path[i].z-K.path[i-1].z); } }
   if (WORLD.apres){ const P=WORLD.apres; for(const d of P.dancers){ d.g.position.y=Math.abs(Math.sin(t*5+d.ph))*.9; d.g.rotation.y=Math.PI+.4*Math.sin(t*2+d.ph); } P.lights.forEach((l,i)=>l.material.color.setHSL((t*.3+i/7)%1,1,.55)); }
+  if (WORLD.bc){ const B=WORLD.bc; for(const q of B.sk){ const u=(t*.011+q.ph)%1, rho=.05+.88*u, w=t*1.2+q.ph*9; const P=B.bcPT(rho,q.off+7*Math.sin(w)), Q=B.bcPT(Math.min(.97,rho+.006),q.off+7*Math.sin(w+.1)); q.g.position.set(P.x,P.y+.2,P.z); q.g.lookAt(Q.x,P.y+.2,Q.z); q.g.rotateZ(-Math.cos(w)*.35); } }
   if (WORLD.hp){ const Hh=WORLD.hp; for(const r of Hh.riders){ const u=(t*.018+r.ph)%1, s=.07+.42*u, ph=t*1.25+r.ph*7, x=10.6*Math.sin(ph); runPt(FS,s,HP_LAT+x,Hh.v1); r.g.position.set(Hh.v1.x,Hh.v1.y+Hh.hpY(x)+.3,Hh.v1.z); runPt(FS,Math.min(.5,s+.008),HP_LAT+10.6*Math.sin(ph+.12),Hh.v2); r.g.lookAt(Hh.v2.x,Hh.v2.y+Hh.hpY(10.6*Math.sin(ph+.12))+.3,Hh.v2.z); r.g.rotateZ(-x/12*.8); } }
   if (WORLD.kids){ const K=WORLD.kids; for(const c of K.list){ const u=(t*.03+c.ph)%1; let a,b,up; if(u<.62){ a=25-55*(u/.62); b=-9; up=1; } else { const f=(u-.62)/.38; a=-30+55*f*f*(3-2*f); b=c.lane; up=0; }
       K.at(a,b,K.v1); K.at(a+(up?-1:1),b,K.v2); c.g.position.copy(K.v1); c.g.position.y+=up?.3:.05; c.g.lookAt(K.v2.x,c.g.position.y,K.v2.z); c.g.children[5].visible=!up; }
@@ -2148,6 +2181,12 @@ async function startReel2(SC){
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
   SH.hp=(t,T,k)=>{ const p=Pr(FS,.14+.06*k,HP_LAT+32,26), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
+  const CP=Object.assign({bcB:9,bcU:3.5,bcS:3.5,wD:560,wH:70,wT:.4,cR:95,cH:34,cA:1.2,hR:95,hH:38},window.__cp||{}); window.__reelDbg={WORLD,V,camera,CP};
+  const evCl=p=>{ const E=WORLD.ev; if(E){ const h=E.hAt(p.x,p.z)+3; if(p.y<h) p.y=h; } return p; };
+  SH.bc=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const g0=B.sk[0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:evCl(P.clone().addScaledVector(d,-CP.bcB).addScaledVector(sd,CP.bcS).add(V(0,CP.bcU,0))), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
+  SH.bcWide=(t,T,k)=>{ const B=WORLD.bc, E=WORLD.ev; if(!B) return SH.crowdWide(t,T,k); const A=B.bcPT(.05,0), Z=B.bcPT(.95,0), M=A.clone().lerp(Z,CP.wT); const d=Z.clone().sub(A); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); if(n.dot(M.clone().sub(E.EC).setY(0))<0) n.negate(); return { p:evCl(M.clone().addScaledVector(n,CP.wD-150*k).add(V(0,CP.wH,0))), q:M.clone().add(V(0,-40,0)) }; };
+  SH.chatky2=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,CP.hR-12*k,CP.hH,Math.atan2(P.C.z,P.C.x)+.6,.1,t,4); };
+  SH.cocoa=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const C=B.HC, a=Math.atan2(C.z,C.x)+CP.cA+.12*t, R=CP.cR-8*k; return { p:evCl(V(C.x+Math.cos(a)*R,C.y+CP.cH,C.z+Math.sin(a)*R)), q:V(C.x,C.y+6,C.z) }; };
   SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,46-8*k,15,Math.atan2(P.C.z,P.C.x)+.6,.14,t,5); };
   SH.moguls=(t,T,k)=>{ const p=Pr(FS,.8+.04*k,HP_LAT+18,10), q=Pr(FS,.93,HP_LAT,0); return {p,q}; };
   SH.skuter=(t,T,k)=>{ const sk=WORLD.skutre&&WORLD.skutre[0]; if(!sk) return SH.crowdWide(t,T,k); const P=sk.g.position.clone(); const d=V(0,0,1).applyQuaternion(sk.g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-13).addScaledVector(sd,6).add(V(0,5,0)), q:P.clone().add(V(0,1.5,0)) }; };
