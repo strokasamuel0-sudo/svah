@@ -720,7 +720,7 @@ function buildWorld(){
       const L=c=>new THREE.MeshLambertMaterial({color:c}), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
       G.add(new THREE.Mesh(new THREE.BoxGeometry(10,6,8).translate(0,3,0),L('#8a5a34')));
       const rf=new THREE.Mesh(new THREE.ConeGeometry(7.5,4,4).rotateY(Math.PI/4),L('#7B1E3A')); rf.position.set(0,7.5,0); G.add(rf);
-      const cp=new THREE.Mesh(new THREE.ConeGeometry(7.6,4,4).rotateY(Math.PI/4),L('#f4f8fc')); cp.scale.set(1.02,.35,1); cp.position.set(0,9,0); G.add(cp);
+      const cp=new THREE.Mesh(new THREE.ConeGeometry(3.4,1.8,4).rotateY(Math.PI/4),L('#f4f8fc')); cp.position.set(0,8.65,0); G.add(cp);
       G.add(new THREE.Mesh(new THREE.BoxGeometry(8,2.5,.2).translate(0,2.5,4.1),glow));
       G.add(new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,5,6).translate(2.5,8.5,0),L('#5a5f66')));
       for(const x of [-2.5,0,2.5]) G.add(new THREE.Mesh(new THREE.CylinderGeometry(.55,.45,1.4,8).translate(x,4.5,3.5),L('#6D4C41')));
@@ -2181,10 +2181,11 @@ async function startReel2(SC){
   SH.kids=(t,T,k)=>orbit(SPOT.kids,72,30,Math.atan2(SPOT.kids.z,SPOT.kids.x)+.35,.07,t,4);
   SH.apres=(t,T,k)=>{ const P=WORLD.apres; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,62-10*k,20,P.a0-.35,.12,t,7); };
   SH.hp=(t,T,k)=>{ const p=Pr(FS,.14+.06*k,HP_LAT+32,26), q=Pr(FS,.3,HP_LAT,2); return {p,q}; };
-  const CP=Object.assign({bcB:16,bcU:9,bcS:10,wR:.25,wO:-60,wH:260,wQ:.55,cR:58,cH:22,cA:.4},window.__cp||{}); window.__reelDbg={WORLD,V,camera,CP};
+  const CP=Object.assign({bcB:9,bcU:3.5,bcS:3.5,wD:1150,wH:120,cR:95,cH:34,cA:1.2,hR:95,hH:38},window.__cp||{}); window.__reelDbg={WORLD,V,camera,CP};
   const evCl=p=>{ const E=WORLD.ev; if(E){ const h=E.hAt(p.x,p.z)+3; if(p.y<h) p.y=h; } return p; };
   SH.bc=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const g0=B.sk[0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:evCl(P.clone().addScaledVector(d,-CP.bcB).addScaledVector(sd,CP.bcS).add(V(0,CP.bcU,0))), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
-  SH.bcWide=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const r=CP.wR+.08*k; return { p:evCl(B.bcPT(r,CP.wO,CP.wH)), q:B.bcPT(r+CP.wQ,0,0) }; };
+  SH.bcWide=(t,T,k)=>{ const B=WORLD.bc, E=WORLD.ev; if(!B) return SH.crowdWide(t,T,k); const A=B.bcPT(.05,0), Z=B.bcPT(.95,0), M=A.clone().lerp(Z,.5); const d=Z.clone().sub(A); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); if(n.dot(M.clone().sub(E.EC).setY(0))<0) n.negate(); return { p:evCl(M.clone().addScaledVector(n,CP.wD-150*k).add(V(0,CP.wH,0))), q:M.clone().add(V(0,-40,0)) }; };
+  SH.chatky2=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,CP.hR-12*k,CP.hH,Math.atan2(P.C.z,P.C.x)+.6,.1,t,4); };
   SH.cocoa=(t,T,k)=>{ const B=WORLD.bc; if(!B) return SH.crowdWide(t,T,k); const C=B.HC, a=Math.atan2(C.z,C.x)+CP.cA+.12*t, R=CP.cR-8*k; return { p:evCl(V(C.x+Math.cos(a)*R,C.y+CP.cH,C.z+Math.sin(a)*R)), q:V(C.x,C.y+6,C.z) }; };
   SH.chatky=(t,T,k)=>{ const P=WORLD.chatky; if(!P) return SH.crowdWide(t,T,k); return orbit(P.C,46-8*k,15,Math.atan2(P.C.z,P.C.x)+.6,.14,t,5); };
   SH.moguls=(t,T,k)=>{ const p=Pr(FS,.8+.04*k,HP_LAT+18,10), q=Pr(FS,.93,HP_LAT,0); return {p,q}; };
