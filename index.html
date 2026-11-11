@@ -2081,6 +2081,7 @@ async function startReel2(SC){
   const voiceBlob=await dbGet(SC.voice);
   let voice=null;
   if(voiceBlob){ const ac=new OfflineAudioContext(2,SR,SR); voice=await ac.decodeAudioData(await voiceBlob.arrayBuffer()); }
+  if(!voice&&SC.silent){ voice=new AudioBuffer({length:Math.round(SR*SC.silent),sampleRate:SR,numberOfChannels:2}); }
   const VO=0.35, vDur=voice?voice.duration:22;
   const DUR=Math.ceil((VO+vDur+2.2)*FPS)/FPS;
   const LENS=SC.sents.map(s=>s.length);
@@ -2372,7 +2373,7 @@ async function startReel2(SC){
   say('Mixujem zvuk…');
   const nTot=Math.ceil(DUR*SR), oc=new OfflineAudioContext(2,nTot,SR);
   const music=oc.createGain(); music.connect(oc.destination);
-  music.gain.setValueAtTime(1,0); music.gain.linearRampToValueAtTime(0.5,VO+0.2); music.gain.setValueAtTime(0.5,VO+vDur); music.gain.linearRampToValueAtTime(1,VO+vDur+0.4); music.gain.setValueAtTime(1,DUR-1); music.gain.linearRampToValueAtTime(0,DUR);
+  music.gain.setValueAtTime(1,0); music.gain.linearRampToValueAtTime(0.5,VO+0.2); music.gain.setValueAtTime(0.5,VO+vDur); music.gain.linearRampToValueAtTime(1,VO+vDur+0.4); music.gain.setValueAtTime(1,DUR-1); music.gain.linearRampToValueAtTime(0,DUR); if(SC.silent){ music.gain.cancelScheduledValues(0); music.gain.setValueAtTime(1,0); music.gain.setValueAtTime(1,DUR-1); music.gain.linearRampToValueAtTime(0,DUR); }
   { const nb=oc.createBuffer(2,SR*2,SR); for(let c=0;c<2;c++){ const d=nb.getChannelData(c); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; }
     const ns=oc.createBufferSource(); ns.buffer=nb; ns.loop=true; const nf=oc.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=420; const ng=oc.createGain(); ng.gain.value=0.12; ns.connect(nf).connect(ng).connect(music); ns.start(0); }
   { const chords=[[261.63,329.63,392.0],[196.0,246.94,392.0],[220.0,261.63,329.63],[174.61,220.0,261.63]];
