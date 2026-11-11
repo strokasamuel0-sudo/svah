@@ -1,0 +1,98 @@
+{
+ "align": "cust",
+ "focus": "mihalova781",
+ "boardN": 6768,
+ "silent": 15,
+ "goal": [
+  7000,
+  "Do snowparku na Evereste 🏂"
+ ],
+ "sents": [
+  "Jeden z vás chcel chatu.",
+  "Osada je rozšírená, druhý rad.",
+  "Plus dvadsaťšesť majiteľov.",
+  "Sto tridsaťpäť nových lyžiarov dnes.",
+  "Sto šesťdesiatdeväť followerov.",
+  "Ešte dvestotridsaťdva a snowpark.",
+  "Skokanský mostík alebo lesná trať?"
+ ],
+ "segs": [
+  {
+   "shot": "chatky2",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "1kub.o",
+    "Môžem mať svoju chatu a červenú? 🏠"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "chatky2",
+   "cap": [
+    "Osada *ROZŠÍRENÁ* 🏠",
+    "*2. rad* chatiek"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "chatky",
+   "cap": [
+    "*+26* nových majiteľov",
+    "110 chatiek s menami 🏷️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "cust",
+   "cap": [
+    "*+135* nových lyžiarov",
+    "dnes na svahu ⛷️"
+   ],
+   "y": 560,
+   "ov": "custTag",
+   "comment": [
+    "mihalova781",
+    "Bunda baby ružová, čapica biela, lyže bledo fialové 💜"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+169* followerov",
+    "za jeden deň 🔥"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "Ešte *232*",
+    "a staviame *čierny snowpark* 🏂"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "crane",
+   "cap": [
+    "Ďalej *skokanský mostík* 🎿",
+    "alebo *lesná trať* 🌲?",
+    "Napíš do komentu 👇"
+   ],
+   "y": 860
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
