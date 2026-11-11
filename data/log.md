@@ -118,3 +118,15 @@
 - Ranné slideshow video „10.11 update" sa na profile neobjavilo (zrejme nezverejnené) – nevadí.
 - MÍĽNIKY: 7000 čierny snowpark Everest + bežkárska trať · 7500 hasičská stanica · 8000 veľká chata.
 - POSLEDNÝ_KOMENT_TS: 2026-11-10T20:52:36Z (1794343956)
+
+## 11.11. ~22:05 – 23:00 – Samuelov večerný beh
+- Sync (tools/ig-sync.js cez blob: script – IG CSP blokuje eval aj inline): IG 6768 followerov (+169 za deň), 3801 komentov z 21 reelov. Komentáre novšie ako minulý beh: 83 (ig-sync berie čas PRVÉHO komentu človeka, preto nové voľby starších komentujúcich treba dočítať zvlášť z API komentov – simiss._d, tondabendl, vladko_pilnik, matysekk111, nearavark).
+- followers.json (všetky kľúče zachované): lyžiari 2608 (+60 nové voľby, +75 čo komentovali skôr a medzitým dali follow, −18 odhlásení) · čakáreň 4115 (+134 noví, −7) · roly 126 (+vr__mtb vlekár na Evereste + čierna kukla – sľub z 10. 11. 22:32 nebol v dátach) · chatky 113 (+29: 25 čakateľov z 10. 11., 1kub.o, tondabendl, vladko_pilnik, matysekk111). ondra_czlis: neónovo zelený snowboard, modrá bunda, snowpark (sľub z DM doplnený).
+- DM: cruisingwithtomkoo (poďakovanie), aneta.schwarzova (nápad: lyžiarsky krúžok s deťmi na veľkom svahu – zapísané), vr__mtb, adr1._.nn (nápad: lesná zjazdovka so skokanskými mostíkmi – zapísané), prijatá žiadosť qlzb3ta._.3mq → ružová bunda + sánky ✅.
+- „Daj follow" (GraphQL usePolarisCommentSubmitMutation – zachytená z UI odpovede, REST /web/comments/add vracia 404): agro__adam, jonynolis, rejza_navra, tamara_drahosova, brunolangmaier, aneta_velkova, emax_x_x_x, misa.neqq. Nenájdené: teo.rosko, tomas.gubo.
+- 🆕 NOVINKA: OSADA ROZŠÍRENÁ – 2. rad chatiek (offset 46 za prvým radom), kapacita 168 (window.__nChatky), tabuľa „🏠 OSADA FOLLOWEROV · rozšírená · 2. rad chatiek". beta → index, bez chýb v konzole.
+- Reel engine: nový režim bez hlasu `SC.silent=<sekundy>` (tichá stopa, hudba na plnú hlasitosť, zábery podľa dĺžky viet v `sents`).
+- 🎬 REEL `dnes1111` ZVEREJNENÝ (bez hlasu – ElevenLabs má len 45 kreditov, treba dobiť): „Jeden z vás chcel:" + koment 1kub.o → Osada ROZŠÍRENÁ → +29 majiteľov / 113 chatiek → +135 lyžiarov (koment mihalova781) → +169 followerov → „Ešte 232 a staviame čierny snowpark" s lištou 6768/7000 → otázka „skokanský mostík alebo lesná trať?" do komentov. 17,6 s, Pôvodné, ?den.
+- Nápady z komentov: meteostanica/elektráreň na vrchole (mirko123_67), párty house (michal_rochl), pokojný kút + čierna strmá zjazdovka (lanovkarj), Gerlachovský štít (agro__adam), vedúci baru (matkooo_21), chatka so saunou/vírivkou, skokanský mostík (adr1._.nn, big_tomi_7, zasteraa_), lesná trať (adr1._.nn), krúžok detí (aneta.schwarzova).
+- MÍĽNIKY: 7000 čierny snowpark Everest + bežkárska trať (chýba 232) · 7500 hasičská stanica · 8000 veľká chata.
+- POSLEDNÝ_KOMENT_TS: 2026-11-11T21:22:19Z (1794432139)
