@@ -1,6 +1,5 @@
 {
- "align": "cust",
- "focus": "mihalova781",
+ "align": "chair",
  "boardN": 6768,
  "silent": 15,
  "goal": [
@@ -41,23 +40,25 @@
    "shot": "chatky",
    "cap": [
     "*+29* nových majiteľov",
-    "113 chatiek s menami 🏷️"
+    "113 chatiek s menami 🏠"
    ],
    "y": 560
   },
   {
-   "shot": "cust",
+   "shot": "tagCam",
    "cap": [
     "*+135* nových lyžiarov",
     "dnes na svahu ⛷️"
    ],
    "y": 560,
-   "ov": "custTag",
    "comment": [
     "mihalova781",
     "Bunda baby ružová, čapica biela, lyže bledo fialové 💜"
    ],
-   "cy": 1300
+   "cy": 1300,
+   "tag": "mihalova781",
+   "dist": 16,
+   "ang": 0.6
   },
   {
    "shot": "crowdWide",
