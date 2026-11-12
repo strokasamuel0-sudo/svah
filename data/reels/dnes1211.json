@@ -1,0 +1,94 @@
+{
+ "align": "chair",
+ "boardN": 6936,
+ "goal": [
+  7000,
+  "Do snowparku na Evereste 🏂"
+ ],
+ "sents": [
+  "Jeden z vás chcel skákať na skokanskom mostíku.",
+  "Tak sme ho postavili.",
+  "Štyria skokani už lietajú.",
+  "Plus päťdesiatjeden nových lyžiarov dnes.",
+  "Stošesťdesiatosem nových followerov.",
+  "Ešte šesťdesiatštyri a staviame snowpark.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
+ ],
+ "segs": [
+  {
+   "shot": "jumpTop",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "zasteraa_",
+    "Lyže a mohl bych skákat někde na skokankách? 🎿"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "jumpTop",
+   "cap": [
+    "*SKOKANSKÝ MOSTÍK* 🎿",
+    "je tu!"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "jump",
+   "cap": [
+    "Skokani už *lietajú* 🚀"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*+51* nových lyžiarov",
+    "dnes na svahu ⛷️"
+   ],
+   "y": 560,
+   "comment": [
+    "dnacova_natalia",
+    "Bunda: fialová, lyže: fialová 💜"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+168* followerov",
+    "za jeden deň 🔥"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "Ešte *64*",
+    "a staviame *čierny snowpark* 🏂"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "chatky2",
+   "cap": [
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇",
+    "prechádzame všetky komenty"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
