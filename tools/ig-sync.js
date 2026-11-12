@@ -66,6 +66,7 @@
     if (!c.u || c.u === OWNER) continue;
     const t = norm(c.t); const words = t.replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(Boolean);
     const e = per.get(c.u) || { u: c.u, ts: c.ts, texts: [] };
+    e.last = c.ts;
     e.texts.push(c.t.replace(/\s+/g, ' ').trim());
     for (const [re, role] of ROLE) if (re.test(t)) e.role = e.role || role;
     if (FREE.test(t)) e.f = 1;
@@ -109,6 +110,6 @@
   for (const list of Object.values(roles)) for (const u of list) inData.add(u);
   const waiting = followers.filter(u => !inData.has(u) && u !== OWNER).sort();
   const data = { updated: new Date().toISOString(), followers: followers.length, skiers: out, waiting, roles, notFollowing: notFollowing.length };
-  window.__svahData = data; window.__svahPer = per;
+  window.__svahData = data; window.__svahPer = per; window.__svahComments = comments;
   return { followers: followers.length, comments: comments.length, skiers: out.length, auto: out.filter(o => o.auto).length, freestyle: out.filter(o => o.f).length, waiting: waiting.length, roles: Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, v.length])), notFollowing: notFollowing.length };
 })();
