@@ -773,14 +773,14 @@ function buildWorld(){
     const orient=(o,rho,lat,dy)=>{ const P=SP(rho,lat,dy), Q=SP(rho+.01,lat,dy); o.position.copy(P); o.lookAt(Q); scene.add(o); return o; };
     const wedge=(w,len,h)=>{ const g=new THREE.BufferGeometry(); const v=[-w,0,0, w,0,0, -w,0,len, w,0,len, -w,h,len, w,h,len]; g.setAttribute('position',new THREE.Float32BufferAttribute(v,3)); g.setIndex([0,2,4, 1,5,3, 0,1,4, 1,5,4, 2,3,4, 3,5,4, 0,1,2, 1,3,2]); g.computeVertexNormals(); return g; };
     const KICK=[.5,.61,.72,.83];
-    KICK.forEach((r,k)=>{ const m=new THREE.Mesh(wedge(6,9,3.2),new THREE.MeshLambertMaterial({color:k%2?'#2B2D31':'#111317',side:THREE.DoubleSide})); orient(m,r,(k%2?-5:5),.4);
-      const lip=new THREE.Mesh(new THREE.BoxGeometry(12.2,.35,.5).translate(0,3.25,9),yel); orient(lip,r,(k%2?-5:5),.4); });
-    [.555,.665,.775].forEach((r,k)=>{ const g=new THREE.Group(); const rl=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,22).translate(0,2.2,11),k%2?red:blk); g.add(rl); for(const z of [2,20]) g.add(new THREE.Mesh(new THREE.BoxGeometry(.4,2.2,.4).translate(0,1.1,z),gry)); orient(g,r,(k%2?9:-9),.4); });
-    { const bx=new THREE.Mesh(new THREE.BoxGeometry(5,1.6,18).translate(0,.8,9),blk); orient(bx,.86,0,.4); }
+    KICK.forEach((r,k)=>{ const m=new THREE.Mesh(wedge(8,14,5.5),new THREE.MeshLambertMaterial({color:k%2?'#f4f8fc':'#dfe8f2',side:THREE.DoubleSide})); orient(m,r,(k%2?-5:5),.4);
+      const lip=new THREE.Mesh(new THREE.BoxGeometry(16.2,.5,.7).translate(0,5.6,14),yel); orient(lip,r,(k%2?-5:5),.4); });
+    [.555,.665,.775].forEach((r,k)=>{ const g=new THREE.Group(); const rl=new THREE.Mesh(new THREE.BoxGeometry(.8,.8,24).translate(0,2.6,12),k%2?red:yel); g.add(rl); for(const z of [2,22]) g.add(new THREE.Mesh(new THREE.BoxGeometry(.5,2.6,.5).translate(0,1.3,z),gry)); orient(g,r,(k%2?9:-9),.4); });
+    { const bx=new THREE.Mesh(new THREE.BoxGeometry(6,2,20).translate(0,1,10),yel); orient(bx,.86,0,.4); }
     for(let k=0;k<10;k++){ const r=R0s+(R1s-R0s)*k/9; for(const sg of [-1,1]){ const P=SP(r,sg*19,0); const fl=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.1,.05).translate(.9,3.6,0),k%2?red:blk); fl.position.copy(P); scene.add(fl); const pl=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,4.4,5).translate(0,2.2,0),gry); pl.position.copy(P); scene.add(pl); } }
     const sg=makeSign(['⚫🏂 ČIERNY SNOWPARK','splnené pri 7000 followeroch'],'#111317','#f4f8fc',768,200); sg.scale.multiplyScalar(.42); const sp0=SP(R0s-.02,0,0); sg.position.set(sp0.x,sp0.y+28,sp0.z); scene.add(sg);
     const rid=[]; for(let k=0;k<5;k++){ const src=skiers[(k*131+17)%Math.max(1,skiers.length)]||{c:'#111111'}; const g=buildRacer({...src,ti:k%2?1:0}); scene.add(g); rid.push({g,ph:k/5,lat:(k%3-1)*4}); }
-    const posAt=(u,lat,out)=>{ const rho=R0s+(R1s-R0s)*u; let hop=0; for(const kr of KICK){ const d=(rho-kr-.006)/.035; if(d>0&&d<1) hop=Math.max(hop,9*Math.sin(Math.PI*d)); } out.copy(SP(rho,lat,.7+hop)); return hop; };
+    const posAt=(u,lat,out)=>{ const rho=R0s+(R1s-R0s)*u; let hop=0; for(const kr of KICK){ const d=(rho-kr-.006)/.035; if(d>0&&d<1) hop=Math.max(hop,13*Math.sin(Math.PI*d)); } out.copy(SP(rho,lat,.7+hop)); return hop; };
     WORLD.bsp={rid,posAt,SP,R0s,R1s,KICK,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; window.__bsp=true; }
   // 🎿 bežkárska trať (míľnik 7000)
   { const hA=(x,z)=>WORLD.ev.hAt(x,z), N=160, V=new THREE.Vector3();
@@ -2256,7 +2256,7 @@ async function startReel2(SC){
   const gCl=p=>{ const h=groundAt(p.x,p.z)+3; if(p.y<h) p.y=h; return p; };
   SH.bsp=(t,T,k)=>{ const S=WORLD.bsp; if(!S) return SH.evWide(t,T,k); const r=(CP.sbR||.5)+.16*k; return { p:evCl(S.SP(r,CP.sbL||-40,CP.sbH||22)), q:S.SP(r+(CP.sbT||.1),0,0) }; };
   SH.bspWide=(t,T,k)=>{ const S=WORLD.bsp; if(!S) return SH.evWide(t,T,k); return { p:evCl(S.SP((CP.swR||.98)-.04*k,CP.swL||30,CP.swH||28)), q:S.SP(CP.swT||.68,0,CP.swQ||0) }; };
-  SH.xc=(t,T,k)=>{ const C=XC.C, a=(CP.xA||2.2)+.1*t, R=(CP.xR||150)-30*k; const p=V(C.x+Math.cos(a)*R,0,C.z+Math.sin(a)*R); p.y=WORLD.ev.hAt(p.x,p.z)+(CP.xH||260); return { p, q:V(C.x,WORLD.ev.hAt(C.x,C.z)+2,C.z) }; };
+  SH.xc=(t,T,k)=>{ const X=WORLD.xc, u=(CP.xU0||.3)+.04*k, P=XC.at(u,CP.xO||-55), Q=XC.at(u+(CP.xT||.07),0); P.y=X.hA(P.x,P.z)+(CP.xH||32); Q.y=X.hA(Q.x,Q.z); return { p:P, q:Q }; };
   SH.xcRide=(t,T,k)=>{ const X=WORLD.xc; if(!X) return SH.xc(t,T,k); const g0=X.xs[CP.xI||0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-(CP.xB||12)).addScaledVector(sd,CP.xS||.01).add(V(0,CP.xU||6,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
   SH.jump=(t,T,k)=>{ const J=WORLD.jump; if(!J) return SH.crowdWide(t,T,k); const M=J.lip.clone().lerp(J.L,CP.jM||.2); const d=J.L.clone().sub(J.lip); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); return { p:gCl(M.clone().addScaledVector(n,(CP.jD||20)-8*k).addScaledVector(d,(CP.jF||40)+10*k).add(V(0,CP.jH||4,0))), q:M.clone().add(V(0,CP.jQ||12,0)) }; };
   SH.jumpTop=(t,T,k)=>{ const J=WORLD.jump; if(!J) return SH.crowdWide(t,T,k); const d=J.L.clone().sub(J.T); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); return { p:J.T.clone().addScaledVector(d,-(CP.jtB||4)+8*k).addScaledVector(n,CP.jtS||10).add(V(0,CP.jtU||30,0)), q:J.lip.clone().lerp(J.L,CP.jtL||.3).add(V(0,CP.jtQ||0,0)) }; };
