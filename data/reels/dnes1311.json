@@ -1,19 +1,18 @@
 {
  "align": "chair",
  "boardN": 7236,
- "silent": 20,
  "goal": [
   7500,
   "Do hasičskej stanice 🚒"
  ],
  "sents": [
-  "Jeden z vás chcel snowpark na Evereste.",
-  "Sedemtisíc. Splnené.",
-  "A k tomu bežkárska trať.",
-  "Plus nových lyžiarov dnes.",
-  "Nových followerov za deň.",
-  "Pri sedemtisícpäťsto hasičská stanica.",
-  "Napíš farbu bundy pod hocijaké video."
+  "Jeden z vás chcel jazdiť v snowparku.",
+  "Sedemtisíc! Čierny snowpark na Evereste je hotový.",
+  "A k tomu bežkárska trať pod Everestom.",
+  "Plus šesťdesiatpäť nových lyžiarov dnes.",
+  "Dvestošesťdesiatšesť nových followerov za deň.",
+  "Ďalší cieľ je sedemtisícpäťsto. Hasičská stanica.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
  ],
  "segs": [
   {
@@ -23,8 +22,8 @@
    ],
    "y": 520,
    "comment": [
-    "x",
-    "snowpark na Evereste"
+    "ivetka_havlova",
+    "Můžu černé lyže, fialovou bundu a chci na snowpark ❤️🔥"
    ],
    "cy": 700
   },
@@ -47,15 +46,20 @@
   {
    "shot": "xcRide",
    "cap": [
-    "*+0* nových lyžiarov",
+    "*+65* nových lyžiarov",
     "dnes na svahu ⛷️"
    ],
-   "y": 560
+   "y": 560,
+   "comment": [
+    "kxjusqq",
+    "Růžový lyže a růžová bunda 💗"
+   ],
+   "cy": 1300
   },
   {
    "shot": "crowdWide",
    "cap": [
-    "*+0* followerov",
+    "*+266* followerov",
     "za jeden deň 🔥"
    ],
    "y": 820
@@ -72,7 +76,8 @@
    "shot": "chatky2",
    "cap": [
     "Napíš *farbu bundy*",
-    "pod *HOCIJAKÉ* video 👇"
+    "pod *HOCIJAKÉ* video 👇",
+    "prechádzame všetky komenty"
    ],
    "y": 820
   }
