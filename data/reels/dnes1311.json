@@ -1,0 +1,89 @@
+{
+ "align": "chair",
+ "boardN": 7236,
+ "silent": 20,
+ "goal": [
+  7500,
+  "Do hasičskej stanice 🚒"
+ ],
+ "sents": [
+  "Jeden z vás chcel snowpark na Evereste.",
+  "Sedemtisíc. Splnené.",
+  "A k tomu bežkárska trať.",
+  "Plus nových lyžiarov dnes.",
+  "Nových followerov za deň.",
+  "Pri sedemtisícpäťsto hasičská stanica.",
+  "Napíš farbu bundy pod hocijaké video."
+ ],
+ "segs": [
+  {
+   "shot": "bspWide",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "x",
+    "snowpark na Evereste"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "bsp",
+   "cap": [
+    "*7000* = *ČIERNY SNOWPARK* ⚫🏂",
+    "splnené ✅"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "xc",
+   "cap": [
+    "🎿 *Bežkárska trať*",
+    "pod Everestom"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "xcRide",
+   "cap": [
+    "*+0* nových lyžiarov",
+    "dnes na svahu ⛷️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+0* followerov",
+    "za jeden deň 🔥"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*7500* = 🚒 *hasičská stanica*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "chatky2",
+   "cap": [
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
