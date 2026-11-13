@@ -142,3 +142,16 @@
 - Nápady z komentov: krúžok/skupiny detí (aneta.schwarzova), manažér hotela (txmik.07), penzión (michal_srutek), požičovňa lyží (simon_cumpl), snežné skútre (2_stroke_kubik), prvý na Evereste (onlz_richardx), učiteľka v lyžiarskej škole (anisek_721), detský svah (vanes_simko), ratrak s lanom (zetor_z_lesa).
 - MÍĽNIKY: 7000 čierny snowpark Everest + bežkárska trať (chýba 30 – zajtra pravdepodobne splnené → postaviť + video „7000 = …") · 7500 hasičská stanica · 8000 veľká chata.
 - POSLEDNÝ_KOMENT_TS: 2026-11-12T20:20:53Z (1794514853)
+
+## 13.11. ~22:30 – 00:30 – Samuelov večerný beh
+- Chrome bol prihlásený ako @dalsia.cast → prepnuté na @svah.followerov cez „Prepnúť účty“ (bez hesla). IG 7236 followerov (+266 za deň).
+- DM: prijaté 3 žiadosti (ravixx__57 „svah everest 1“ → odpísané, nech to napíše ako KOMENT pod reel; patasss_sct a 2015lilborecka len zdieľané reely). Neprečítané: vr__mtb „Ok“, reakcia – bez odpovede.
+- Sync VŠETKÝCH komentov: 23 reelov, 3932 komentov; 103 komentov od 88 ľudí novších ako minulý beh. Voľby spracované RUČNE z najnovšieho komentu (parser mieša staré a nové voľby, napr. elzatablet16). Zoznam followerov API opäť utnutý (2583) → follow overený cez friendships/show.
+- followers.json (všetky kľúče zachované): lyžiari 2724 (+65) · čakáreň 4503 (+230) · roly 129 (+_benjamind_9 ratrak, +kikecik15_ detský inštruktor) · chatky 125 (+vikus_ka78, ferggy_cz, matt_eo._.4) · snowpark (f) pre matt_eo._.4, surkovalaura11, kata48312, proyn25, justsomeone5341, ivetka_havlova, dejvikolbabek.
+- „Daj follow“ (UI odpovede, permalink /p/KÓD/c/ID_KOMENTU/ + tlačidlo Uverejniť): sona_revtakova, _skrrrrerika_, andraskomisko, lindaszalaiova, matusseptak, dorca_songs, dejwi_dko, lili_troubilova, _.hubibi._; maximtomczak67ronaldo („dal som follow a nič“ – friendships/show hovorí, že nesleduje) → odpoveď nech skontroluje follow a napíše farbu.
+- 🎉 MÍĽNIK 7000 SPLNENÝ a NASADENÝ (beta→index): ⚫🏂 ČIERNY SNOWPARK na Evereste (pás vedľa lanovky, LAT=26 – ďalej od osi má hora hrbole a jazdci sa schovávali pod povrch!), 4 biele skoky so žltou hranou, 3 zábradlia, žltý box, vlajky, 5 jazdcov so skokmi a otočkami; 🎿 BEŽKÁRSKA TRAŤ – okruh pod Everestom (XC.at), stopy, kolíky, modrá brána, 8 bežkárov. Tabuľa 🎯 PRI 7500 – 🚒 hasičská stanica. Nové zábery: bspWide (zhora s tabuľou), bsp (jazdec, kamera podľa toO), xc, xcRide.
+- 🎬 REEL `dnes1311` ZVEREJNENÝ s hlasom (Brian, 27 s): „Jeden z vás chcel:“ + koment ivetka_havlova (snowpark) → „7000 = ČIERNY SNOWPARK splnené“ → bežkárska trať → +65 lyžiarov (koment kxjusqq) → +266 followerov → „7500 = 🚒 hasičská stanica“ (lišta 7236/7500) → výzva komentovať pod hocijaké video. Pôvodné, ?den.
+- Pozn.: Chrome raz na pár minút prestal odpovedať (ElevenLabs spadol na „client side error“) – po obnovení OK.
+- Nápady z komentov: vyhrievaný bazén (lili_troubilova), horské preteky áut a skútrov (petr.zana), VIP chatky pre inštruktorov + smeny inštruktora (kikecik15_), triky na zábradlí (dejvikolbabek), ťažké prekážky (kata48312, surkovalaura11), saltá (justsomeone5341), skokanský mostík pre seba (lady_gaga123467, lukasek_sekasek), fortnite lyže (samkopolc).
+- MÍĽNIKY: 7500 hasičská stanica (chýba 264) · 8000 veľká chata pre všetkých lyžiarov.
+- POSLEDNÝ_KOMENT_TS: 2026-11-13T21:39:54Z (1794605994)
