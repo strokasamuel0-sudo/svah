@@ -1,19 +1,18 @@
 {
  "align": "chair",
  "boardN": 7526,
- "silent": 20,
  "goal": [
   8000,
   "Do veľkej chaty 🏠"
  ],
  "sents": [
-  "Jeden z vás chcel hasičskú stanicu.",
-  "Sedemtisícpäťsto. Splnené.",
-  "Hasiči vyrážajú.",
-  "Nových lyžiarov.",
-  "Followerov.",
-  "Ďalej veľká chata.",
-  "Napíš farbu bundy."
+  "Jeden z vás chcel byť hasič.",
+  "Sedemtisícpäťsto! Hasičská stanica je hotová.",
+  "Hasiči vyrážajú. A traja z vás sú v tíme.",
+  "Plus osemdesiatdva nových lyžiarov.",
+  "Dvestodeväťdesiat nových followerov za dva dni.",
+  "Ďalší cieľ je osemtisíc. Veľká chata pre všetkých.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
  ],
  "segs": [
   {
@@ -23,8 +22,8 @@
    ],
    "y": 520,
    "comment": [
-    "x",
-    "hasičská stanica"
+    "evickahalmova",
+    "Já chci pracovat jako hasička 🚒"
    ],
    "cy": 700
   },
@@ -39,28 +38,37 @@
   {
    "shot": "fireTruck",
    "cap": [
-    "Hasiči *vyrážajú* 🚨"
+    "Hasiči *vyrážajú* 🚨",
+    "a *traja z vás* sú v tíme"
    ],
    "y": 560
   },
   {
    "shot": "slope2",
    "cap": [
-    "*+0* nových lyžiarov"
+    "*+82* nových lyžiarov",
+    "na svahu ⛷️"
    ],
-   "y": 560
+   "y": 560,
+   "comment": [
+    "zapletal_ma",
+    "Modrou bundu, zelené gatě, oranžové lyže a černou helmu 🎿"
+   ],
+   "cy": 1300
   },
   {
    "shot": "crowdWide",
    "cap": [
-    "*+0* followerov"
+    "*+290* followerov",
+    "za dva dni 🔥"
    ],
    "y": 820
   },
   {
    "shot": "evWide",
    "cap": [
-    "*8000* = 🏠 *veľká chata*"
+    "*8000* = 🏠 *VEĽKÁ CHATA*",
+    "pre všetkých lyžiarov"
    ],
    "y": 620,
    "ov": "goal"
@@ -68,7 +76,9 @@
   {
    "shot": "chatky2",
    "cap": [
-    "Napíš *farbu bundy*"
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇",
+    "prechádzame všetky komenty"
    ],
    "y": 820
   }
