@@ -1,19 +1,18 @@
 {
  "align": "chair",
- "boardN": 7917,
- "silent": 20,
+ "boardN": 7920,
  "goal": [
   8000,
   "Do veľkej chaty 🏠"
  ],
  "sents": [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g"
+  "Jeden z vás už druhý deň prosil o sánkarskú dráhu.",
+  "Tak je tu! A on je jej správca.",
+  "Plus sedemdesiatdva nových lyžiarov.",
+  "Tristodeväťdesiatštyri followerov za jeden deň.",
+  "Ešte osemdesiat a staviame veľkú chatu.",
+  "A potom pri deväťtisícpäťsto klzisko.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
  ],
  "segs": [
   {
@@ -23,58 +22,70 @@
    ],
    "y": 520,
    "comment": [
-    "x",
-    "sánkarská dráha"
+    "radioativniclovek",
+    "2. deň čo žiadam o sánkarskú dráhu a byť jej správcom 🛷"
    ],
    "cy": 700
   },
   {
    "shot": "sled",
    "cap": [
-    "🛷 *SÁNKARSKÁ DRÁHA*"
-   ],
-   "y": 560
-  },
-  {
-   "shot": "fire",
-   "cap": [
-    "x"
+    "🛷 *SÁNKARSKÁ DRÁHA* je tu!",
+    "a on je jej *správca* ✅"
    ],
    "y": 560
   },
   {
    "shot": "slope2",
    "cap": [
-    "x"
+    "*+72* nových lyžiarov",
+    "na svahu ⛷️"
    ],
-   "y": 560
+   "y": 560,
+   "comment": [
+    "krabsova.s",
+    "Fialová bunda a vínový snowboard 🏂"
+   ],
+   "cy": 1300
   },
   {
    "shot": "crowdWide",
    "cap": [
-    "x"
+    "*+394* followerov",
+    "za jeden deň 🔥"
    ],
    "y": 820
   },
   {
    "shot": "evWide",
    "cap": [
-    "x"
+    "Ešte *80*",
+    "a staviame *VEĽKÚ CHATU* 🏠"
    ],
    "y": 620,
    "ov": "goal"
   },
   {
+   "shot": "evWide2",
+   "cap": [
+    "Potom *9500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620
+  },
+  {
    "shot": "chatky2",
    "cap": [
-    "x"
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇",
+    "prechádzame všetky komenty"
    ],
    "y": 820
   }
  ],
  "end": [
   [
-   "x"
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
   ],
   [
    "svahfollowerov.online · odkaz v bio"
