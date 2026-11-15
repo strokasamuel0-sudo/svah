@@ -1,0 +1,85 @@
+{
+ "align": "chair",
+ "boardN": 7526,
+ "silent": 20,
+ "goal": [
+  8000,
+  "Do veľkej chaty 🏠"
+ ],
+ "sents": [
+  "Jeden z vás chcel hasičskú stanicu.",
+  "Sedemtisícpäťsto. Splnené.",
+  "Hasiči vyrážajú.",
+  "Nových lyžiarov.",
+  "Followerov.",
+  "Ďalej veľká chata.",
+  "Napíš farbu bundy."
+ ],
+ "segs": [
+  {
+   "shot": "fire",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "x",
+    "hasičská stanica"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "fire",
+   "cap": [
+    "*7500* = 🚒 *HASIČSKÁ STANICA*",
+    "splnené ✅"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "fireTruck",
+   "cap": [
+    "Hasiči *vyrážajú* 🚨"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*+0* nových lyžiarov"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*+0* followerov"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8000* = 🏠 *veľká chata*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "chatky2",
+   "cap": [
+    "Napíš *farbu bundy*"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
