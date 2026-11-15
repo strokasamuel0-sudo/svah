@@ -1,0 +1,83 @@
+{
+ "align": "chair",
+ "boardN": 7917,
+ "silent": 20,
+ "goal": [
+  8000,
+  "Do veľkej chaty 🏠"
+ ],
+ "sents": [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g"
+ ],
+ "segs": [
+  {
+   "shot": "sledTop",
+   "cap": [
+    "Jeden z vás *chcel*:"
+   ],
+   "y": 520,
+   "comment": [
+    "x",
+    "sánkarská dráha"
+   ],
+   "cy": 700
+  },
+  {
+   "shot": "sled",
+   "cap": [
+    "🛷 *SÁNKARSKÁ DRÁHA*"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "fire",
+   "cap": [
+    "x"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "x"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "x"
+   ],
+   "y": 820
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "x"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "chatky2",
+   "cap": [
+    "x"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "x"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
