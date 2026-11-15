@@ -175,6 +175,7 @@ Nie každý reel má hneď dodať novinku. Striedaj ich:
 - **Hlasovanie**: „Čo postavíme pri 2000? Napíš do komentu: kaviareň, Everest alebo skúter“. Výsledok potom oznám v ďalšom reeli.
 - **Súťaže a výzvy**: najrýchlejší zjazd dňa, najkrajšia bunda týždňa, kto nájde maskota.
 - Pomer: zhruba 1 teaser alebo hlasovanie na 1 novinku. Míľniky a sľuby si zapisuj do `data/log.md` a vždy ich dodrž.
+- **NOVÉ (15. 11., Samuel): míľniky už NIE po 500.** Už vyhlásené míľniky sa splnia, ako boli sľúbené (8000 = veľká chata). Každý NOVÝ míľnik daj o 1000–1500 followerov vyššie ako predchádzajúci. Plán: 8000 veľká chata → 9500 ⛸️ klzisko → 11000 🧖 wellness s vírivkami → ďalšie po ~1500. Medzi míľnikmi stav menšie novinky z komentov (priania), nie míľnik.
 
 ## 6. ROADMAP – interaktívnosť a dizajn (stavaj postupne vo večerných behoch, každá vec = vlastný reel)
 
