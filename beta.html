@@ -234,7 +234,7 @@ const OWNER = window.FOLLOWERS[0];
 const hexOk = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c.toUpperCase() : '';
 let rawSki = DATA && Array.isArray(DATA.skiers) ? DATA.skiers.slice() : window.FOLLOWERS.slice();
 if (!rawSki.length || rawSki[0].u !== OWNER.u) rawSki = [OWNER, ...rawSki.filter(p => p.u !== OWNER.u)];
-const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [], dj: [] };
+const ROLES = { ratrak: [], rescue: [], hotel: [], lift: [], mascot: [], snow: [], coach: [], skuter: [], police: [], kids: [], dj: [], fire: [] };
 const roleOf = new Map();
 if (DATA && DATA.roles) for (const key of Object.keys(ROLES)) for (const u of (DATA.roles[key] || [])) if (u !== OWNER.u && !roleOf.has(u)) { roleOf.set(u, key); ROLES[key].push(u); }
 const rawById = new Map(rawSki.map(p => [p.u, p]));
@@ -269,7 +269,7 @@ try{ const o=JSON.parse(localStorage.getItem(RUN_KEY)||'null'); if(o&&o.u){ cons
 for (const key of Object.keys(ROLES)) for (const u of ROLES[key]){
   if (seenU.has(u)) continue; seenU.add(u);
   const src = rawById.get(u) || {}, h = hash(u), i = people.length;
-  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31',police:'#123A75',kids:'#E84A8A',dj:'#111111'})[key];
+  const c = hexOk(src.c) || ({ratrak:'#F26B21',rescue:'#C8102E',hotel:'#F4F4F4',lift:'#1E5AA8',mascot:'#2E9E5B',snow:'#0FA3B1',coach:'#F2B705',skuter:'#2B2D31',police:'#123A75',kids:'#E84A8A',dj:'#111111',fire:'#1f2a44'})[key];
   people.push({ kind:'role', role:key, u, k:src.k||'', i, num:i+1, ti:0, c, h, phase:((h>>>4)%997)/997 });
 }
 const NROLE = people.length;
@@ -449,6 +449,7 @@ const ROLE_TXT = {
   police:{ name:'policajt na svahu', short:'👮', icon:'👮', place:'Pri hoteli Svah' },
   kids:{ name:'inštruktor na detskom svahu', short:'👶', icon:'👶', place:'Detský svah' },
   dj:{ name:'DJ v après-ski bare', short:'🎧', icon:'🎧', place:'Après-ski bar pri Evereste' },
+  fire:{ name:'hasič', short:'🚒', icon:'🚒', place:'Hasičská stanica' },
 };
 function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
 function roleLive(p){
@@ -810,7 +811,8 @@ function buildWorld(){
     for(const y of [10,16,22]) box(2.2,2.6,.3,glass,17.5,y,-4.9);
     const bell=new THREE.Mesh(new THREE.SphereGeometry(1.1,10,8),yel); bell.position.set(17.5,24.5,-4.6); G.add(bell);
     const hyd=new THREE.Group(); hyd.add(new THREE.Mesh(new THREE.CylinderGeometry(.5,.6,1.8,8).translate(0,.9,0),red), new THREE.Mesh(new THREE.SphereGeometry(.55,8,6).translate(0,1.9,0),red)); hyd.position.set(-17,0,10); G.add(hyd);
-    const crew=[]; for(let k=0;k<4;k++){ const g=buildRacer({c:'#1f2a44',ti:0,pcHex:'#1f2a44',hcHex:'#F2B705'}); g.position.set(-12+k*3.2,.6,11); g.rotation.y=0; G.add(g); crew.push(g); }
+    G.updateMatrixWorld(true); const fr=ROLES.fire.map(u=>people.find(q=>q.u===u&&q.kind==='role')).filter(Boolean).slice(0,8); fr.forEach((p,k)=>{ const Pw=G.localToWorld(new THREE.Vector3(-14+(k%4)*3.4,.6,11+Math.floor(k/4)*3.4)); add(p.i,Pw,Math.atan2(R.x-S.x,R.z-S.z),false,p.c); });
+    const crew=[]; for(let k=0;k<Math.max(1,4-fr.length);k++){ const g=buildRacer({c:'#1f2a44',ti:0,pcHex:'#1f2a44',hcHex:'#F2B705'}); g.position.set(4+k*3.2,.6,12); g.rotation.y=0; G.add(g); crew.push(g); }
     const mkTruck=()=>{ const t=new THREE.Group(); t.add(new THREE.Mesh(new THREE.BoxGeometry(3.2,3,7.5).translate(0,2.1,-1.2),red), new THREE.Mesh(new THREE.BoxGeometry(3.2,2.4,2.6).translate(0,1.8,3.6),red), new THREE.Mesh(new THREE.BoxGeometry(3,1.1,.2).translate(0,2.5,4.95),glass), new THREE.Mesh(new THREE.BoxGeometry(3.25,.35,7.6).translate(0,2.2,-1.2),wht), new THREE.Mesh(new THREE.BoxGeometry(.9,.35,7).translate(0,3.85,-1.2),gry));
       for(const z of [-3.6,-.4,3.4]) for(const x of [-1.55,1.55]){ const w=new THREE.Mesh(new THREE.CylinderGeometry(.6,.6,.4,10).rotateZ(Math.PI/2),dk); w.position.set(x,.6,z); t.add(w); }
       const lb=new THREE.Mesh(new THREE.BoxGeometry(2.2,.35,.5),new THREE.MeshBasicMaterial({color:'#2a6cff'})); lb.position.set(0,3.15,4.2); t.add(lb); t.scale.setScalar(1.5); t.userData.lb=lb; return t; };
