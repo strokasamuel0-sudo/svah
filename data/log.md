@@ -178,3 +178,16 @@
 - MÍĽNIKY: 8000 veľká chata (chýba 83 – zajtra pravdepodobne splnené → postaviť) · 9500 ⛸️ klzisko · 11000 🧖 wellness s vírivkami (nové pravidlo: míľniky po 1000–1500).
 - Rebríček Zjazd na čas: bez zmeny (1. peterkos_os 31,00 · ondra_czlis 31,00 · valocka.a 31,01 …).
 - POSLEDNÝ_KOMENT_TS: 2026-11-15T21:07:52Z (1794776872)
+
+## 15.11. ~22:00 – 23:45 – Samuelov večerný beh
+- 🆕 NOVÉ PRAVIDLO (Samuel): míľniky už NIE po 500. Vyhlásené sa splnia, ako boli sľúbené (8000 = veľká chata), každý ĎALŠÍ míľnik o 1000–1500 vyššie. Plán: 8000 🏠 veľká chata → 9500 ⛸️ klzisko → 11000 🧖 wellness s vírivkami. Zapísané v AUTOPILOT.md, tabuľa na svahu: „PRI 8000 · veľká chata · potom 9500 ⛸️ klzisko".
+- Míľnik 8000 ešte NESPLNENÝ: IG 7920 followerov (+394 za deň, chýba 80).
+- DM: Petr Vojtek (peterkos_os) chcel byť hasič namiesto ratraku → odpísané, nech napíše koment (a aj napísal → presunutý). Prijatá žiadosť ninka_strbova17 (fialová bunda, čierne nohavice, lyže) → odpísané, nech napíše koment pod reel.
+- Sync: 25 reelov (POZOR: stránka reelov pri scrollovaní zahadzuje najnovšie reely → kódy treba zbierať postupne, window.__codes), 3993 komentov, 180 nových od 120 ľudí. Zoznam followerov API vrátil 0 → follow overený cez friendships/show (115 ľudí); 26 ľudí bez overenia (nenašiel sa koment v API) nepridaných – skúsiť ďalší beh.
+- followers.json (všetky kľúče zachované): lyžiari 2878 (+72) · roly 155: police 7 (matyas.zaruba4, michal_srutek, andy_friess, maximtomczak67ronaldo, kop_cak, kristianpoki12…), rescue 26 (nikolhalmova, alicahlinkova, ynw_lil._.domisek, maxo.opatrny, samuelsauvik, pan.tondisek), fire 6 (+queen.8185270, qqq_skubicek.oficial, peterkos_os – vyradený z ratraku), mascot 4 (+namakana_m0lly, el1a_jandova), hotel +kai_ra2199 (kuchárka), skuter +gretusaaak, NOVÁ ROLA sled: radioativniclovek · chatky 133 (+marsalkova._m baby pink, stec4797).
+- „Daj follow": martinko__1234, bugaty_bro, k.stachurova, spiderman_76765, andrian_777_qxx, jakubmalina_, daevorian, flip_filip10, adamkvasnicak, vaclav91924, imczechskatertomas, cipi.bro, viki_nanana.
+- 🛷 NOVINKA (prianie z komentov, radioativniclovek „2. deň čo žiadam" + stellinka30): SÁNKARSKÁ DRÁHA – kľukatý ľadový žľab s klopenými zákrutami a červeno-bielymi mantinelmi, štartová búdka, 7 sánkarov na sánkach, správca (rola sled) pri štarte. Zábery sledTop, sled. beta → index, bez chýb.
+- 🎬 REEL `dnes1511b` ZVEREJNENÝ s hlasom (Brian, 25 s): „Jeden z vás chcel:" + koment radioativniclovek → SÁNKARSKÁ DRÁHA je tu, on je správca → +72 lyžiarov (koment krabsova.s) → +394 followerov → „Ešte 80 a staviame VEĽKÚ CHATU" (lišta 7920/8000) → „Potom 9500 = KLZISKO" → výzva. Pôvodné, ?den.
+- Nápady z komentov: policajná stanica (matyas.zaruba4, martinko__1234), reštaurácia (majko_44), heliport (tadeas_basketball_14), lezecké steny + nákupné centrum (matessrubar), stajne s koňmi (jojoamia), bar s vaječňákom (k.stachurova), občerstvenie (spiderman_76765), hotel Atrium (michal612262), súťažné svahy + rozhodca (pato_jan125culok), skibus (ten_autobusoveyyy_officialee), elektrikár / murár / provozovateľ (rôzni), vila (nikolhalmova), chata s čajom a čokoládou (ninus_ik12), korytnačka (kalisovama).
+- MÍĽNIKY: 8000 🏠 veľká chata (chýba 80) → 9500 ⛸️ klzisko → 11000 🧖 wellness.
+- POSLEDNÝ_KOMENT_TS: 2026-11-15T21:05:56Z (1794776756)
