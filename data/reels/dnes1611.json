@@ -1,0 +1,69 @@
+{
+ "align": "chair",
+ "boardN": 8199,
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ],
+ "sents": [
+  "Je nás vyše osemtisíc!",
+  "A sľúbili sme veľkú chatu.",
+  "Tak tu je. Veľká chata pre všetkých lyžiarov, s terasou a slnečníkmi.",
+  "Plus XX nových lyžiarov.",
+  "Ďalší cieľ: deväťtisícpäťsto followerov a postavíme klzisko.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
+ ],
+ "segs": [
+  {
+   "shot": "lodge",
+   "cap": [
+    "🎉 *8000* followerov!",
+    "sľúbili sme *VEĽKÚ CHATU*…"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "lodgeFront",
+   "cap": [
+    "🏠 *VEĽKÁ CHATA* je tu!",
+    "pre *všetkých* lyžiarov ☀️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*+XX* nových lyžiarov",
+    "na svahu ⛷️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "Ďalší cieľ: *9500*",
+    "= ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇",
+    "prechádzame všetky komenty"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
