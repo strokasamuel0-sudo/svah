@@ -1,0 +1,81 @@
+{
+ "align": "chair",
+ "boardN": 7920,
+ "silent": 22,
+ "sents": [
+  "Na svahu pribudla nová vec.",
+  "Kukly svah followerov v štyroch vtipných dizajnoch.",
+  "A k tomu limitované kúsky.",
+  "Kto si kúpi kuklu, jeho lyžiar bude na svahu žiariť.",
+  "Prvých desať dostane zlatého lyžiara s korunou a meno na tabuli.",
+  "Napíš kukla do komentu a pošleme ti info."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "img": "data/kukly/kukla-usmev.jpg",
+   "cap": [
+    "Nová vec na svahu 👀",
+    "*KUKLY* svah.followerov"
+   ],
+   "y": 1640
+  },
+  {
+   "shot": "crowdWide",
+   "img": [
+    "data/kukly/kukla-smiech.jpg",
+    "data/kukly/kukla-placuca.jpg",
+    "data/kukly/kukla-usmev-velky.jpg",
+    "data/kukly/kukla-usmev.jpg"
+   ],
+   "cap": [
+    "*4 dizajny* 😂😭😁🙂"
+   ],
+   "y": 1660
+  },
+  {
+   "shot": "crowdWide",
+   "img": [
+    "data/kukly/kukla-strojcek.jpg",
+    "data/kukly/kukla-zubata.jpg"
+   ],
+   "cap": [
+    "+ *limitky* 🔥"
+   ],
+   "y": 1660
+  },
+  {
+   "shot": "glow",
+   "cap": [
+    "Kúpiš kuklu =",
+    "✨ *ŽIARIACI lyžiar* na svahu"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "glowFront",
+   "cap": [
+    "*Prvých 10* = 👑 *ZLATÝ lyžiar*",
+    "+ meno na tabuli KUKLA CREW"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crew",
+   "cap": [
+    "Chceš kuklu? 👇",
+    "Napíš *KUKLA* do komentu"
+   ],
+   "y": 820
+  }
+ ],
+ "end": [
+  [
+   "Napíš *KUKLA* 👇",
+   "pošleme ti info"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
