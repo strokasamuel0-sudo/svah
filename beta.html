@@ -872,7 +872,7 @@ function buildWorld(){
     // dym z komína
     const smT=(()=>{ const cv=document.createElement('canvas'); cv.width=cv.height=128; const x=cv.getContext('2d'), gr=x.createRadialGradient(64,64,0,64,64,64); gr.addColorStop(0,'rgba(235,238,242,.8)'); gr.addColorStop(1,'rgba(235,238,242,0)'); x.fillStyle=gr; x.fillRect(0,0,128,128); return new THREE.CanvasTexture(cv); })();
     const chim=G.localToWorld(new THREE.Vector3(W/2-12,42,-4)), smoke=[]; for(let k=0;k<14;k++){ const m=new THREE.Sprite(new THREE.SpriteMaterial({map:smT,transparent:true,depthWrite:false})); scene.add(m); smoke.push({m,ph:k/14}); }
-    const s1=makeSign(['🏠 VEĽKÁ CHATA','pre všetkých lyžiarov · splnené pri 8000'],'#6D4C41','#fff',900,220); s1.scale.multiplyScalar(.42); s1.position.copy(G.localToWorld(new THREE.Vector3(0,48,0))); scene.add(s1);
+    const s1=makeSign(['🏠 VEĽKÁ CHATA','pre všetkých lyžiarov'],'#6D4C41','#fff',900,220); s1.scale.multiplyScalar(.42); s1.position.copy(G.localToWorld(new THREE.Vector3(0,48,0))); scene.add(s1);
     const s2=makeSign(['🏠 VEĽKÁ CHATA svah.followerov'],'#C8102E','#fff',900,120); s2.scale.multiplyScalar(.3); s2.position.copy(G.localToWorld(new THREE.Vector3(0,12.2,D/2+1.2))); scene.add(s2);
     WORLD.lodge={G,S:S.clone(),W,D,guests,smoke,chim,front:G.localToWorld(new THREE.Vector3(0,0,D/2+20)).clone()}; window.__lodge=true; }
   // ✨ žiariaci lyžiari v kukle (kukly svah.followerov – náhľad pre reel)
