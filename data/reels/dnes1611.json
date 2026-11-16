@@ -1,6 +1,6 @@
 {
  "align": "chair",
- "boardN": 8199,
+ "boardN": 8201,
  "goal": [
   9500,
   "Do klziska ⛸️"
@@ -9,7 +9,7 @@
   "Je nás vyše osemtisíc!",
   "A sľúbili sme veľkú chatu.",
   "Tak tu je. Veľká chata pre všetkých lyžiarov, s terasou a slnečníkmi.",
-  "Plus XX nových lyžiarov.",
+  "Plus stodvadsaťšesť nových lyžiarov.",
   "Ďalší cieľ: deväťtisícpäťsto followerov a postavíme klzisko.",
   "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
  ],
@@ -33,10 +33,15 @@
   {
    "shot": "slope2",
    "cap": [
-    "*+XX* nových lyžiarov",
+    "*+126* nových lyžiarov",
     "na svahu ⛷️"
    ],
-   "y": 560
+   "y": 560,
+   "comment": [
+    "eli_mega_secret",
+    "Já chci mít fialovou bundu a snowboard fialový 🏂 číslo 67"
+   ],
+   "cy": 1300
   },
   {
    "shot": "evWide",
