@@ -1,7 +1,6 @@
 {
  "align": "chair",
  "boardN": 7920,
- "silent": 22,
  "sents": [
   "Na svahu pribudla nová vec.",
   "Kukly svah followerov v štyroch vtipných dizajnoch.",
@@ -66,7 +65,7 @@
     "Chceš kuklu? 👇",
     "Napíš *KUKLA* do komentu"
    ],
-   "y": 820
+   "y": 1450
   }
  ],
  "end": [
