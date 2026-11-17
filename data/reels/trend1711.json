@@ -1,0 +1,72 @@
+{
+ "align": "chair",
+ "boardN": 8265,
+ "sents": [
+  "Vieš, koľko lyžiarskych stredísk je na svete?",
+  "Asi dvetisíc, v šesťdesiatich ôsmich krajinách.",
+  "Ale iba jedno postavili followeri.",
+  "Každý z vyše osemtisíc dvesto lyžiarov je skutočný človek, ktorý dal follow.",
+  "Hotel, Everest, snowpark, hasiči aj veľká chata. Všetko podľa vašich komentov.",
+  "Daj follow, napíš farbu bundy a zajtra tu jazdíš aj ty."
+ ],
+ "segs": [
+  {
+   "shot": "evWide2",
+   "cap": [
+    "Vieš, koľko *lyžiarskych",
+    "stredísk* je na svete? 🌍"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "cca *2000*",
+    "v *68* krajinách 🏔️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Ale iba *JEDNO*",
+    "postavili followeri 👀"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*8 265* lyžiarov",
+    "každý = *skutočný človek* 🫵"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "hotel · Everest · snowpark",
+    "hasiči · *veľká chata* 🏠",
+    "všetko z *vašich komentov* 💬"
+   ],
+   "y": 1380
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Daj *follow* 👇",
+    "a zajtra tu jazdíš *aj ty* ⛷️"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
