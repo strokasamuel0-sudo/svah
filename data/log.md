@@ -228,3 +228,14 @@
 - MÍĽNIKY: 9500 ⛸️ klzisko (chýba 1138) → 11000 🧖 wellness (správca macejkamatyas) → 12500 🛍️ obchodné centrum s požičovňou + herňa → NOVÝ 14000 👮 policajná stanica + 🍫 čokoládová reštika (michal_srutek, sara.elisova).
 - Rebríček Zjazd na čas: bez zmeny (1. peterkos_os 31,00 · ondra_czlis 31,00 · valocka.a 31,01 …).
 - POSLEDNÝ_KOMENT_TS: 2026-11-17T20:31:32Z (1794947492)
+
+## 17.11. ~21:50 – 23:00 – Samuelov večerný beh („urob to čo každý večer“)
+- DM: prijaté žiadosti, odpovede – takmer všetko KUKLA (cena 20 € / limitka 30 € + poštovné cca 2 €). Cenu dostali: Lenke Wieden, Máli (Strojček), Nina Simčáková, Matej Kakuta, ✮, Katka, Vladko Pilnik, Teodor Onder, Lukáš Dudoň, drengubiakmatyas, Romyk, Valocka.a. jakubiiskra si to rozmyslel → odpísané, nech napíše farbu pod reel (je v čakárni). Zmeny na svahu cez DM → „napíš to ako koment pod hocijaký reel“ (martinko, Marek Hoťko).
+- 🟡 KUKLA objednávky pre Samuela: l.lhotska – Veľký úsmev 20 € (adresa v DM) · misa_cz77 – Úsmev (adresa, chýba meno). Záujem: ondra_czlis, ema.prikopova (Zubatá); daniel371457, peterkos_os, Balwarestauracia, Máli (Strojček); petob10 (Veľký úsmev, koment).
+- Sync: 54 komentov (od 1794917176) → followers.json commit 8553348: lyžiari 3103 (+34, 6 úprav) · čakáreň 5261 · IG 8362.
+- 🌭 NOVINKA (beta→index): BUFET pri veľkej chate (polar 1015, R0.th+.10) – kiosk s pruhovanou markízou, pariace sa hrnce, rad 9 followerov; tabule „🌭 BUFET · punč · čokoláda · hranolky“, „predáva @knr.ziaciaknr · nápad: @spiderman_76765“. Zábery `bufet`, `bufetFront`.
+- 🎬 REELY: `trend1711` (popoludní – koľko stredísk je na svete → náš svah) a `dnes1711` (hlas Brian, 24,7 s: bufet → +34 lyžiarov → cieľ 9500 klzisko) – oba ZVEREJNENÉ.
+- Odpovede na komenty: 52 (všetky nové komenty; „už jazdíš“, nápady, kukla cena, „daj follow“ zdenkoo_). Na reeli kukly1 sa komenty v UI nenačítajú → cena poslaná ako 3 hlavné komenty s @: maxbzzn, eluskqqqq, maxo.opatrny, baru_rothovaa, jenda_48, barborka_skokanova, alex.hockey52, jirka_luska, eliskamelichercikova, nelca820, squirrel.8748266 (všetky čakajúce KUKLA odpovede vybavené).
+- Outreach strediskám: 15 poslaných 17.11. 00:15; zostáva 11 (harrachov, herlikovice, paseky, ramzova, drienica, čierny balog, skalka arena, jahodná, zuberec janovky, makov, bezovec) – poslať, keď Samuel povie.
+- MÍĽNIKY: 9500 ⛸️ klzisko (chýba 1138) → 11000 🧖 wellness → 12500 🛍️ obchodné centrum + požičovňa + herňa → 14000 👮 polícia + 🍫 čokoládovňa.
+- POSLEDNÝ_KOMENT_TS: 2026-11-17T20:31:32Z (1794947492)
