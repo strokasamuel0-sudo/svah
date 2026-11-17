@@ -387,6 +387,8 @@ const FIRE=(()=>{ const n=ROAD.length; let k0=Math.round(n*.3); const A=ROAD[k0]
   const off=window.__fireOff||88, S=new THREE.Vector3(A.x+nx*off,0,A.z+nz*off); return {k0,S,nx,nz,off}; })();
 /* 🏠 veľká chata pre všetkých lyžiarov (míľnik 8000) – za davom pod zjazdovkami */
 const LODGE=polar(window.__lodgeR||1078, R0.th+(window.__lodgeA||.075)); ZONES.push({x:LODGE.x,z:LODGE.z,r:50});
+/* 🌭 bufet / stánok s občerstvením (nápad spiderman_76765, 17.11.) */
+const BUFET=polar(1015, R0.th+.10); ZONES.push({x:BUFET.x,z:BUFET.z,r:18});
 ZONES.push({x:FIRE.S.x,z:FIRE.S.z,r:34}); for(let d=14;d<FIRE.off;d+=12) ZONES.push({x:ROAD[FIRE.k0].x+FIRE.nx*d,z:ROAD[FIRE.k0].z+FIRE.nz*d,r:9});
 /* 🛹 halfpipe + boulová trať (míľnik 5500) */
 const HP_LAT=-95; for(let s=.04;s<=.98;s+=.03){ const P=runPt(FS,s,HP_LAT,new THREE.Vector3()); ZONES.push({x:P.x,z:P.z,r:25}); }
@@ -875,6 +877,29 @@ function buildWorld(){
     const s1=makeSign(['🏠 VEĽKÁ CHATA','pre všetkých lyžiarov'],'#6D4C41','#fff',900,220); s1.scale.multiplyScalar(.42); s1.position.copy(G.localToWorld(new THREE.Vector3(0,48,0))); scene.add(s1);
     const s2=makeSign(['🏠 VEĽKÁ CHATA svah.followerov'],'#C8102E','#fff',900,120); s2.scale.multiplyScalar(.3); s2.position.copy(G.localToWorld(new THREE.Vector3(0,12.2,D/2+1.2))); scene.add(s2);
     WORLD.lodge={G,S:S.clone(),W,D,guests,smoke,chim,front:G.localToWorld(new THREE.Vector3(0,0,D/2+20)).clone()}; window.__lodge=true; }
+  // 🌭 bufet – punč, horúca čokoláda, hranolky (novinka 17.11.)
+  { const S=BUFET.clone(); S.y=groundAt(S.x,S.z); const G=new THREE.Group(); G.position.copy(S); G.lookAt(0,S.y,0); scene.add(G); G.updateMatrixWorld(true);
+    { let my=-1e9; const v=new THREE.Vector3(); for(let x=-10;x<=10;x+=4) for(let z=-6;z<=14;z+=4){ v.set(x,0,z); G.localToWorld(v); my=Math.max(my,groundAt(v.x,v.z)); } S.y=my-.3; G.position.y=S.y; }
+    const L=c=>new THREE.MeshLambertMaterial({color:c}), wood=L('#9a6a3e'), dwood=L('#5e3b22'), white=L('#f4f8fc'), red=L('#C8102E'), dk=L('#2b2d31'), glow=new THREE.MeshBasicMaterial({color:'#ffd27a'});
+    const box=(w,h,d,m,x,y,z,par)=>{ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m); o.position.set(x,y,z); (par||G).add(o); return o; };
+    box(16,8,10,dwood,0,-3.5,0);                 // podstava
+    box(14,6,8,wood,0,3.5,0);                    // stánok
+    box(14.4,1.2,3,wood,0,3.6,4.6);              // pult
+    box(12,3.2,.3,glow,0,4.8,4.05);              // svietiace okno
+    for(let i=0;i<8;i++){ const st=box(16/8,.5,6,i%2?white:red,-7+i*2+1,9.2,2.6); st.rotation.x=-.32; }  // pruhovaná markíza
+    box(15,.6,9,red,0,6.9,0);
+    // hrnce s parou + šálky na pulte
+    const potM=L('#8a9099'); for(const x of [-4,4]){ const p=new THREE.Mesh(new THREE.CylinderGeometry(1,1,1.4,12),potM); p.position.set(x,4.9,4.6); G.add(p); }
+    for(let i=0;i<5;i++){ const c=new THREE.Mesh(new THREE.CylinderGeometry(.32,.28,.6,8),i%2?red:white); c.position.set(-1.8+i*.9,4.5,5.2); G.add(c); }
+    const smT=(()=>{ const cv=document.createElement('canvas'); cv.width=cv.height=64; const x=cv.getContext('2d'), gr=x.createRadialGradient(32,32,0,32,32,32); gr.addColorStop(0,'rgba(255,255,255,.75)'); gr.addColorStop(1,'rgba(255,255,255,0)'); x.fillStyle=gr; x.fillRect(0,0,64,64); return new THREE.CanvasTexture(cv); })();
+    const steam=[]; for(const x of [-4,4]) for(let k=0;k<5;k++){ const m=new THREE.Sprite(new THREE.SpriteMaterial({map:smT,transparent:true,depthWrite:false})); scene.add(m); steam.push({m,o:G.localToWorld(new THREE.Vector3(x,5.8,4.6)).clone(),ph:k/5}); }
+    // predavač za pultom + rad followerov
+    const roleU=(typeof DATA!=='undefined'&&DATA&&DATA.roles&&(DATA.roles.hotel||[]).includes('knr.ziaciaknr'))?'knr.ziaciaknr':null;
+    
+    const queue=[]; for(let k=0;k<9;k++){ const src=skiers[(k*131+17)%Math.max(1,skiers.length)]||{c:'#1E5AA8'}; const g=buildRacer({...src,ti:0}); g.position.set(Math.sin(k*1.3)*1.5,.5,8+k*3.1); g.rotation.y=Math.PI+(k%3-1)*.3; G.add(g); queue.push({g,ph:k*.7}); }
+    const s1=makeSign(['🌭 BUFET','punč · čokoláda · hranolky'],'#C8102E','#fff',900,220); s1.scale.multiplyScalar(.14); s1.position.copy(G.localToWorld(new THREE.Vector3(0,14,0))); scene.add(s1);
+    const s2=makeSign([roleU?'predáva @'+roleU:'otvorené každý deň','nápad: @spiderman_76765'],'#6D4C41','#fff',900,200); s2.scale.multiplyScalar(.075); s2.position.copy(G.localToWorld(new THREE.Vector3(10,6,5))); scene.add(s2);
+    WORLD.bufet={G,S:S.clone(),steam,queue,front:G.localToWorld(new THREE.Vector3(0,0,14)).clone()}; window.__bufet=true; }
   // ✨ žiariaci lyžiari v kukle (kukly svah.followerov – náhľad pre reel)
   if(params.get('kukly')!==null || (params.get('script')||'').startsWith('kukly')){ const RUN=RUNS[0];
     const tex=(draw,w=256,h=256)=>{ const cv=document.createElement('canvas'); cv.width=w; cv.height=h; const x=cv.getContext('2d'); draw(x,w,h); const t=new THREE.CanvasTexture(cv); return t; };
@@ -887,11 +912,11 @@ function buildWorld(){
     const hY=haloT('rgba(255,250,200,1)','rgba(255,214,40,.55)'), hG=haloT('rgba(255,255,230,1)','rgba(255,170,0,.75)'), spark=haloT('rgba(255,255,255,1)','rgba(255,220,90,.7)');
     const crownT=tex((x)=>{ x.font='190px serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillText('👑',128,140); });
     const lab=(t1,c)=>tex((x,w,h)=>{ x.fillStyle=c; x.beginPath(); x.roundRect(8,40,w-16,h-80,40); x.fill(); x.fillStyle='#fff'; x.font='800 70px system-ui,Arial'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(t1,w/2,h/2+4); },512,256);
-    const GL=[]; const N=5;
-    for(let k=0;k<N;k++){ const vip=k===0; const g=buildRacer({c:vip?'#D4AF37':['#1E5AA8','#C8102E','#2B2D31','#7A3FB8'][k%4],ti:k%2,hcHex:'#F7D21A',scHex:vip?'#D4AF37':'#F2B705'}); g.traverse(m=>{ if(m.material){ m.material=m.material.clone(); m.material.emissive=new THREE.Color(m.material.color).multiplyScalar(vip?.85:.6); } }); scene.add(g); const lt=new THREE.PointLight(vip?0xffc23a:0xfff1a8,vip?3:2.2,28*SK/2); scene.add(lt);
-      const halo=sp(vip?hG:hY,(vip?9:7)*SK,true), face=sp(faceT(faces[k%4]),.55*SK,false), trail=[]; for(let j=0;j<22;j++) trail.push(sp(spark,(vip?1.4:1.1)*SK*(1-j/26),true));
+    const AD=(params.get('script')||'').startsWith('kuklyad'); const KN=['kukla-usmev-velky','kukla-smiech','kukla-strojcek','kukla-placuca','kukla-zubata','kukla-usmev']; const TL=new THREE.TextureLoader(); const GL=[]; const N=AD?6:5;
+    for(let k=0;k<N;k++){ const vip=!AD&&k===0; const g=buildRacer({c:vip?'#D4AF37':(AD?['#2B2D31','#1E5AA8','#C8102E','#2B2D31','#7A3FB8','#0FA3B1']:['#1E5AA8','#C8102E','#2B2D31','#7A3FB8'])[AD?k:k%4],ti:k%2,hcHex:'#F7D21A',scHex:vip?'#D4AF37':'#F2B705'}); g.traverse(m=>{ if(m.material){ m.material=m.material.clone(); m.material.emissive=new THREE.Color(m.material.color).multiplyScalar(vip?.85:.6); } }); scene.add(g); const lt=new THREE.PointLight(vip?0xffc23a:0xfff1a8,vip?3:2.2,28*SK/2); scene.add(lt);
+      const halo=sp(vip?hG:hY,(vip?9:(AD?4:7))*SK,true), face=AD?sp(TL.load('data/kukly/cut/'+KN[k]+'.png',t=>{t.colorSpace=THREE.SRGBColorSpace;}),1.12*SK,false):sp(faceT(faces[k%4]),.55*SK,false), trail=[]; for(let j=0;j<22;j++) trail.push(sp(spark,(vip?1.4:1.1)*SK*(1-j/26),true));
       const crown=vip?sp(crownT,.9*SK,false):null, tag=sp(lab(vip?'👑 TOP 10':'✨ KUKLA',vip?'#B8860B':'#F2B705'),1,false); tag.scale.set(1.5*SK,.75*SK,1); tag.visible=vip;
-      GL.push({g,lt,halo,face,trail,crown,tag,vip,ph:k/N,lat:(k%2?1:-1)*(4+3*k),hist:[]}); }
+      if(AD){ g.children.forEach(m=>{ if(m.position.y>=1.5) m.visible=false; }); halo.material.opacity=.35; trail.forEach(x=>x.visible=false); lt.intensity=.6; } GL.push({g,lt,halo,face,trail,crown,tag,vip,ad:AD,ph:AD?k*.018:k/N,lat:AD?[-9,-3,3,9,-6,6][k]:(k%2?1:-1)*(4+3*k),hist:[]}); }
     const sg=makeSign(['👑 KUKLA CREW','prvých 10 · zlatý žiariaci lyžiar + meno tu'],'#B8860B','#fff',900,220); sg.scale.multiplyScalar(.36); const sP=runPt(RUN,.985,-30,new THREE.Vector3()); sg.position.copy(sP).add(new THREE.Vector3(0,18,0)); scene.add(sg);
     WORLD.glow={GL,RUN,sign:sg,v1:new THREE.Vector3(),v2:new THREE.Vector3()}; window.__glow=true; }
   // 🏠 chatky followerov (míľnik 6000)
@@ -999,9 +1024,10 @@ function updateWorld(t, now){
   if (WORLD.apres){ const P=WORLD.apres; for(const d of P.dancers){ d.g.position.y=Math.abs(Math.sin(t*5+d.ph))*.9; d.g.rotation.y=Math.PI+.4*Math.sin(t*2+d.ph); } P.lights.forEach((l,i)=>l.material.color.setHSL((t*.3+i/7)%1,1,.55)); }
   if (WORLD.bsp){ const S=WORLD.bsp; for(const q of S.rid){ const u=(t*.018+q.ph)%1; q.u=u; const hop=S.posAt(u,q.lat,S.v1); S.posAt(Math.min(.999,u+.004),q.lat,S.v2); q.g.position.copy(S.v1); q.g.lookAt(S.v2.x,S.v1.y,S.v2.z); q.g.rotateY(hop>0?t*6:0); } }
   if (WORLD.glow){ const Q=WORLD.glow; for(const q of Q.GL){ const u=(t*.012+q.ph)%1, lat=q.lat+5*Math.sin(t*.9+q.ph*7); runPt(Q.RUN,u,lat,Q.v1); runPt(Q.RUN,Math.min(1,u+.004),lat+5*Math.cos(t*.9+q.ph*7)*.2,Q.v2); q.g.position.copy(Q.v1); q.g.lookAt(Q.v2.x,Q.v1.y,Q.v2.z); q.d=Q.v2.clone().sub(Q.v1).setY(0).normalize();
-      const hp=Q.v1.clone().add(new THREE.Vector3(0,1.6*SK,0)); q.face.position.copy(hp); q.halo.position.copy(Q.v1).add(new THREE.Vector3(0,1.1*SK,0)); q.lt.position.copy(Q.v1).add(new THREE.Vector3(0,2*SK,0)); q.halo.material.opacity=.75+.25*Math.sin(t*6+q.ph*9); if(q.crown) q.crown.position.copy(hp).add(new THREE.Vector3(0,.55*SK,0)); q.tag.position.copy(hp).add(new THREE.Vector3(0,1.25*SK,0));
+      const hp=Q.v1.clone().add(new THREE.Vector3(0,(q.ad?1.5:1.6)*SK,0)); q.face.position.copy(hp); q.halo.position.copy(Q.v1).add(new THREE.Vector3(0,1.1*SK,0)); q.lt.position.copy(Q.v1).add(new THREE.Vector3(0,2*SK,0)); q.halo.material.opacity=(q.ad?.3:1)*(.75+.25*Math.sin(t*6+q.ph*9)); if(q.crown) q.crown.position.copy(hp).add(new THREE.Vector3(0,.55*SK,0)); q.tag.position.copy(hp).add(new THREE.Vector3(0,1.25*SK,0));
       q.hist.unshift(Q.v1.clone().add(new THREE.Vector3(0,.8*SK,0))); if(q.hist.length>66) q.hist.pop(); q.trail.forEach((m,j)=>{ const h=q.hist[Math.min(q.hist.length-1,j*3)]; if(h) m.position.copy(h); m.material.opacity=(1-j/22)*(.6+.4*Math.sin(t*12+j)); }); } }
   if (WORLD.sled){ const Q=WORLD.sled; for(const q of Q.sl){ const u=(t*.022+q.ph)%1, bank=-Math.cos(u*Math.PI*5)*2.6; sledAt(u,bank,Q.v1); sledAt(Math.min(1,u+.006),bank,Q.v2); const cy=sledAt(u,0).y; const yb=cy+.25+Math.max(0,Math.abs(bank)-1.5)*.5; q.g.position.set(Q.v1.x,yb,Q.v1.z); q.g.lookAt(Q.v2.x,yb-(Q.v1.y-Q.v2.y),Q.v2.z); q.g.rotateZ(bank*.12); } }
+  if (WORLD.bufet){ const B=WORLD.bufet; for(const q of B.steam){ const u=(t*.35+q.ph)%1; q.m.position.set(q.o.x,q.o.y+u*5,q.o.z); q.m.scale.setScalar(1+u*3); q.m.material.opacity=.7*(1-u); } for(const q of B.queue){ q.g.position.y=.5+Math.max(0,Math.sin(t*2.5+q.ph))*.15; } }
   if (WORLD.lodge){ const Q=WORLD.lodge; for(const q of Q.smoke){ const u=(t*.12+q.ph)%1; q.m.position.set(Q.chim.x+u*14,Q.chim.y+u*30,Q.chim.z+u*6); q.m.scale.setScalar(4+u*16); q.m.material.opacity=.75*(1-u); } for(const q of Q.guests){ q.g.position.y=2.2+Math.max(0,Math.sin(t*3+q.ph*9))*.25; } }
   if (WORLD.fire){ const F=WORLD.fire, P=(t%48)/48, tr=F.truck, n=ROAD.length, K=Math.min(n-2,F.k0+40); let x,z,yaw=null, on=false;
     const roadAt=(f)=>{ const kf=F.k0+(K-F.k0)*f, i=Math.min(n-2,Math.floor(kf)), w=kf-i, A=ROAD[i], B=ROAD[i+1]; return [A.x+(B.x-A.x)*w, A.z+(B.z-A.z)*w, B.x-A.x, B.z-A.z]; };
@@ -2374,11 +2400,17 @@ async function startReel2(SC){
   SH.xcRide=(t,T,k)=>{ const X=WORLD.xc; if(!X) return SH.xc(t,T,k); const g0=X.xs[CP.xI||0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-(CP.xB||12)).addScaledVector(sd,CP.xS||.01).add(V(0,CP.xU||6,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
   SH.fire=(t,T,k)=>{ const F=WORLD.fire; if(!F) return SH.crowdWide(t,T,k); const C=F.S, R=ROAD[F.k0], a0=Math.atan2(R.z-C.z,R.x-C.x)+(CP.fA||.6), a=a0-.12*t*(CP.fW||1), Rr=(CP.fR||58)-10*k; const p=V(C.x+Math.cos(a)*Rr,0,C.z+Math.sin(a)*Rr); p.y=F.hA(p.x,p.z)+(CP.fH||32); return { p, q:C.clone().add(V(0,CP.fQ||10,0)) }; };
   SH.fireTruck=(t,T,k)=>{ const F=WORLD.fire; if(!F) return SH.crowdWide(t,T,k); const P=F.truck.position.clone(), d=V(Math.sin(F.truck.rotation.y),0,Math.cos(F.truck.rotation.y)), sd=V(-d.z,0,d.x); const p=P.clone().addScaledVector(d,CP.ftF||28).addScaledVector(sd,CP.ftS||12); p.y=F.hA(p.x,p.z)+(CP.ftU||7); return { p, q:P.clone().add(V(0,2.5,0)) }; };
+  SH.bufet=(t,T,k)=>{ const B=WORLD.bufet; if(!B) return SH.crowdWide(t,T,k); const C=B.S, a0=Math.atan2(-C.z,-C.x)+(CP.bA||.7), a=a0-(CP.bW||.25)*k, r=(CP.bR||46)-8*k; const p=V(C.x+Math.cos(a)*r,0,C.z+Math.sin(a)*r); p.y=Math.max(groundAt(p.x,p.z),C.y)+(CP.bH||16); return { p, q:C.clone().add(V(0,CP.bQ||5,0)) }; };
+  SH.bufetFront=(t,T,k)=>{ const B=WORLD.bufet; if(!B) return SH.crowdWide(t,T,k); const C=B.S, d=V(B.front.x-C.x,0,B.front.z-C.z).normalize(), sd=V(-d.z,0,d.x); const p=C.clone().addScaledVector(d,(CP.bfF||36)-6*k).addScaledVector(sd,(CP.bfS||-14)+8*k); p.y=C.y+(CP.bfU||9); return { p, q:C.clone().addScaledVector(d,3).add(V(0,CP.bfQ||5,0)) }; };
   SH.lodge=(t,T,k)=>{ const Q=WORLD.lodge; if(!Q) return SH.crowdWide(t,T,k); const C=Q.S, a0=Math.atan2(-C.z,-C.x)+(CP.lA||.5), a=a0-(CP.lW||.1)*t, r=(CP.lR||120)-14*k; const p=V(C.x+Math.cos(a)*r,0,C.z+Math.sin(a)*r); p.y=Math.max(groundAt(p.x,p.z),C.y)+(CP.lH||38); return { p, q:C.clone().add(V(0,CP.lQ||14,0)) }; };
   SH.lodgeFront=(t,T,k)=>{ const Q=WORLD.lodge; if(!Q) return SH.crowdWide(t,T,k); const C=Q.S, d=V(Q.front.x-C.x,0,Q.front.z-C.z).normalize(), sd=V(-d.z,0,d.x); const p=C.clone().addScaledVector(d,(CP.lfF||Q.D/2+50)).addScaledVector(sd,(CP.lfS||-30)+16*k); p.y=C.y+(CP.lfU||13)+3*k; return { p, q:C.clone().addScaledVector(d,CP.lfD||4).add(V(0,CP.lfQ||10,0)) }; };
   SH.sled=(t,T,k)=>{ const Q=WORLD.sled; if(!Q) return SH.crowdWide(t,T,k); const P=Q.sl[CP.slI||0].g.position.clone(), d=V(0,0,1).applyQuaternion(Q.sl[CP.slI||0].g.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); const p=P.clone().addScaledVector(d,-(CP.slB||16)).addScaledVector(sd,CP.slS||5); p.y=Math.max(p.y,groundAt(p.x,p.z))+(CP.slU||8); return { p, q:P.clone().addScaledVector(d,10).add(V(0,-1,0)) }; };
   SH.sledTop=(t,T,k)=>{ const A=sledAt(CP.stU||.02,CP.stL||-14), B=sledAt((CP.stT||.3)+.05*k,0); A.y+=CP.stH||16; return { p:A, q:B }; };
   SH.glow=(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const q=Q.GL[CP.gI==null?1:CP.gI], P=q.g.position.clone(), d=q.d||V(0,0,1), sd=V(-d.z,0,d.x); const p=P.clone().addScaledVector(d,CP.gF||-11).addScaledVector(sd,CP.gS||5); p.y=Math.max(p.y,height(Math.hypot(p.x,p.z),Math.atan2(p.z,p.x)))+(CP.gU||4.5); return { p, q:P.clone().addScaledVector(d,6).add(V(0,1.5,0)) }; };
+  { const KF=(i,F,S,U,orb)=>(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const q=Q.GL[i]||Q.GL[0], P=q.g.position.clone(), d=q.d||V(0,0,1), sd=V(-d.z,0,d.x); const a=orb?(k-.5)*orb:0, ca=Math.cos(a), sa=Math.sin(a); const dd=d.clone().multiplyScalar(ca).addScaledVector(sd,sa), ss=V(-dd.z,0,dd.x); const p=P.clone().addScaledVector(dd,F).addScaledVector(ss,S); p.y=Math.max(p.y,height(Math.hypot(p.x,p.z),Math.atan2(p.z,p.x)))+U; return { p, q:P.clone().add(V(0,1.45*SK,0)) }; };
+    for(let i=0;i<6;i++){ SH['kf'+i]=KF(i,5.2,-1.2,2.9,.9); SH['kw'+i]=KF(i,9,3.5,3.4,1.4); }
+    SH.kGroup=(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const C=V(0,0,0); Q.GL.forEach(q=>C.add(q.g.position)); C.multiplyScalar(1/Q.GL.length); const q=Q.GL[2], d=q.d||V(0,0,1), sd=V(-d.z,0,d.x); const p=C.clone().addScaledVector(d,26-8*k).addScaledVector(sd,-6+12*k); p.y=Math.max(p.y,height(Math.hypot(p.x,p.z),Math.atan2(p.z,p.x)))+7; return { p, q:C.clone().add(V(0,2,0)) }; };
+    SH.kTop=(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const C=V(0,0,0); Q.GL.forEach(q=>C.add(q.g.position)); C.multiplyScalar(1/Q.GL.length); const q=Q.GL[2], d=q.d||V(0,0,1); const p=C.clone().addScaledVector(d,-30+10*k); p.y+=34-8*k; return { p, q:C.clone().addScaledVector(d,8) }; }; }
   SH.glowFront=(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const q=Q.GL[CP.gI2||0], P=q.g.position.clone(), d=q.d||V(0,0,1), sd=V(-d.z,0,d.x); const p=P.clone().addScaledVector(d,CP.gF2||12).addScaledVector(sd,CP.gS2||-4); p.y=Math.max(p.y,height(Math.hypot(p.x,p.z),Math.atan2(p.z,p.x)))+(CP.gU2||3); return { p, q:P.clone().add(V(0,2.2,0)) }; };
   SH.crew=(t,T,k)=>{ const Q=WORLD.glow; if(!Q) return SH.crowdWide(t,T,k); const S=Q.sign.position.clone(), P=runPt(Q.RUN,CP.cwR||.85,CP.cwL||0,V()); P.y+=CP.cwU||26; return { p:P.lerp(S,.12*k), q:S.clone().add(V(0,-3,0)) }; };
   SH.jump=(t,T,k)=>{ const J=WORLD.jump; if(!J) return SH.crowdWide(t,T,k); const M=J.lip.clone().lerp(J.L,CP.jM||.2); const d=J.L.clone().sub(J.lip); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); return { p:gCl(M.clone().addScaledVector(n,(CP.jD||20)-8*k).addScaledVector(d,(CP.jF||40)+10*k).add(V(0,CP.jH||4,0))), q:M.clone().add(V(0,CP.jQ||12,0)) }; };
@@ -2559,7 +2591,7 @@ async function startReel2(SC){
     { let sg=0; for(let i=0;i<NS;i++) if(t>=bounds[i]) sg=i; const sx=SC.segs[sg]; if(sg<NSEG&&sx&&sx.img){ const arr=[].concat(sx.img), st=Math.max(0,t-bounds[sg]), dur=Math.max(.3,(bounds[sg+1]-bounds[sg])/arr.length), k=Math.min(arr.length-1,Math.floor(st/dur)), im=IMGS[arr[k]], lt=Math.min(1,(st-k*dur)/dur);
       if(im){ g.save(); g.filter='blur(30px) brightness(.5)'; const cs=Math.max(W/im.width,H2/im.height)*1.15; g.drawImage(im,(W-im.width*cs)/2,(H2-im.height*cs)/2,im.width*cs,im.height*cs); g.filter='none';
         const S=(sx.iw||960)*(1+.07*lt), x=(W-S)/2, y=(sx.iy||560)-(S-(sx.iw||960))/2, pop=Math.min(1,(st-k*dur)/.18); g.globalAlpha=pop; g.shadowColor='rgba(0,0,0,.45)'; g.shadowBlur=50; g.beginPath(); g.roundRect(x,y,S,S,46); g.fillStyle='#fff'; g.fill(); g.shadowBlur=0; g.clip(); g.drawImage(im,x,y,S,S); g.restore(); } } }
-    overlay(t,T);
+    if(params.get('clean')===null) overlay(t,T);
   }
   if(params.get('reel')==='preview'){
     cv2.style.cssText='position:fixed;left:50%;top:0;height:100vh;transform:translateX(-50%);z-index:40';
