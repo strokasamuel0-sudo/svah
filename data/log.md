@@ -217,3 +217,14 @@
 - MÍĽNIKY: 9500 ⛸️ klzisko (chýba 1228) → 11000 🧖 wellness s vírivkami (správca macejkamatyas) → NOVÝ 12500 🛍️ obchodné centrum s požičovňou + herňa pre deti (elodi_ee15, terka_stastkova, _c3rn1cky_).
 - Rebríček Zjazd na čas: bez zmeny (1. peterkos_os 31,00 · ondra_czlis 31,00 · valocka.a 31,01 …).
 - POSLEDNÝ_KOMENT_TS: 2026-11-17T12:06:16Z (1794917176)
+
+## 17.11. ~22:05 – 22:35 – nočný autopilot (bežal súbežne so Samuelovým večerným behom: bufet, reel dnes1711, sync +34)
+- ÚPLNÝ SYNC: 30 príspevkov, 5307 komentov vrátane odpovedí (4731 hlavných + 576 odpovedí); 61 komentov od 58 ľudí novších ako 17.11. 12:06Z. Follow všetkých 58 overený cez friendships/show (nesledujú 2: zdenkoo_ – prázdny koment, domcaaaa321). IG 8362 followerov. Zoznam followerov API = HTTP 429 → noví followeri bez komentu ani odhlásení sa tento beh NEKONTROLOVALI.
+- Takmer všetko už spracoval Samuelov večerný commit 8553348. Doplnené (commit 3ac45d9): denca8197 (dala follow po našej odpovedi → ružový snowboard), namakana_m0lly (čierna bunda + ružové lyže, zostáva maskot).
+- Stav: lyžiari 3104 · čakáreň 5261 · roly 161 · chatky 136 · web: NA SVAHU 8426, 12 zjazdoviek (overené).
+- „Daj follow“ odpoveď: 1 – domcaaaa321 (chce recepciu v hoteli). GraphQL mutácia doc 39617891021192323 dnes vrátila xig_comment_create:null a koment NEODIŠIEL → poslané cez UI (permalink /p/KÓD/c/ID/ + Odpovedať + Uverejniť).
+- DM: 3 odpovede – oficial_hotvath_ (prijatá žiadosť, nájde sa na svahu), evi_qq (Hotovo ✅ fialová bunda), jakubiskra (prijatá žiadosť, KUKLA → cena). Ostatné vlákna zodpovedal Samuelov beh.
+- Nápady z komentov: vlastná reštika/čokoládovňa „slzi11“ (sara.elisova), policajná stanica pre policajtov (michal_srutek – opakovane), ďalšie stredisko „Salamandra“ (ihringmatus), horský bike + skoky (ada._m5ko → bikepark, aj janik.na.kole).
+- MÍĽNIKY: 9500 ⛸️ klzisko (chýba 1138) → 11000 🧖 wellness (správca macejkamatyas) → 12500 🛍️ obchodné centrum s požičovňou + herňa → NOVÝ 14000 👮 policajná stanica + 🍫 čokoládová reštika (michal_srutek, sara.elisova).
+- Rebríček Zjazd na čas: bez zmeny (1. peterkos_os 31,00 · ondra_czlis 31,00 · valocka.a 31,01 …).
+- POSLEDNÝ_KOMENT_TS: 2026-11-17T20:31:32Z (1794947492)
