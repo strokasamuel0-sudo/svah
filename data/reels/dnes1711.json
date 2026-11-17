@@ -1,0 +1,80 @@
+{
+ "align": "chair",
+ "boardN": 8362,
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ],
+ "sents": [
+  "Jeden z vás už druhý deň prosil o bufet.",
+  "Tak tu je. Bufet s punčom, horúcou čokoládou a hranolkami.",
+  "A rad followerov už čaká.",
+  "Plus tridsaťštyri nových lyžiarov.",
+  "Je nás osemtisíc tristo a pri deväťtisícpäťsto staviame klzisko.",
+  "Napíš farbu bundy pod hocijaké video, prechádzame všetky komenty."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Jeden z vás chcel *BUFET* 🌭",
+    "už *2. deň*…"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "bufet",
+   "cap": [
+    "🌭 *BUFET* je tu!",
+    "punč · čokoláda · hranolky"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "bufetFront",
+   "cap": [
+    "a rad followerov",
+    "už *čaká* 😂"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*+34* nových lyžiarov ⛷️"
+   ],
+   "y": 560,
+   "comment": [
+    "vero_nikazahorcova",
+    "Světle žlutá bunda aj žluté lyže aj žlutá helma🌼🫶"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8362* followerov",
+    "pri *9500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Napíš *farbu bundy*",
+    "pod *HOCIJAKÉ* video 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
