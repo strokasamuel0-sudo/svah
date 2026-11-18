@@ -1,0 +1,23 @@
+{
+ "align": "chair",
+ "boardN": 8494,
+ "goal": [9500, "Do klziska ⛸️"],
+ "sents": [
+  "Chceli ste bikepark na snehu? Tak ho staviame!",
+  "Viacerí z vás písali, že chcú bicykel a bike park.",
+  "Fatbiky, skoky a vlajky, hneď vedľa sánkarskej dráhy.",
+  "Plus päťdesiatdeväť nových lyžiarov z vašich komentov.",
+  "Je nás osemtisícpäťsto a pri deväťtisícpäťsto staviame klzisko.",
+  "Napíš farbu bundy do komentu a zajtra jazdíš aj ty."
+ ],
+ "segs": [
+  {"shot": "bikeTop", "cap": ["Chceli ste *BIKEPARK*? 🚵", "tak ho *staviame*!"], "y": 560},
+  {"shot": "bike", "cap": ["Písali ste to *vy* 👇"], "y": 520, "ov": "comments"},
+  {"shot": "bikeSide", "cap": ["🚵 *SNOW BIKEPARK*", "fatbiky · skoky · vlajky"], "y": 1400},
+  {"shot": "slope2", "cap": ["*+59* nových lyžiarov ⛷️"], "y": 560, "comment": ["crazy_.lindor._cz", "Chtela bych růžovou bundu aj růžovou helmu a snowboard taky růžový 🤍🌷"], "cy": 1300},
+  {"shot": "evWide", "cap": ["*8494* followerov", "pri *9500* = ⛸️ *KLZISKO*"], "y": 620, "ov": "goal"},
+  {"shot": "lodge", "cap": ["Napíš *farbu bundy*", "do *komentu* 👇"], "y": 1400}
+ ],
+ "end": [["Daj *follow* a napíš", "*farbu bundy* 👇"], ["svahfollowerov.online · odkaz v bio"]],
+ "comments": [["tobias.liptak", "Urobiťe mi prosím prosim bike park"], ["_kubis87_", "Kolo a červenou bundu"]]
+}
