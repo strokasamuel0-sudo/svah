@@ -1,0 +1,84 @@
+{
+ "align": "cust",
+ "focus": "vero_nikazahorcova",
+ "boardN": 8402,
+ "sents": [
+  "Chceš tento rok lyžovať úplne zadarmo?",
+  "Tak sleduj tento návod.",
+  "Krok jedna: daj follow.",
+  "Krok dva: pod hocijaké naše video napíš farbu bundy a či chceš lyže, snowboard alebo sánky.",
+  "Krok tri: večer ťa dáme na svah a nájdeš sa na svahfollowerov.online.",
+  "Takto už zadarmo lyžuje vyše osemtisícštyristo ľudí.",
+  "Tak čo, ideš?"
+ ],
+ "segs": [
+  {
+   "shot": "aerial",
+   "cap": [
+    "Chceš tento rok *lyžovať*",
+    "úplne *ZADARMO*? 🎿"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Sleduj tento *NÁVOD* 👇"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdClose",
+   "cap": [
+    "*1.* daj *FOLLOW* ✅"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "cust",
+   "cap": [
+    "*2.* napíš *farbu bundy*",
+    "+ lyže / snowboard / sánky"
+   ],
+   "y": 520,
+   "comment": [
+    "vero_nikazahorcova",
+    "Světle žlutá bunda aj žluté lyže aj žlutá helma🌼🫶"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "custSide",
+   "cap": [
+    "*3.* večer *JAZDÍŠ* ⛷️",
+    "nájdi sa: *svahfollowerov.online*"
+   ],
+   "y": 520,
+   "ov": "custTag"
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "Takto *zadarmo* lyžuje",
+    "už *8 400+* ľudí 😂"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Tak čo, *IDEŠ*? 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
