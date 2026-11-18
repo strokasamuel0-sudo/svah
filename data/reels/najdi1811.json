@@ -1,0 +1,22 @@
+{
+ "align": "cust",
+ "focus": "crazy_.lindor._cz",
+ "boardN": 8494,
+ "sents": [
+  "Napísal si nám farbu bundy? Tak sa teraz nájdi na svahu!",
+  "Otvor svahfollowerov.online, odkaz máš v bio.",
+  "Hore do hľadania napíš svoje meno a kamera ťa hneď nájde.",
+  "Uvidíš svoju bundu, lyže aj číslo, a môžeš si dať Zjazd na čas.",
+  "Kto ešte nenapísal, čaká v čakárni pod vlekom.",
+  "Napíš farbu bundy do komentu a zajtra sa nájdeš aj ty."
+ ],
+ "segs": [
+  {"shot": "aerial", "cap": ["Napísal si *farbu bundy*? 🎿", "tak sa *NÁJDI* na svahu! 🔎"], "y": 560},
+  {"shot": "slope", "cap": ["*svahfollowerov.online*", "odkaz máš v *bio* 👆"], "y": 560},
+  {"shot": "cust", "cap": ["napíš svoje *meno* 🔎", "a kamera ťa *nájde*"], "y": 1400, "ov": "custTag"},
+  {"shot": "custSide", "cap": ["tvoja *bunda* · *lyže* · *číslo*", "+ ⏱️ *Zjazd na čas*"], "y": 560, "comment": ["crazy_.lindor._cz", "Chtela bych růžovou bundu aj růžovou helmu a snowboard taky růžový 🤍🌷"], "cy": 1350},
+  {"shot": "crowdClose", "cap": ["bez komentu = *ČAKÁREŇ* 😅", "pod vlekom"], "y": 560},
+  {"shot": "lodge", "cap": ["Napíš *farbu bundy*", "do *komentu* 👇"], "y": 1400}
+ ],
+ "end": [["Daj *follow* a napíš", "*farbu bundy* 👇"], ["svahfollowerov.online · odkaz v bio"]]
+}
