@@ -2305,7 +2305,7 @@ function endJump(){
 function jgAction(){
   if(!JG.on) return;
   if(JG.phase==='inrun'){ JG.q=Math.max(0,1-Math.abs(JG.f-.975)*7.5); JG.phase='takeoff'; }
-  else if(JG.phase==='flight'){ const hA=JG.y-groundAt(JG.lipP.x+JG.dir.x*JG.x,JG.lipP.z+JG.dir.z*JG.x); if(hA<7 && !JG.tele){ JG.tele=true; jgEl('jHint').textContent='TELEMARK! 🦵'; } }
+  else if(JG.phase==='flight'){ const hA=JG.y-groundAt(JG.lipP.x+JG.dir.x*JG.x,JG.lipP.z+JG.dir.z*JG.x); if(hA<7 && JG.t>.6 && !JG.tele){ JG.tele=true; jgEl('jHint').textContent='TELEMARK! 🦵'; } }
 }
 function jgFinish(){
   const G=JG; G.phase='out'; const d=Math.max(0,G.x);
@@ -2327,7 +2327,7 @@ function stepJump(now){
   const gyAt=x=>groundAt(G.lipP.x+dir.x*x, G.lipP.z+dir.z*x);
   if(G.phase==='count'){ G.cnt-=dt; if(!G.demo) jgEl('jHint').textContent=G.cnt>.3?'Štart o '+Math.ceil(G.cnt-.3)+' …':'ŠTART!'; if(G.cnt<=0){ G.phase='inrun'; if(!G.demo) jgEl('jHint').textContent='Ťukni ODRAZ tesne pred hranou!'; } }
   if(G.phase==='count'||G.phase==='inrun'||G.phase==='takeoff'){
-    if(G.phase!=='count'){ const slope=.38*(1-G.f)+.08; G.v=Math.min(29,G.v+dt*(9.81*slope*1.25)); G.f+=G.v*dt/(J.R2-J.R1); }
+    if(G.phase!=='count'){ const slope=.38*(1-G.f)+.08; G.v=Math.min(29,G.v+dt*(9.81*slope*1.6)); G.f+=G.v*dt/(J.R2-J.R1); }
     if(G.demo && G.phase==='inrun' && G.f>=G.demoTap) jgAction();
     if(G.f>=1){ if(G.phase==='inrun') G.q=.15; G.f=1; G.phase='flight'; const ang=(-4+9*G.q)*Math.PI/180; G.vx=G.v*Math.cos(ang); G.vy=G.v*Math.sin(ang); G.x=0; G.y=G.lipP.y; if(!G.demo) jgEl('jHint').textContent='Drž rovnováhu ← →'; }
     else { P.copy(J.JP(J.R1+(J.R2-J.R1)*G.f,0)); P.y+=.25; R.position.copy(P); R.lookAt(P.x+dir.x,P.y-(.42*(1-G.f)),P.z+dir.z); G.up.rotation.x=G.phase==='count'?.2:.95; for(const k of G.skisArr) k.rotation.y=0; }
@@ -2341,10 +2341,10 @@ function stepJump(now){
     const lift=G.fall?0:7.95*Math.min(1.3,(G.vx*G.vx)/(27*27))*(1-Math.pow(Math.min(1,Math.abs(G.b)),1.5))*(.62+.38*G.q)*(1+G.wind*.04);
     G.vy+=(-9.81+lift)*dt; G.vx=Math.max(8,G.vx-dt*(.35+(G.fall?1.5:0)));
     G.x+=G.vx*dt; G.y+=G.vy*dt;
-    const gy=gyAt(G.x); if(G.demo && G.y-gy<5.5 && !G.tele) jgAction();
+    const gy=gyAt(G.x); if(G.demo && G.t>1.2 && G.y-gy<5.5 && !G.tele) jgAction();
     if(G.y<=gy+.15){ G.y=gy+.15; if(Math.abs(G.b)>.62) G.fall=true; jgFinish(); }
     P.set(G.lipP.x+dir.x*G.x, G.y, G.lipP.z+dir.z*G.x); R.position.copy(P);
-    R.lookAt(P.x+dir.x*3,P.y+G.vy*.06,P.z+dir.z*3); R.rotateX(-.18); R.rotateZ(G.b*.55); if(G.fall){ R.rotateX(G.t*3); } G.up.rotation.x=G.fall?.3:Math.min(1.25,.3+G.t*2.2); G.skisArr.forEach((k,i)=>{ k.rotation.y=(i?-1:1)*Math.min(.32,G.t*.9); });
+    R.lookAt(P.x+dir.x*3,P.y+G.vy*.06,P.z+dir.z*3); R.rotateX(-.3); R.rotateZ(G.b*.55); if(G.fall){ R.rotateX(G.t*3); } G.up.rotation.x=G.fall?.3:Math.min(.62,.25+G.t*1.2); G.skisArr.forEach((k,i)=>{ k.rotation.y=(i?-1:1)*Math.min(.32,G.t*.9); });
     if(!G.demo){ jgEl('jDist').textContent=Math.max(0,G.x).toFixed(1).replace('.',',')+' m'; jgEl('jBal').style.left=(50+Math.max(-1,Math.min(1,G.b))*46)+'%'; jgEl('jBal').style.background=Math.abs(G.b)>.62?'#C8102E':Math.abs(G.b)>.35?'#F2B705':'#2E9E5B'; }
   }
   if(G.phase==='out'){
@@ -2963,6 +2963,7 @@ async function startReel2(SC){
     const st=bounds[sIdx], en=sIdx+1<bounds.length?bounds[sIdx+1]:DUR; const k=(t-st)/Math.max(.5,en-st);
     const kk=seg>=NSEG?1+(t-bounds[NSEG])/Math.max(1,DUR-bounds[NSEG])*.4:k;
     gRacer.visible=false; curSeg=s; if(SC.hideCrowd) gameCrowd(!/^game/.test(s.shot));
+    if(s.shot!=='jumpPlay'&&JG.on&&JG.demo) endJump();
     let A=SH[s.shot](t,T,Math.min(1.4,kk));
     const gy=groundAt(A.p.x,A.p.z)+2; if(A.p.y<gy) A.p.y=gy;
     return A;
@@ -3058,6 +3059,29 @@ async function startReel2(SC){
     if(segT>1.1){ const kk=Math.min(1,(segT-1.1)/0.25); g.globalAlpha=1-kk*.6; g.fillStyle='rgba(255,255,255,.9)'; g.strokeStyle='#1E5AA8'; g.lineWidth=8; g.beginPath(); g.arc(785,y+190,30+40*kk,0,Math.PI*2); g.stroke(); }
     g.restore();
   }
+  /* 🎬 19. 11. – zábery na novú grafiku + hra Skoky */
+  SH.gfxSky=(t,T,k)=>{ const a=R0r.th+(CP.gsA||.42), P=polar(CP.gsR||1180,a); P.y+=CP.gsH||26; const b=a+(CP.gsW||.22)*(k-.5); return { p:P, q:V(Math.cos(b)*7000,CP.gsQ||700,Math.sin(b)*7000) }; };
+  SH.gfxHill=(t,T,k)=>{ const a=R0r.th+(CP.ghA||.18)+.10*k, P=polar((CP.ghR||1750)-150*k,a); P.y+=CP.ghH||95; const Q=polar(CP.ghQ||420,a-.02); Q.y+=60; return { p:P, q:Q }; };
+  SH.gfxForest=(t,T,k)=>{ const a=R0r.th+(CP.gfA||1.9)+.05*k, r=(CP.gfR||2150)-260*k, P=polar(r,a); P.y+=CP.gfH||30; const Q=polar(r-260,a+.03); Q.y+=4; return { p:P, q:Q }; };
+  SH.gfxSparkle=(t,T,k)=>{ const run=RUNS[CP.spRun||3]; return { p:Pr(run,(CP.spS||.5)+.07*k,CP.spL||-9,CP.spH||2.2), q:Pr(run,(CP.spS||.5)+.2+.07*k,4,0) }; };
+  SH.gfxMtn=(t,T,k)=>{ const a=R0r.th+(CP.gmA||-1.2)+.12*k, P=polar(1500,a); P.y+=CP.gmH||140; return { p:P, q:V(Math.cos(a+.2)*9000,1200,Math.sin(a+.2)*9000) }; };
+  SH.gfxLodge=(t,T,k)=>orbit(LODGE,CP.glR||175,CP.glH||48,R0r.th+(CP.glA||.9),.05,t,10);
+  const jIdx=()=>SC.segs.findIndex(s=>s.shot==='jumpPlay');
+  let jLastTau=-1, jLead=null;
+  SH.jumpIntro=(t,T,k)=>{ const J=WORLD.jump; if(!J) return SH.crowdWide(t,T,k); const d=J.L.clone().sub(J.lip); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); const M=J.lip.clone().lerp(J.L,.25); return { p:gCl(M.clone().addScaledVector(n,95-20*k).addScaledVector(d,-55+30*k).add(V(0,32,0))), q:J.T.clone().lerp(J.L,.45).add(V(0,-6,0)) }; };
+  SH.jumpPlay=(t,T,k)=>{ const j=jIdx();
+    if(jLead===null){ startJump(-1,{demo:true}); JG.demoTap=SC.jumpTap||.975; JG.fixedDt=1/30; let n=0; while(JG.phase!=='flight'&&n<900){ stepJump(0); n++; } endJump(); const segL=(bounds[j+1]||0)-(bounds[j]||0); jLead=Math.max(0,n/30-segL+(SC.jumpLead||.15)); }
+    const tau=Math.max(0,t-(bounds[j]||0)+jLead);
+    if(!JG.on||!JG.demo||tau<jLastTau){ if(JG.on) endJump(); startJump(SC.jumpWho?people.findIndex(p=>p.u===SC.jumpWho):-1,{demo:true}); JG.demoTap=SC.jumpTap||.975; JG.fixedDt=1/30; JG.wind=SC.jumpWind||1.4; JG.simT=0; }
+    jLastTau=tau; while(JG.simT<tau){ stepJump(0); JG.simT+=1/30; }
+    return { p:JG.camP.clone(), q:JG.camQ.clone() }; };
+  function jumpHud(segT){ if(!JG.on) return; const al=Math.min(1,segT/.25); g.save(); g.globalAlpha=al;
+    const x=W/2, y=430; g.fillStyle='rgba(255,255,255,.93)'; g.beginPath(); g.roundRect(x-230,y-70,460,150,36); g.fill();
+    g.fillStyle='#1E5AA8'; g.font='800 84px '+FONT; g.textAlign='center'; g.textBaseline='middle'; g.fillText((JG.res?JG.res.d:Math.max(0,JG.x)).toFixed(1).replace('.',',')+' m',x,y-8);
+    g.fillStyle='#22262d'; g.font='700 30px '+FONT; const ph=JG.phase==='inrun'||JG.phase==='count'?'nájazd…':JG.phase==='flight'?(JG.tele?'TELEMARK!':'let – drž rovnováhu'):(JG.res&&JG.res.rec?'🏆 rekord!':'dopad'); g.fillText(ph,x,y+50);
+    const bw=520, bx=x-bw/2, by=y+110; const gr=g.createLinearGradient(bx,0,bx+bw,0); [['#C8102E',0],['#F2B705',.22],['#2E9E5B',.38],['#2E9E5B',.62],['#F2B705',.78],['#C8102E',1]].forEach(([c,o])=>gr.addColorStop(o,c));
+    g.fillStyle=gr; g.beginPath(); g.roundRect(bx,by,bw,22,11); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
+    const mx=x+Math.max(-1,Math.min(1,JG.b))*bw*.46; g.fillStyle='#fff'; g.beginPath(); g.roundRect(mx-10,by-12,20,46,8); g.fill(); g.restore(); }
   function overlay(t,T){
     const gr=g.createLinearGradient(0,960,0,H2); gr.addColorStop(0,'rgba(10,20,35,0)'); gr.addColorStop(1,'rgba(10,20,35,.45)'); g.fillStyle=gr; g.fillRect(0,960,W,H2-960);
     board();
@@ -3074,6 +3098,7 @@ async function startReel2(SC){
       if(s.ov==='progress'||s.ov==='goal') progress(segT);
       if(s.ov==='gameHud'||(/^game/.test(s.shot)&&s.ov!=='none'&&!s.ov)) gameHud(t,segT);
       if(s.ov==='tapRace') tapRace(segT);
+      if(s.ov==='jumpHud') jumpHud(segT);
       capDraw(s.cap,s.y||1250,86,segT);
     } else {
       const al=Math.min(1,segT/0.3); g.fillStyle='rgba(10,18,30,'+(0.38*al)+')'; g.fillRect(0,0,W,H2); board();
