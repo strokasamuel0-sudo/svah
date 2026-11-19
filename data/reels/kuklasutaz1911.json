@@ -1,102 +1,30 @@
 {
  "align": "cust",
- "voice": "voice_kuklasutaz1911",
+ "voice": "voice_kuklasutaz1911b",
  "out": "reel_kuklasutaz1911",
  "boardN": 8500,
- "jumpTap": 0.975,
+ "jumpTap": 0.95,
  "jumpWind": 1.4,
  "jumpTakeoffSeg": 1,
  "sents": [
   "Súťaž o kuklu zadarmo!",
   "Táto zubatá kukla so strojčekom môže byť tvoja.",
-  "Zahraj si skoky na mostíku na svahu followerov.",
-  "Kto dnes skočí najďalej, kuklu vyhráva.",
-  "Výsledok skoku odfoť a screenshot daj do komentára pod toto video.",
-  "Rátajú sa iba skoky so screenshotom v komentári.",
-  "Musíš nás sledovať. Súťaž trvá dnes do polnoci, víťaza vyhlásime zajtra.",
-  "Odkaz na hru máš v bio. Veľa šťastia!"
+  "Súťaž je zajtra celý deň v hre skoky na mostíku.",
+  "Kto zajtra skočí najďalej, kuklu vyhráva.",
+  "Skákať musíš so svojím lyžiarom. Preto ešte dnes daj follow a do komentára napíš farbu bundy.",
+  "Ľudí pridávame každý večer. Kto to urobí až zajtra, súťaž už nestihne.",
+  "Zajtra výsledok skoku odfoť a screenshot daj do komentára pod toto video. Rátajú sa iba skoky so screenshotom.",
+  "Víťaza vyhlásime v sobotu. Odkaz na hru máš v bio!"
  ],
  "segs": [
-  {
-   "shot": "jumpIntro",
-   "cap": [
-    "*SÚŤAŽ* o kuklu",
-    "*ZADARMO* 🎁"
-   ],
-   "y": 470,
-   "img": "data/kukly/kukla-strojcek.jpg",
-   "iw": 820,
-   "iy": 640
-  },
-  {
-   "shot": "jumpIntro",
-   "cap": [
-    "*ZUBATÁ* kukla",
-    "so *strojčekom* 😁"
-   ],
-   "y": 470,
-   "img": "data/kukly/kukla-strojcek.jpg",
-   "iw": 820,
-   "iy": 640
-  },
-  {
-   "shot": "jumpPlay",
-   "cap": [
-    "zahraj *SKOKY*",
-    "na mostíku 🎿"
-   ],
-   "y": 1500,
-   "ov": "jumpHud"
-  },
-  {
-   "shot": "jumpPlay",
-   "cap": [
-    "kto dnes skočí",
-    "*NAJĎALEJ* vyhráva 🏆"
-   ],
-   "y": 1500,
-   "ov": "jumpHud"
-  },
-  {
-   "shot": "jump",
-   "cap": [
-    "📸 výsledok *odfoť*",
-    "screenshot daj do *KOMENTU* 👇"
-   ],
-   "y": 560
-  },
-  {
-   "shot": "jumpTop",
-   "cap": [
-    "rátajú sa *iba* skoky",
-    "so *screenshotom v komente*"
-   ],
-   "y": 1400
-  },
-  {
-   "shot": "chairRide",
-   "cap": [
-    "sleduj *@svah.followerov*",
-    "⏰ dnes do *23:59*"
-   ],
-   "y": 560
-  },
-  {
-   "shot": "gfxLodge",
-   "cap": [
-    "hra = *odkaz v bio* 👆",
-    "Veľa šťastia! 🍀"
-   ],
-   "y": 1400
-  }
+  {"shot":"jumpIntro","cap":["*SÚŤAŽ* o kuklu","*ZADARMO* 🎁"],"y":470,"img":"data/kukly/kukla-strojcek.jpg","iw":820,"iy":640},
+  {"shot":"jumpIntro","cap":["*ZUBATÁ* kukla","so *strojčekom* 😁"],"y":470,"img":"data/kukly/kukla-strojcek.jpg","iw":820,"iy":640},
+  {"shot":"jumpPlay","cap":["*ZAJTRA* celý deň","🎿 skoky na mostíku"],"y":1500,"ov":"jumpHud"},
+  {"shot":"jumpPlay","cap":["kto skočí *NAJĎALEJ*","vyhráva kuklu 🏆"],"y":1500,"ov":"jumpHud"},
+  {"shot":"slope2","cap":["*DNES* daj follow +","*farbu bundy* do komentu 👇"],"y":560},
+  {"shot":"crowdWide","cap":["pridávame *každý večer* 🌙","zajtra už *nestihneš* ⚠️"],"y":560},
+  {"shot":"jump","cap":["📸 zajtra výsledok *odfoť*","screenshot do *KOMENTU* 👇"],"y":560},
+  {"shot":"gfxLodge","cap":["víťaz v *sobotu* 🏆","hra = *odkaz v bio*"],"y":1400}
  ],
- "end": [
-  [
-   "📸 screenshot skoku",
-   "do *KOMENTÁRA* 👇"
-  ],
-  [
-   "najdlhší skok dnes vyhráva zubatú kuklu 🎁"
-  ]
- ]
+ "end": [["*DNES*: follow + farba bundy 👇","*ZAJTRA*: najdlhší skok vyhráva 🎁"],["screenshot skoku do komentára"]]
 }

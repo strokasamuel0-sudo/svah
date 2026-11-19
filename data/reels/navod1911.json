@@ -3,7 +3,7 @@
  "voice": "voice_navod1911",
  "out": "reel_navod1911",
  "boardN": 8500,
- "jumpTap": 0.975,
+ "jumpTap": 0.95,
  "jumpWind": 1.4,
  "jumpTakeoffSeg": 2,
  "sents": [
