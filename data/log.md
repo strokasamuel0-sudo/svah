@@ -272,3 +272,16 @@
 - 🎬 REEL `grafika1911` ZVEREJNENÝ (22 s, hlas Brian): „nová grafika“ → PREDTÝM (screenshot starej verzie, data/reels/img/stare1.jpg) → TERAZ → sneh, lesy, hory → každý follower → svahfollowerov.online.
 - 🎬 REEL `skoky1911` ZVEREJNENÝ (19 s, hlas Brian): nová hra Skoky na mostíku, ukážka skoku s HUD (vzdialenosť + rovnováha), výzva „kto skočí najďalej – pošli screenshot do DM“ → nový rebríček SKOKY (zapisovať do logu ako Zjazd na čas).
 - IG 8531 followerov.
+
+## 19.11. ~13:00 – 13:45 – Samuel: návod na Skoky + SÚŤAŽ o zubatú kuklu
+- 🎬 REEL `navod1911` ZVEREJNENÝ (42 s): ako hrať Skoky – 🎮 Hry → Skoky, ODRAZ tesne pred hranou, rovnováha šípkami/naklonením, telemark pred dopadom, protivietor, K-bod 95 m, body = vzdialenosť + štýl.
+- 🎬 REEL `kuklasutaz1911` ZVEREJNENÝ (40 s): 🎁 SÚŤAŽ o ZUBATÚ KUKLU SO STROJČEKOM (data/kukly/kukla-strojcek.jpg).
+- 🏆 PRAVIDLÁ SÚŤAŽE (Samuel 19.11.):
+  - Súťaž je v PIATOK 20.11. celý deň (do 23:59). Vyhráva NAJDLHŠÍ SKOK v hre Skoky na mostíku.
+  - Skáče sa so svojím lyžiarom → kto chce súťažiť, musel dať follow + farbu bundy do komentu UŽ 19.11. (pridávame každý večer; kto to urobí až 20.11., nestihne).
+  - Rátajú sa IBA skoky so SCREENSHOTOM výsledku v KOMENTÁRI pod reelom kuklasutaz1911 (nie v DM). Na výsledku je meno lyžiara + dátum/čas.
+  - Víťaza vyhlásime v SOBOTU 21.11.
+- Web: banner súťaže v 🎮 Hry a na výsledku skoku (19.11. „zajtra súťaž – daj follow dnes“, 20.11. „dnes súťaž“; po 20.11. 23:59 zmizne sám). Výsledok skoku ukazuje @meno a čas; „Uložiť skok“ funguje len so svojím lyžiarom.
+- ⚠️ NOČNÝ BEH 19.11.: pridať VŠETKÝCH nových followerov s komentom (aj pod súťažným a návodovým reelom) – zajtra súťažia.
+- ⚠️ NOČNÝ BEH 20.11.: komenty so screenshotmi pod kuklasutaz1911 zatiaľ len zbierať (súťaž ešte beží do 23:59), priebežné poradie pošli Samuelovi v pushi.
+- ⚠️ BEH 21.11.: VYHODNOTIŤ – prejsť všetky komenty so screenshotom pod kuklasutaz1911 (pridané do 20.11. 23:59), overiť follow, zoradiť podľa metrov (pri rovnosti body), výsledok + top 3 poslať Samuelovi. Víťaza vyhlasuje Samuel (alebo po jeho súhlase reel/storka). Kuklu posiela Samuel.
