@@ -1,0 +1,78 @@
+{
+ "align": "cust",
+ "voice": "voice_skoky1911",
+ "out": "reel_skoky1911",
+ "boardN": 8500,
+ "jumpTap": 0.975,
+ "jumpWind": 1.4,
+ "sents": [
+  "Na svahu followerov je nová hra. Skoky na mostíku!",
+  "Načasuj odraz tesne pred hranou.",
+  "Vo vzduchu drž rovnováhu.",
+  "A dopadni telemarkom.",
+  "Kto z vás skočí najďalej? Pošli nám screenshot do správ.",
+  "Hraj zadarmo, odkaz máš v bio."
+ ],
+ "segs": [
+  {
+   "shot": "jumpIntro",
+   "cap": [
+    "*NOVÁ HRA* 🎿",
+    "skoky na mostíku"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "načasuj *ODRAZ*",
+    "tesne pred hranou"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "vo vzduchu drž",
+    "*rovnováhu* ⚖️"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "a dopadni",
+    "*TELEMARKOM* 🦵"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jump",
+   "cap": [
+    "Kto skočí *najďalej*?",
+    "pošli screenshot do DM 🏆"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "gfxLodge",
+   "cap": [
+    "Hraj *zadarmo* 👇",
+    "svahfollowerov.online"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Kto skočí *najďalej*? 🏆",
+   "napíš svoj skok do komentu 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}

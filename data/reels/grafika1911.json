@@ -1,0 +1,82 @@
+{
+ "align": "cust",
+ "voice": "voice_grafika1911",
+ "out": "reel_grafika1911",
+ "boardN": 8500,
+ "sents": [
+  "Svah followerov dostal úplne novú grafiku.",
+  "Takto to vyzeralo doteraz.",
+  "A takto to vyzerá teraz.",
+  "Sneh, ktorý sa na slnku trblieta.",
+  "Husté lesy, skutočné hory a obloha s mrakmi.",
+  "A stále tu jazdí každý jeden follower.",
+  "Pozri si to sám, odkaz máš v bio."
+ ],
+ "segs": [
+  {
+   "shot": "gfxHill",
+   "cap": [
+    "*NOVÁ GRAFIKA* 🔥",
+    "na svahu followerov"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "gfxHill",
+   "cap": [
+    "*PREDTÝM* 👎"
+   ],
+   "y": 430,
+   "img": "data/reels/img/stare1.jpg",
+   "iw": 900,
+   "iy": 680
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "*TERAZ* 😳"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "gfxSparkle",
+   "cap": [
+    "sneh, ktorý sa",
+    "*trblieta* ✨"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "gfxMtn",
+   "cap": [
+    "*lesy* · *hory* · *mraky*"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "chairRide",
+   "cap": [
+    "a stále tu jazdí",
+    "*každý follower* ⛷️"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "gfxLodge",
+   "cap": [
+    "Pozri sa sám 👇",
+    "*svahfollowerov.online*"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Nová *grafika* je tu 🔥",
+   "napíš, čo na to 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
