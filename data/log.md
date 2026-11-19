@@ -288,13 +288,13 @@
 
 ## 19.11. ~22:30 – 23:05 – Samuelov večerný beh (ručne, nočný autopilot bol pozastavený – počítač nebol dostupný)
 - SYNC: 39 reelov, 5336 komentov; 121 nových od 18.11. 20:45Z od 99 ľudí. Follow overený cez friendships/show: sleduje 85, nesleduje 14.
-- followers.json: lyžiari 3226 (+63 nových, 9 úprav – napr. matkoo.hl zelená bunda + ružové lyže, vikikqq_17 svetlomodrý snowboard, suchankovasofia žlté lyže) · čakáreň 5246 · roly 164 (d.vajcner presunutý z vleku na RATRAK – pýtal sa 8. deň; michal_srutek polícia – čaká na míľnik 14000; lietajuci_blazon DJ 3. deň) · IG 8527. Emoji farby (🤍🩷💚🟦💋) doplnené ručne. Všetci noví komentujúci (aj pod súťažným reelom) sú na svahu → môžu zajtra súťažiť.
+- followers.json: lyžiari 3226 (+63 nových, 9 úprav – napr. matkoo.hl zelená bunda + ružové lyže, vikikqq_17 svetlomodrý snowboard, suchankovasofia žlté lyže) · čakáreň 5246 · roly 164 (d.vajcner presunutý z vleku na RATRAK – pýtal sa 8. deň; michal_srutek polícia – čaká na míľnik 14000; lietajuci_blazon DJ 3. deň) · IG 8608 (og:meta ukazoval staré 8527, Samuel opravil). Emoji farby (🤍🩷💚🟦💋) doplnené ručne. Všetci noví komentujúci (aj pod súťažným reelom) sú na svahu → môžu zajtra súťažiť.
 - „Daj follow“ odpovede (13): dejvidddd__, leaaaaaa2026, linda_gallova, victor_tancos, maros.toth.587, urf4vadis, exotic.matx, majitel_hondi, adam_a_25, robikuze, janportych, buckoigor152 (vírivka → wellness pri 11000), ann_asarova. Odpovede cez GraphQL PolarisPostCommentInputRevampedMutation (formulár zachytený z prvého komentu, replied_to_comment_id ako text).
 - DM: SKI ČIERNY BALOG odpísal – „preposlať na mail info@skiciernybalog.sk“ → v DM poďakované, v Gmaile pripravený KONCEPT ponuky (neodoslaný, čaká na Samuela). Matej Nosáľ „idem súťažiť“ → pravidlá súťaže. Peťo B 10 kuklu nechce → OK. Žiadosť Elena Nováková (elca_novak) – ako sa dostať na svah → prijaté, už je na svahu (snowboard, svetloružová) + pravidlá súťaže. niNa, Týba – len poďakovanie/reakcia.
 - 🎬 REEL `zajtra1911` ZVEREJNENÝ (Df8FqwyNL3C, 23 s, hlas Brian, Pôvodné): „Zajtra súťaž o zubatú kuklu“ → +63 lyžiarov → elca_novak (koment) → l_tabacko (koment) → skok s HUD → screenshot do komentu → víťaz v sobotu. POPIS overený cez API ✅.
 - ⚠️ ElevenLabs: zostáva ~10 kreditov (z 278 sa minulo 268 na tento reel). Ďalší hlas potrebuje dobiť kredity / vyšší plán.
 - Súťaž: frickristian už dnes napísal „102,4 m“ pod súťažný reel – NERÁTA SA (súťaž je až 20.11.), zajtra musí poslať screenshot.
 - 🟡 KUKLY súhrn: objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno). Záujem bez adresy bez zmeny (Máli, Balwarestauracia, daniel371457, Petr Vojtek – Strojček; ondra_czlis Zubatá; Matej Kakuta v decembri). Dnes: 0 nových dopytov na cenu; odmietli Peťo B 10 (petob10, „Nie“), niNa a Týba už skôr.
-- MÍĽNIKY: 9500 ⛸️ klzisko (chýba 973) → 11000 🧖 wellness → 12500 🛍️ obchodné centrum → 14000 👮 polícia + 🍫 čokoládovňa.
+- MÍĽNIKY: 9500 ⛸️ klzisko (chýba 892) → 11000 🧖 wellness → 12500 🛍️ obchodné centrum → 14000 👮 polícia + 🍫 čokoládovňa.
 - Rebríček Zjazd na čas: bez zmeny.
 - POSLEDNÝ_KOMENT_TS: 2026-11-19T21:38:00Z (1795124280)
