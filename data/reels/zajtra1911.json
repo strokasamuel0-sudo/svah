@@ -1,0 +1,30 @@
+{
+ "align": "cust",
+ "focus": "elca_novak",
+ "voice": "voice_zajtra1911",
+ "out": "reel_zajtra1911",
+ "boardN": 8500,
+ "jumpTap": 0.95,
+ "jumpWind": 1.4,
+ "jumpTakeoffSeg": 1,
+ "jumpLead": 2.0,
+ "sents": [
+  "Zajtra to vypukne! Súťaž o zubatú kuklu so strojčekom.",
+  "Dnes večer sme na svah pridali šesťdesiattri nových lyžiarov.",
+  "Napríklad Elenu na snowboarde vo svetloružovej bunde.",
+  "Alebo tohto lyžiara v pieskovej bunde s ružovými lyžami.",
+  "Zajtra celý deň skáčeš na mostíku so svojím lyžiarom a najdlhší skok vyhráva.",
+  "Výsledok odfoť a screenshot daj do komentára pod video o súťaži.",
+  "Víťaza vyhlásime v sobotu. Hru máš v bio, veľa šťastia!"
+ ],
+ "segs": [
+  {"shot":"jumpIntro","cap":["*ZAJTRA* súťaž 🏆","o *zubatú kuklu* 😁"],"y":470,"img":"data/kukly/kukla-strojcek.jpg","iw":820,"iy":640},
+  {"shot":"crowdWide","cap":["*+63* nových","lyžiarov dnes ⛷️"],"y":560},
+  {"shot":"tagCam","tag":"elca_novak","dist":15,"cap":["*vitaj* na svahu 🏂","nájdi sa cez 🔍"],"y":1350,"comment":["elca_novak","Snowboard a růžová světle"],"cy":420},
+  {"shot":"tagCam","tag":"l_tabacko","dist":15,"cap":["piesková bunda ✅","*ružové lyže* ✅"],"y":1350,"comment":["l_tabacko","Bunda: Piesková Lyže: Ružové"],"cy":420},
+  {"shot":"jumpPlay","cap":["*ZAJTRA* celý deň 🎿","najdlhší *skok* vyhráva"],"y":1500,"ov":"jumpHud"},
+  {"shot":"jump","cap":["📸 výsledok *odfoť*","screenshot do *komentu* 👇"],"y":560},
+  {"shot":"gfxLodge","cap":["víťaz v *sobotu* 🏆","hra = *odkaz v bio*"],"y":1400}
+ ],
+ "end": [["*ZAJTRA*: skoky o kuklu 🎁"],["screenshot pod video o súťaži 👇"]]
+}
