@@ -233,3 +233,10 @@ Aktuálny obsah súboru: `fetch('https://api.github.com/repos/strokasamuel0-sudo
 - Nové zábery do reelov: `gfxHill`, `gfxSparkle`, `gfxMtn`, `gfxForest`, `gfxSky`, `gfxLodge`, `jumpIntro`, `jumpPlay` (+ `"ov":"jumpHud"`; viac segmentov `jumpPlay` za sebou = jeden súvislý skok, nastav `jumpTap` 0.9–0.98, `jumpWind`). Segment môže mať `img` (obrázok z data/reels/img/).
 - Rebríček SKOKY: časy/vzdialenosti, ktoré ľudia pošlú do DM, zapisuj do logu ako pri Zjazde na čas.
 - Commit veľkých súborov: GitHub stránka `upload/main` (input type=file) + `file_upload` – rýchlejšie ako paste do editora.
+
+## 8. 📝 POPIS KU KAŽDÉMU VIDEU – POVINNÉ (Samuel 19. 11.)
+- Každé zverejnené video MUSÍ mať popis, ktorý sedí k obsahu videa: čo sa vo videe hovorí + výzva (follow, farba bundy do komentu…) + svahfollowerov.online / odkaz v bio + 3–5 hashtagov.
+- ⚠️ Popis sa NEULOŽÍ, ak ho vložíš cez JS (execCommand('insertText'), paste event, nastavenie textContent) – IG ho síce ukáže v poli, ale pri zdieľaní/uložení ho zahodí. Píš ho SKUTOČNÝM písaním: nástroj computer → left_click do poľa popisu → action „type“ (text bez zalomení riadkov), potom skutočný klik na „Zdieľať“/„Hotovo“.
+- Po zverejnení VŽDY over: `/api/v1/media/<id>/info/` → `items[0].caption.text` (kód→id: base64 abeceda A–Z a–z 0–9 - _).
+- Chýbajúci popis doplníš: `/p/<kód>/` → „…“ (vpravo hore pri mene) → „Upraviť“ → klik do poľa → type → „Hotovo“ → over cez API.
+- 19. 11. doplnené popisy k 10 videám, ktoré ho nemali (4 zo 4. 11., bike1811, najdi1811, grafika1911, skoky1911, navod1911, kuklasutaz1911).
