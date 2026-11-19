@@ -173,6 +173,8 @@
   #jEnd #jQuit{background:#e9edf2;color:var(--ink)}
   .search svg{z-index:2}
   #bQ{padding:8px 10px}
+  .jcont{margin-top:10px;background:linear-gradient(135deg,#fff4d6,#ffe1e1);border-radius:12px;padding:8px 10px;font-size:12px;font-weight:700;color:#7a2a00;max-width:300px}
+  .gmcont{background:linear-gradient(135deg,#fff4d6,#ffe1e1);border-radius:12px;padding:8px 10px;margin:0 2px 8px;font-size:12.5px;color:#7a2a00}
 </style>
 <script type="importmap">
 { "imports": {
@@ -2319,7 +2321,7 @@ function jgFinish(){
     const b=document.createElement('b'); b.textContent=d.toFixed(1).replace('.',',')+' m'; const s=document.createElement('span');
     s.textContent=(G.fall?'💥 Pád pri dopade · ':'')+(rec?'🏆 Nový rekord! · ':(G.res.best?'Rekord '+G.res.best.toFixed(1).replace('.',',')+' m · ':''))+'štýl '+styleSum.toFixed(1).replace('.',',')+' · '+pts.toFixed(1).replace('.',',')+' bodov';
     const tip=document.createElement('small'); tip.textContent=G.q>.85?'Perfektný odraz!':G.q>.5?'Dobrý odraz – skús ho ešte bližšie k hrane.':'Odraz bol mimo – ťukni tesne pred hranou mostíka.';
-    R.append(b,s,tip); jgEl('jEnd').style.display='flex'; },900);
+    R.append(b,s,tip); if(jgContest()){ const c=document.createElement('div'); c.className='jcont'; c.textContent='🎁 Súťaž o zubatú kuklu: ulož/odfoť tento výsledok a daj screenshot do komentára pod súťažným videom na @svah.followerov (dnes do 23:59). Vyhráva najdlhší skok!'; R.append(c); } jgEl('jEnd').style.display='flex'; },900);
 }
 function stepJump(now){
   const G=JG, J=WORLD.jump; let dt=Math.min(.05,(now-G.last)/1000); G.last=now; if(G.demo&&G.fixedDt) dt=G.fixedDt;
@@ -2370,8 +2372,10 @@ jgEl('jGo').addEventListener('pointerdown',e=>{ e.preventDefault(); jgAction(); 
 for(const [id,v] of [['jL',-1],['jR',1]]){ const el=jgEl(id); el.addEventListener('pointerdown',e=>{ e.preventDefault(); JG.steer=v; }); for(const ev of ['pointerup','pointerleave','pointercancel']) el.addEventListener(ev,()=>{ if(JG.steer===v) JG.steer=0; }); }
 jgEl('jAgain').onclick=()=>{ const p=JG.p, u=JG.useTilt; endJump(); startJump(p?p.i:-1); JG.useTilt=u; };
 jgEl('jQuit').onclick=endJump;
-jgEl('jShot').onclick=async()=>{ const r=JG.res; if(!r) return; const i=JG.p?JG.p.i:0; const b=await photoCard(i,'Skok na mostíku: '+r.d.toFixed(1).replace('.',',')+' m · '+r.pts.toFixed(1).replace('.',',')+' b'); shareImage(b,'svah-skok-'+(JG.p?JG.p.u:'svah')+'.jpg'); };
+jgEl('jShot').onclick=async()=>{ const r=JG.res; if(!r) return; const i=JG.p?JG.p.i:0; const b=await photoCard(i,'Skok na mostíku: '+r.d.toFixed(1).replace('.',',')+' m · '+r.pts.toFixed(1).replace('.',',')+' b · '+new Date().toLocaleDateString('sk-SK')); shareImage(b,'svah-skok-'+(JG.p?JG.p.u:'svah')+'.jpg'); };
 async function jgStartUI(){ let tilt=false; try{ if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){ tilt=(await DeviceOrientationEvent.requestPermission())==='granted'; } }catch(e){} startJump(selected); JG.useTilt=tilt; }
+function jgContest(){ return Date.now()<Date.parse('2026-11-19T23:59:59+01:00'); }
+if(jgContest()){ const c=document.createElement('div'); c.className='gmcont'; c.innerHTML='🎁 <b>SÚŤAŽ o zubatú kuklu</b> – kto dnes skočí najďalej, vyhráva! Výsledok odfoť a screenshot daj do komentára pod súťažným videom.'; document.querySelector('#gamesMenu .gmh').after(c); }
 /* 🎮 menu hier */
 { const box=jgEl('gamesMenu');
   jgEl('bGames').onclick=()=>{ box.style.display=box.style.display==='block'?'none':'block'; };
@@ -3070,7 +3074,7 @@ async function startReel2(SC){
   let jLastTau=-1, jLead=null;
   SH.jumpIntro=(t,T,k)=>{ const J=WORLD.jump; if(!J) return SH.crowdWide(t,T,k); const d=J.L.clone().sub(J.lip); d.y=0; d.normalize(); const n=V(-d.z,0,d.x); const M=J.lip.clone().lerp(J.L,.25); return { p:gCl(M.clone().addScaledVector(n,95-20*k).addScaledVector(d,-55+30*k).add(V(0,32,0))), q:J.T.clone().lerp(J.L,.45).add(V(0,-6,0)) }; };
   SH.jumpPlay=(t,T,k)=>{ const j=jIdx();
-    if(jLead===null){ startJump(-1,{demo:true}); JG.demoTap=SC.jumpTap||.975; JG.fixedDt=1/30; let n=0; while(JG.phase!=='flight'&&n<900){ stepJump(0); n++; } endJump(); const segL=(bounds[j+1]||0)-(bounds[j]||0); jLead=Math.max(0,n/30-segL+(SC.jumpLead||.15)); }
+    if(jLead===null){ startJump(-1,{demo:true}); JG.demoTap=SC.jumpTap||.975; JG.fixedDt=1/30; let n=0; while(JG.phase!=='flight'&&n<900){ stepJump(0); n++; } endJump(); const off=SC.jumpTakeoffSeg||1; const segL=(bounds[j+off]||0)-(bounds[j]||0); jLead=n/30-segL+(SC.jumpLead||.15); }
     const tau=Math.max(0,t-(bounds[j]||0)+jLead);
     if(!JG.on||!JG.demo||tau<jLastTau){ if(JG.on) endJump(); startJump(SC.jumpWho?people.findIndex(p=>p.u===SC.jumpWho):-1,{demo:true}); JG.demoTap=SC.jumpTap||.975; JG.fixedDt=1/30; JG.wind=SC.jumpWind||1.4; JG.simT=0; }
     jLastTau=tau; while(JG.simT<tau){ stepJump(0); JG.simT+=1/30; }
