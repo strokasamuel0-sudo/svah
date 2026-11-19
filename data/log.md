@@ -262,3 +262,13 @@
 - Rebríček Zjazd na čas: bez zmeny (1. peterkos_os 31,00 · ondra_czlis 31,00 · valocka.a 31,01 …).
 - POSLEDNÝ_KOMENT_TS: 2026-11-18T20:45:42Z (1795034742)
 - 18.11. ~23:20 (2. beh, ručne spustený): žiadne nové komenty od TS (dva nové reely 0 komentov), GitHub prihlásený → všetko nahraté. Ďalší reel v tomto behu NEVYŠIEL (dnes už 4 reely: zadarmo1811, kamos1811, bike1811, najdi1811).
+
+## 19.11. ~09:10 – 10:35 – Samuel: veľký upgrade grafiky + nová hra + 2 reely
+- 🎮 GRAFIKA ULTRA (index + beta): PBR materiály (Lambert → Standard, drsnosť podľa farby, zdieľané materiály), odraz oblohy (PMREM), post-processing (bloom, farebný grade, vinetácia, FXAA), nová obloha s mrakmi a slnkom, realistické pohorie okolo (ridged noise, sneh/skala podľa sklonu), hustejšie smreky v lesných skupinách + vzdialené lesy, sneh s mikroreliéfom a trblietkami na slnku, jemnejší manšestr bez moaré, mäkké vločky, zaoblené postavy lyžiarov.
+- ⚙️ Kvalita: chip „⚙️ Ultra/Vysoká/Nízka“ (localStorage svah_q, alebo ?q=0/1/2). Mobil = Vysoká, PC = Ultra, reel = Ultra. Rozlíšenie sa po spomalení znižuje a pri dobrom výkone vracia späť.
+- 🚀 Výkon: statické zlučovanie objektov po ~130 snímkach (4400 → ~1300 draw callov). Na Samuelovom Macu ~40 fps na Ultra (pred úpravou výkonu 9 fps). Slučka beží ďalej aj po chybe v jednom snímku.
+- 🐛 Opravy: lyžiar na vleku sa drží kotvy (predtým stál vedľa), Zjazd na čas začína pod stanicou (kamera nebola za stĺpom), ikonka lupy vo vyhľadávaní.
+- 🎿 NOVÁ HRA „Skoky na mostíku“ (🎮 Hry → Skoky, alebo tlačidlo 🎿 Skoky v karte lyžiara, ?skoky): načasovanie odrazu (ODRAZ/medzerník), rovnováha vo vzduchu (← → / naklonenie mobilu), telemark pri dopade, vietor, K-bod 95 m, rekord v prehliadači (svah_jump_best), zelená vlajka na rekorde, obrázok na storku. Mostík dostal konštrukciu, stopy, tabule 50–130 m, vlajky, rozhodcovskú vežu, banner a stožiare so svetlami.
+- 🎬 REEL `grafika1911` ZVEREJNENÝ (22 s, hlas Brian): „nová grafika“ → PREDTÝM (screenshot starej verzie, data/reels/img/stare1.jpg) → TERAZ → sneh, lesy, hory → každý follower → svahfollowerov.online.
+- 🎬 REEL `skoky1911` ZVEREJNENÝ (19 s, hlas Brian): nová hra Skoky na mostíku, ukážka skoku s HUD (vzdialenosť + rovnováha), výzva „kto skočí najďalej – pošli screenshot do DM“ → nový rebríček SKOKY (zapisovať do logu ako Zjazd na čas).
+- IG 8531 followerov.
