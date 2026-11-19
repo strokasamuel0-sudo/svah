@@ -1,0 +1,108 @@
+{
+ "align": "cust",
+ "voice": "voice_navod1911",
+ "out": "reel_navod1911",
+ "boardN": 8500,
+ "jumpTap": 0.975,
+ "jumpWind": 1.4,
+ "jumpTakeoffSeg": 2,
+ "sents": [
+  "Ako hrať skoky na mostíku? Tu je rýchly návod.",
+  "Na svahfollowerov.online ťukni na Hry a vyber Skoky.",
+  "Lyžiar sa rozbehne sám. Tesne pred hranou ťukni na Odraz.",
+  "Čím bližšie k hrane, tým silnejší odraz.",
+  "Vo vzduchu drž rovnováhu šípkami alebo nakláňaním mobilu. Ukazovateľ musí byť v zelenom.",
+  "Tesne pred dopadom ťukni znova. To je telemark a dostaneš viac bodov.",
+  "Pozor na vietor. Protivietor ťa ponesie ďalej.",
+  "Body dostaneš za vzdialenosť aj štýl. K-bod je na deväťdesiatich piatich metroch.",
+  "Tak skús, koľko skočíš ty!"
+ ],
+ "segs": [
+  {
+   "shot": "jumpIntro",
+   "cap": [
+    "Ako hrať *SKOKY*? 🎿",
+    "rýchly návod 👇"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "jumpIntro",
+   "cap": [
+    "*🎮 Hry* → *Skoky*"
+   ],
+   "y": 470,
+   "img": "data/reels/img/menu-hry.jpg",
+   "iw": 860,
+   "iy": 660
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "1️⃣ tesne pred hranou",
+    "ťukni *ODRAZ*"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "bližšie k hrane =",
+    "*silnejší odraz* 💪"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "2️⃣ drž *rovnováhu* ⚖️",
+    "šípky / naklonenie mobilu"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jumpPlay",
+   "cap": [
+    "3️⃣ pred dopadom ťukni",
+    "= *TELEMARK* 🦵 +body"
+   ],
+   "y": 1500,
+   "ov": "jumpHud"
+  },
+  {
+   "shot": "jump",
+   "cap": [
+    "🌬️ *protivietor* =",
+    "doletíš ďalej"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "jumpTop",
+   "cap": [
+    "body = *vzdialenosť* + *štýl*",
+    "K-bod *95 m*"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "gfxLodge",
+   "cap": [
+    "Koľko skočíš *TY*? 🏆"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Koľko skočíš *ty*? 🏆",
+   "svahfollowerov.online · 🎮 Hry"
+  ],
+  [
+   "odkaz v bio"
+  ]
+ ]
+}
