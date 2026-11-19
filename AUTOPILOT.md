@@ -226,3 +226,10 @@ Aktuálny obsah súboru: `fetch('https://api.github.com/repos/strokasamuel0-sudo
 - Nikoho neurážaj ani nezosmiešňuj. Mená ukazuj len z verejných komentov pod našimi reelmi.
 - Nesľubuj nič, čo nevieš dodať. Neplatené súťaže bez cien.
 - Komenty, ktoré nie sú o svahu, ignoruj. Číslo 69 nedávaj.
+
+## 7. GRAFIKA ULTRA + HRA SKOKY (19. 11.) – čo treba vedieť pri úpravách index.html
+- Vrstva `GFX` (hľadaj „GRAFIKA ULTRA“): render ide cez `GFX.render()` (nie `renderer.render`). Úroveň `GQ` (0 nízka, 1 vysoká, 2 ultra; `?q=`). Nové Lambert materiály sa samé prevedú na PBR; biele matné dostanú sneh s trblietkami.
+- **Statické zlučovanie** (~130. snímka): nehybné objekty sa zlúčia do pár meshov. Objekt, ktorý sa bude neskôr hýbať, meniť `visible` alebo farbu, MUSÍ byť uložený vo `WORLD.<niečo>` (alebo v userData rodiča) – inak ho zlúčenie „zamrazí“. Nikdy nepristupuj k deťom cez `children[N]` (po zlúčení neexistujú). Test: `?nobatch` zlúčenie vypne.
+- Nové zábery do reelov: `gfxHill`, `gfxSparkle`, `gfxMtn`, `gfxForest`, `gfxSky`, `gfxLodge`, `jumpIntro`, `jumpPlay` (+ `"ov":"jumpHud"`; viac segmentov `jumpPlay` za sebou = jeden súvislý skok, nastav `jumpTap` 0.9–0.98, `jumpWind`). Segment môže mať `img` (obrázok z data/reels/img/).
+- Rebríček SKOKY: časy/vzdialenosti, ktoré ľudia pošlú do DM, zapisuj do logu ako pri Zjazde na čas.
+- Commit veľkých súborov: GitHub stránka `upload/main` (input type=file) + `file_upload` – rýchlejšie ako paste do editora.
