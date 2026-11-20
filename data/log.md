@@ -298,3 +298,7 @@
 - MÍĽNIKY: 9500 ⛸️ klzisko (chýba 892) → 11000 🧖 wellness → 12500 🛍️ obchodné centrum → 14000 👮 polícia + 🍫 čokoládovňa.
 - Rebríček Zjazd na čas: bez zmeny.
 - POSLEDNÝ_KOMENT_TS: 2026-11-19T21:38:00Z (1795124280)
+
+## 20.11. ~09:10 – 09:30 – Samuel: reel so zaujímavosťami (nenapojený na svah)
+- 🎬 REEL `fakty2011` ZVEREJNENÝ (Df9NA9BN228, 36 s, animácia canvas + vlastná hudba, BEZ hlasu – ElevenLabs bez kreditov): „6 vecí o lyžovaní, ktoré si nevedel“ – 255,5 km/h Simon Billy (Vars 2023), skok 291 m Kobayashi (Island 2024, neoficiálny; oficiálny 254,5 m D. Prevc 2025), lyže ~8 000 rokov (jazero Sindor, Rusko), prvé snežné delo 1950 (Mohawk Mountain, USA), Les 3 Vallées 600 km, Zermatt 25 km zo 3 883 m. Výzva: napíš číslo 1–6 do komentu. POPIS overený cez API ✅.
+- Nápad na sériu: „zaujímavosti“ reely bez väzby na svah (oslovujú aj nových ľudí) – ďalšie témy: najvyššie strediská, najdrahšie skipasy, najstrmšia zjazdovka, rekordy v snežení, slovenské rekordy.
