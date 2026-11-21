@@ -16,8 +16,8 @@
   {"shot": "crowdWide", "cap": ["Toto *NIE JE* hra 🤯", "*8 611* skutočných ľudí"], "y": 560},
   {"shot": "aerial", "cap": ["každý lyžiar = *skutočný človek*", "zo 🇸🇰 aj 🇨🇿"], "y": 560},
   {"shot": "tagCam", "tag": "elca_novak", "dist": 15, "cap": ["napíše *farbu bundy*…", "…a o pár hodín *lyžuje* ⛷️"], "y": 1350, "comment": ["elca_novak", "Snowboard a růžová světle"], "cy": 420},
-  {"shot": "crowdClose", "cap": ["možno tu je aj tvoje *dieťa*", "alebo *vnúča* 👀"], "y": 560},
-  {"shot": "chairRide", "cap": ["svah *rastie* každý večer", "podľa *vašich komentov* 💬"], "y": 560},
+  {"shot": "slope2", "cap": ["možno tu je aj tvoje *dieťa*", "alebo *vnúča* 👀"], "y": 560},
+  {"shot": "evWide", "cap": ["svah *rastie* každý večer", "podľa *vašich komentov* 💬"], "y": 560},
   {"shot": "lodge", "cap": ["1️⃣ daj *follow*", "2️⃣ *farbu bundy* do komentu 👇"], "y": 1400}
  ],
  "end": [["Daj *follow* a napíš", "*farbu bundy* 👇"], ["zadarmo · aj pre rodičov 😄"]]
