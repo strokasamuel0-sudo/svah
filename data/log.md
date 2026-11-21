@@ -317,3 +317,5 @@
   5. h.a.j.q_ – 101,3 m · 20.11. 08:57 (rekord 106,8 m bez screenshotu)
   Neplatné (mimo piatku): brejnou 126,6 m (19.11.), frickristian 102,4 m (19.11., len text).
   → Víťaza určí/vyhlási Samuel (návrh: f.fiala14).
+- 🏆 VÍŤAZKA podľa Samuela: **e_kov.acova – 152,0 m** (20.11. 11:23, screenshot zo story, poslal Samuel). Poradie vo videu: 🥇 e_kov.acova 152,0 · 🥈 f.fiala14 131,0 · 🥉 elca_novak 123,1.
+- 🎬 REEL `vitaz2111` ZVEREJNENÝ (Df_5YpzNlX6, 19 s, animácia + hudba, bez hlasu, titulka = screenshot): víťazka + kukla + počítadlo 152,0 m + screenshot + TOP 3 + „ďalšia súťaž čoskoro“. POPIS overený ✅. Kuklu víťazke treba poslať – adresu od nej vybaví Samuel.
