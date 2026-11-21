@@ -1,0 +1,24 @@
+{
+ "align": "cust",
+ "focus": "elca_novak",
+ "voice": "voice_ludia2111",
+ "out": "reel_ludia2111",
+ "boardN": 8611,
+ "sents": [
+  "Toto nie je obyčajná hra. Každý jeden lyžiar tu je skutočný človek.",
+  "Je ich už osemtisíc šesťsto, zo Slovenska aj z Česka.",
+  "Stačí napísať do komentára farbu bundy, a o pár hodín tu lyžuješ aj ty.",
+  "Možno tu už lyžuje aj tvoje dieťa, vnúča alebo kolega z práce.",
+  "A svah každý večer rastie podľa vašich komentárov.",
+  "Chceš tu byť aj ty? Daj follow a napíš do komentára farbu bundy. Je to zadarmo."
+ ],
+ "segs": [
+  {"shot": "crowdWide", "cap": ["Toto *NIE JE* hra 🤯", "*8 611* skutočných ľudí"], "y": 560},
+  {"shot": "aerial", "cap": ["každý lyžiar = *skutočný človek*", "zo 🇸🇰 aj 🇨🇿"], "y": 560},
+  {"shot": "tagCam", "tag": "elca_novak", "dist": 15, "cap": ["napíše *farbu bundy*…", "…a o pár hodín *lyžuje* ⛷️"], "y": 1350, "comment": ["elca_novak", "Snowboard a růžová světle"], "cy": 420},
+  {"shot": "crowdClose", "cap": ["možno tu je aj tvoje *dieťa*", "alebo *vnúča* 👀"], "y": 560},
+  {"shot": "chairRide", "cap": ["svah *rastie* každý večer", "podľa *vašich komentov* 💬"], "y": 560},
+  {"shot": "lodge", "cap": ["1️⃣ daj *follow*", "2️⃣ *farbu bundy* do komentu 👇"], "y": 1400}
+ ],
+ "end": [["Daj *follow* a napíš", "*farbu bundy* 👇"], ["zadarmo · aj pre rodičov 😄"]]
+}
