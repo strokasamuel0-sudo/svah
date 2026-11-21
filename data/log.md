@@ -302,3 +302,18 @@
 ## 20.11. ~09:10 – 09:30 – Samuel: reel so zaujímavosťami (nenapojený na svah)
 - 🎬 REEL `fakty2011` ZVEREJNENÝ (Df9NA9BN228, 36 s, animácia canvas + vlastná hudba, BEZ hlasu – ElevenLabs bez kreditov): „6 vecí o lyžovaní, ktoré si nevedel“ – 255,5 km/h Simon Billy (Vars 2023), skok 291 m Kobayashi (Island 2024, neoficiálny; oficiálny 254,5 m D. Prevc 2025), lyže ~8 000 rokov (jazero Sindor, Rusko), prvé snežné delo 1950 (Mohawk Mountain, USA), Les 3 Vallées 600 km, Zermatt 25 km zo 3 883 m. Výzva: napíš číslo 1–6 do komentu. POPIS overený cez API ✅.
 - Nápad na sériu: „zaujímavosti“ reely bez väzby na svah (oslovujú aj nových ľudí) – ďalšie témy: najvyššie strediská, najdrahšie skipasy, najstrmšia zjazdovka, rekordy v snežení, slovenské rekordy.
+
+## 21.11. ~10:00 – Samuel: správy + výsledky súťaže + sync (bez videa)
+- Nočný beh 20.11. nič necommitol (asi Mac nebol dostupný).
+- SYNC: nových komentov od 19.11. 21:38Z len 12 (tichý deň). Na svah +8: matous_kunc (snowboard, čierna), ann_asarova (žltá + svetlomodré lyže – už sleduje), honzix.sapor (snowboard modrá), adelaklukova (snowboard svetlomodrá), eliskaaa_84 (biela bunda, ružové nohavice), urf4vadis (snowboard svetloružová), majitel_hondi (fialová), janportych (červená) – posledné 4 dali follow po našej odpovedi. Chatka: romanecka_2290 (chce dvojposchodovú s menom). Čakáreň +111 (najnovší followeri bez komentu, API followerov vrátilo 150). IG 8611. Lyžiari 3234 · čakáreň 5356 · chatky 137 · roly 164.
+- Stále nesledujú: dejvidddd__, leaaaaaa2026, linda_gallova, victor_tancos, maros.toth.587, exotic.matx, adam_a_25, robikuze.
+- Nápad: elca_novak – bobová dráha (už v zozname nápadov).
+- DM (všetko podpísané „– Samuel, Svah followerov“): prijatých 6 žiadostí – michnakova_z, f.fiala14, h.a.j.q_, brejnou, 01a_d_a_m._.s_v_i_d_r_o_n10, sarlotkaaa_11 (už na svahu). Matej Nosáľ nevedel hrať → návod.
+- 🏆 SÚŤAŽ O ZUBATÚ KUKLU (piatok 20.11.) – výsledky zo screenshotov (DM + komenty; web IG nezobrazuje fotky v komentoch, Adamove 2 foto-komenty sú zrejme rovnaké ako v DM):
+  1. f.fiala14 (František Fiala) – 131,0 m · 20.11. 11:23 · meno na výsledku ✅ · sleduje ✅ · na svahu od skôr ✅ (poslal do DM, IG mu nedovolil koment s fotkou; v komente pod súťažným reelom napísal 131,0 m)
+  2. elca_novak (Elena Nováková) – 123,1 m · 20.11. 14:11 ✅ (DM)
+  3. michnakova_z (Zara Michňáková) – 122,9 m · 20.11. 19:35 ✅ (DM)
+  4. 01a_d_a_m._.s_v_i_d_r_o_n10 (Adam Švidron) – 109,6 m · 20.11. 21:16, ale BEZ mena (skákal bez svojho lyžiara); 107,8 m zo štvrtka
+  5. h.a.j.q_ – 101,3 m · 20.11. 08:57 (rekord 106,8 m bez screenshotu)
+  Neplatné (mimo piatku): brejnou 126,6 m (19.11.), frickristian 102,4 m (19.11., len text).
+  → Víťaza určí/vyhlási Samuel (návrh: f.fiala14).
