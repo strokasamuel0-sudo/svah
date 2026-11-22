@@ -1,0 +1,24 @@
+{
+ "align": "cust",
+ "focus": "sofiaprobalova",
+ "voice": "voice_splnene2211",
+ "out": "reel_splnene2211",
+ "boardN": 8623,
+ "sents": [
+  "Napísali ste nám do komentárov. A my sme to cez noc splnili!",
+  "Sofia chcela všetko modré. Tak je celá modrá.",
+  "Ďalší chcel tyrkysové boby s chrómom. Hotovo.",
+  "A Nela si vypýtala ružovú bundu so svetlomodrou. Sedí?",
+  "Pribudlo deväť nových lyžiarov a je nás už osemtisíc šesťsto.",
+  "Chceš tu byť aj ty? Napíš do komentára farbu bundy a daj follow."
+ ],
+ "segs": [
+  {"shot": "crowdWide", "cap": ["Napísali ste 💬", "→ *SPLNENÉ* ✅"], "y": 560},
+  {"shot": "tagCam", "tag": "sofiaprobalova", "dist": 15, "cap": ["chcela *všetko modré* 💙", "→ *celá modrá* ✅"], "y": 1350, "comment": ["sofiaprobalova", "Ja chcem všetko modré"], "cy": 420},
+  {"shot": "tagCam", "tag": "dominikanec.kanec.lol", "dist": 15, "cap": ["*tyrkysové boby* s chrómom 🛷", "→ *hotovo* ✅"], "y": 1350, "comment": ["dominikanec.kanec.lol", "Tyrkysově chromová boby"], "cy": 420},
+  {"shot": "tagCam", "tag": "nela_l30", "dist": 15, "cap": ["ružová + *svetlomodrá* 🩷🩵", "sedí? 😄"], "y": 1350, "comment": ["nela_l30", "Chcem ružovo modrú bundu ale aby modrá bola uuuplne svetlá"], "cy": 420},
+  {"shot": "aerial", "cap": ["*+9* nových lyžiarov", "už nás je *8 623* ⛷️"], "y": 560},
+  {"shot": "lodge", "cap": ["napíš *farbu bundy* 👇", "a daj *follow*"], "y": 1400}
+ ],
+ "end": [["Napíš *farbu bundy* 👇", "zajtra si tu aj ty!"], ["svahfollowerov.online · odkaz v bio"]]
+}
