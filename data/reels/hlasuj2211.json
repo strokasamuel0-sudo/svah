@@ -1,8 +1,8 @@
 {
  "align": "cust",
  "focus": "matylda.poloczkova",
- "voice": "voice_hlasuj2211_none",
- "out": "reel_hlasuj2211",
+ "voice": "voice_hlasuj2211v",
+ "out": "reel_hlasuj2211v",
  "boardN": 8623,
  "sents": [
   "Rozhodni ty, čo na svahu postavíme tento týždeň!",
@@ -77,6 +77,5 @@
   [
    "svahfollowerov.online · odkaz v bio"
   ]
- ],
- "silent": 24
+ ]
 }
