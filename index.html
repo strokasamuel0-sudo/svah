@@ -2282,7 +2282,7 @@ function jgEl(id){ return document.getElementById(id); }
 function startJump(pIdx, opts={}){
   const J=WORLD.jump; if(!J||!J.JP){ toast('Mostík sa ešte stavia…'); return; }
   if(GAME.on) endGame();
-  const p = pIdx>=0 && people[pIdx] && people[pIdx].kind==='ski' ? people[pIdx] : null;
+  const p = pIdx>=0 && people[pIdx] && (people[pIdx].kind==='ski'||people[pIdx].kind==='role') ? people[pIdx] : null; /* 22.11: aj ľudia s rolou skáču so svojím menom a farbou */
   try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'skoky-start',title:'Skoky na mostíku – štart',event:true}); }catch(e){}
   const racer=buildRacer(p||{c:'#C8102E',ti:0,pcHex:'#22262d',hcHex:'#F2B705',scHex:'#1E5AA8'}); const kids=[...racer.children], skisArr=kids.filter(m=>m.geometry&&m.geometry.parameters&&m.geometry.parameters.height===.04), up=new THREE.Group(); kids.forEach(m=>{ if(!skisArr.includes(m)) up.add(m); }); racer.add(up);
   scene.add(racer);
