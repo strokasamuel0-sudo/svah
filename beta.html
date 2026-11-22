@@ -955,7 +955,7 @@ function buildWorld(){
     hut.add(new THREE.Mesh(new THREE.BoxGeometry(18,5.5,9).translate(0,2.75,-3),L('#C8102E')), new THREE.Mesh(new THREE.BoxGeometry(22,.6,13).translate(0,6,-1),L('#f4f8fc')), new THREE.Mesh(new THREE.BoxGeometry(20,.5,6).translate(0,.25,4),L('#8a6a4a')));
     for(const x of [-9.5,9.5]) hut.add(new THREE.Mesh(new THREE.BoxGeometry(.5,6,.5).translate(x,3,5),L('#f4f8fc')));
     const sg=makeSign(['🎢 BOBOVÁ DRÁHA','prianie z vašich komentov'],'#C8102E','#fff',768,200); sg.scale.multiplyScalar(.3); sg.position.copy(S).add(new THREE.Vector3(0,19,0)); scene.add(sg);
-    const sg2=makeSign(window.__bobIdea||['nápad: @dlouhagita','@elca_novak · @filiptomasec'],'#6D4C41','#fff',768,180); sg2.scale.multiplyScalar(.12); hut.updateMatrixWorld(true); sg2.position.copy(hut.localToWorld(new THREE.Vector3(0,0,7))).add(new THREE.Vector3(0,7.5,0)); scene.add(sg2);
+    const sg2=makeSign(window.__bobIdea||['nápad: @elca_novak','@dlouhagita · ďakujeme!'],'#6D4C41','#fff',768,180); sg2.scale.multiplyScalar(.12); hut.updateMatrixWorld(true); sg2.position.copy(hut.localToWorld(new THREE.Vector3(0,0,7))).add(new THREE.Vector3(0,7.5,0)); scene.add(sg2);
     const carts=[], cols=['#C8102E','#F2B705','#1E5AA8','#2E9E5B','#F26B21','#7A3FB8','#E84A8A','#0FA3B1','#C8102E','#1E5AA8'];
     for(let k=0;k<10;k++){ const src=skiers[(k*53+7)%Math.max(1,skiers.length)]||{c:'#E84A8A'}, w=new THREE.Group(), cm=L(cols[k]);
       w.add(new THREE.Mesh(new THREE.BoxGeometry(1.5,.55,2.4).translate(0,.35,0),cm)); const nose=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,.55,10,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateY(Math.PI/2),cm); nose.position.set(0,.35,1.2); w.add(nose);
@@ -2313,7 +2313,7 @@ function jgEl(id){ return document.getElementById(id); }
 function startJump(pIdx, opts={}){
   const J=WORLD.jump; if(!J||!J.JP){ toast('Mostík sa ešte stavia…'); return; }
   if(GAME.on) endGame();
-  const p = pIdx>=0 && people[pIdx] && people[pIdx].kind==='ski' ? people[pIdx] : null;
+  const p = pIdx>=0 && people[pIdx] && (people[pIdx].kind==='ski'||people[pIdx].kind==='role') ? people[pIdx] : null; /* 22.11: aj ľudia s rolou skáču so svojím menom a farbou */
   try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'skoky-start',title:'Skoky na mostíku – štart',event:true}); }catch(e){}
   const racer=buildRacer(p||{c:'#C8102E',ti:0,pcHex:'#22262d',hcHex:'#F2B705',scHex:'#1E5AA8'}); const kids=[...racer.children], skisArr=kids.filter(m=>m.geometry&&m.geometry.parameters&&m.geometry.parameters.height===.04), up=new THREE.Group(); kids.forEach(m=>{ if(!skisArr.includes(m)) up.add(m); }); racer.add(up);
   scene.add(racer);
