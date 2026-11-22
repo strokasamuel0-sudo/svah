@@ -1,0 +1,96 @@
+{
+ "align": "chair",
+ "boardN": 8683,
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ],
+ "sents": [
+  "Chceli ste bobovú dráhu? Tak tu je!",
+  "Elca sa v komentári pýtala, či tu môže byť bobová dráha. Tak sme ju postavili.",
+  "Dolu kľukato pomedzi smreky a hore po koľajnici naspäť.",
+  "A v každom vozíku sedí jeden z vás.",
+  "Je nás osemtisícšesťsto a pri deväťtisícpäťsto staviame klzisko.",
+  "Napíš farbu bundy do komentu a zajtra sa vezieš aj ty."
+ ],
+ "segs": [
+  {
+   "shot": "bobTop",
+   "cap": [
+    "Chceli ste *BOBOVÚ DRÁHU*? 🎢",
+    "tak *TU JE!*"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "bobHut",
+   "cap": [
+    "Písali ste to *vy* 👇"
+   ],
+   "y": 520,
+   "ov": "comments"
+  },
+  {
+   "shot": "bob",
+   "cap": [
+    "dolu *kľukato* 🌲",
+    "hore po *koľajnici* 🎢"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "bobSide",
+   "cap": [
+    "v každom vozíku",
+    "sedí *jeden z vás* 🎢"
+   ],
+   "y": 560,
+   "comment": [
+    "matylda.poloczkova",
+    "A muzu tam byt s konem za kterym budu mit zaprahnute boby"
+   ],
+   "cy": 1300
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8683* followerov",
+    "pri *9500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "bob",
+   "cap": [
+    "Napíš *farbu bundy*",
+    "do *komentu* 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Daj *follow* a napíš",
+   "*farbu bundy* 👇"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ],
+ "comments": [
+  [
+   "elca_novak",
+   "Muže tam být bobová dráha?"
+  ],
+  [
+   "dominikanec.kanec.lol",
+   "Tyrkysově chromová boby"
+  ],
+  [
+   "matylda.poloczkova",
+   "A muzu tam byt s konem za kterym budu mit zaprahnute boby"
+  ]
+ ],
+ "note": "KONCEPT – zverejniť až keď bobová dráha vyhrá hlasovanie hlasuj2211 (29.11.); aktualizuj čísla."
+}
