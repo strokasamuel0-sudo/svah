@@ -1,0 +1,24 @@
+{
+ "align": "cust",
+ "focus": "matylda.poloczkova",
+ "voice": "voice_hlasuj2211",
+ "out": "reel_hlasuj2211",
+ "boardN": 8623,
+ "sents": [
+  "Rozhodni ty, čo na svahu postavíme tento týždeň!",
+  "Číslo jeden: bobová dráha, ktorú si pýtate najviac.",
+  "Číslo dva: záprah s koňom a saňami. Nápad od Matyldy.",
+  "Číslo tri: večerný hokej na osvetlenom ihrisku.",
+  "Vyhrá to, čo bude mať v komentároch najviac hlasov.",
+  "Napíš do komentára jedna, dva alebo tri, daj follow, a o týždeň to tu bude stáť."
+ ],
+ "segs": [
+  {"shot": "crowdWide", "cap": ["*ROZHODNI TY* 🗳️", "čo postavíme tento týždeň?"], "y": 560},
+  {"shot": "sledTop", "cap": ["*1️⃣ BOBOVÁ DRÁHA* 🛷", "pýtate si ju najviac"], "y": 560},
+  {"shot": "tagCam", "tag": "matylda.poloczkova", "dist": 15, "cap": ["*2️⃣ KONSKÝ ZÁPRAH* 🐴", "nápad od Matyldy"], "y": 1350, "comment": ["matylda.poloczkova", "A muzu tam byt s konem za kterym budu mit zaprahnute boby"], "cy": 420},
+  {"shot": "glowFront", "cap": ["*3️⃣ VEČERNÝ HOKEJ* 🏒", "na osvetlenom ihrisku"], "y": 560},
+  {"shot": "evWide", "cap": ["vyhrá *najviac hlasov*", "v komentároch 💬"], "y": 560},
+  {"shot": "lodge", "cap": ["napíš *1, 2 alebo 3* 👇", "a daj *follow*"], "y": 1400}
+ ],
+ "end": [["Napíš *1 · 2 · 3* 👇", "o týždeň to tu bude!"], ["svahfollowerov.online · odkaz v bio"]]
+}
