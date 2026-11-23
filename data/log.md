@@ -330,3 +330,17 @@
 - 🎬 REEL `hlasuj2211` ZVEREJNENÝ (DgBl8hjNN8J, 28 s, S HLASOM – Samuel zmazal verziu bez hlasu DgBkuL5NrMq a dobil ElevenLabs; popis overený ✅) – HLASOVANIE „Čo postavíme tento týždeň?“ 1 bobová dráha · 2 konský záprah (matylda) · 3 večerný hokej. Vyhrá najviac hlasov v komentoch → ⚠️ NOČNÝ BEH 29.11.: spočítaj hlasy (1/2/3) pod týmto reelom a postav víťaza + reel.
 - Výkon reelov (zhliadnutia, 22.11.): ludia2111 1738 (16 kom.), víťazka 1424, fakty 1337, zajtra1911 1223, kuklasutaz 1205, návod 2304, hra Skoky 2194. Najlepšie historicky: „splnené prianie/míľnik“ formát (snowpark 5576, back-country 5068, hasiči 4666).
 - POSLEDNÝ_KOMENT_TS: 2026-11-22T00:50:00Z
+
+## 23.11. ~06:00 – 07:40 – Samuel: večerný beh (dobehnutý ráno) + víťaz hlasovania na svah + reel
+- DM (podpísané „– Samuel, Svah followerov“): Aneta (chce krúžok – nápad), zemanova_zoe, vikin.lajfik, buckoigor152 (nápad výrivka) – odpísané / žiadosti prijaté.
+- SYNC: +10 lyžiarov, 2 úpravy, čakáreň +68. IG 8703. Lyžiari 3261 · čakáreň 5484 · chatky 139 · roly 164.
+- 🗳️ HLASOVANIE (DgBl8hjNN8J) uzavreté skôr: 1 bobová dráha **34** · 3 večerný hokej 29 · 2 konský záprah 0 → vyhrala BOBOVÁ DRÁHA.
+- 🎢 Bobová dráha (postavená v beta inou session) presunutá na ostrý web (index.html), tabuľa „🎢 BOBOVÁ DRÁHA – vyhrala vaše hlasovanie 🗳️“. Overené live ✅.
+- 🎬 REEL `bobdraha` ZVEREJNENÝ (DgEvysfNIPr, 26 s, hlas Brian, Pôvodné): výsledok 34:29 → koľajnica, smreky, vozíky s lyžiarmi → komenty elca_novak/viktoriehejdukova/chvapilt → 8 703 / pri 9 500 klzisko → CTA farba bundy. POPIS overený cez API ✅ (vďaka @elca_novak).
+- `splnene2211` (Sofia celá modrá, tyrkysové boby dominikanec, nela_l30) je vyrenderovaný s hlasom, ale NEzverejnený – nechaný na ďalší deň, aby si reely nekradli dosah.
+- Komenty: k.hamp3js („Cerna“, nesleduje) → odpoveď „daj follow…“. j.petras13 nesleduje, len nápad (motokros).
+- Nápady: fifowesely krytý skatepark, 17_dada_17 horská dráha, j.petras13 motokros, tami030716 chce zmeniť výstroj, michal_srutek polícia, buckoigor výrivka, Aneta krúžok, hokej (2. miesto, 29 hlasov) – kandidát na ďalšie hlasovanie.
+- ElevenLabs: ~8 900 kreditov.
+- 🟡 KUKLY: objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno). Nové dopyty: 0. Víťazka e_kov.acova – treba adresu.
+- Scheduled nočný beh stále pozastavený (device_absent).
+- POSLEDNÝ_KOMENT_TS: 2026-11-23T06:20:00Z
