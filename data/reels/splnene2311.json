@@ -1,0 +1,100 @@
+{
+ "align": "cust",
+ "focus": "postavavaclav",
+ "voice": "voice_splnene2311",
+ "out": "reel_splnene2311",
+ "boardN": 8789,
+ "sents": [
+  "Napísali ste farbu bundy do komentára. A my sme to splnili!",
+  "Ultras chcel modrú bundu. Tu je.",
+  "Tyrkysovú bundu? Hotovo.",
+  "A Václav chcel svietivo oranžovú. Toho neprehliadneš!",
+  "Je nás osemtisícsedemstoosemdesiatdeväť a pri deväťtisícpäťsto staviame klzisko.",
+  "Chceš tu byť aj ty? Napíš do komentára farbu bundy a daj follow."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Napísali ste farbu 💬",
+    "→ *SPLNENÉ* ✅"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "tagCam",
+   "tag": "ultrasslovansupporter",
+   "dist": 15,
+   "cap": [
+    "chcel *modrú bundu* 💙",
+    "→ *tu je* ✅"
+   ],
+   "y": 1350,
+   "comment": [
+    "ultrasslovansupporter",
+    "modra bunda"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "tagCam",
+   "tag": "_.jajisqq._",
+   "dist": 15,
+   "cap": [
+    "*tyrkysová* bunda 🩵",
+    "→ *hotovo* ✅"
+   ],
+   "y": 1350,
+   "comment": [
+    "_.jajisqq._",
+    "Tyrkysová bunda prosim"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "tagCam",
+   "tag": "postavavaclav",
+   "dist": 15,
+   "cap": [
+    "*svietivo oranžová* 🧡",
+    "neprehliadneš ho 😄"
+   ],
+   "y": 1350,
+   "comment": [
+    "postavavaclav",
+    "Svítivě oranžová prosiiiiiiiiiim"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8 789* followerov",
+    "pri *9 500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "napíš *farbu bundy* 👇",
+    "a daj *follow*"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Napíš *farbu bundy* 👇",
+   "zajtra si tu aj ty!"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ],
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ]
+}
