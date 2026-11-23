@@ -1,31 +1,32 @@
 {
  "align": "chair",
- "boardN": 8683,
+ "boardN": 8703,
  "goal": [
   9500,
   "Do klziska ⛸️"
  ],
  "sents": [
-  "Chceli ste bobovú dráhu? Tak tu je!",
-  "Elca sa v komentári pýtala, či tu môže byť bobová dráha. Tak sme ju postavili.",
+  "Hlasovali ste a vyhrala bobová dráha! Tak tu je!",
+  "Tridsaťštyri hlasov pre boby, hokej mal dvadsaťdeväť. Tesné!",
   "Dolu kľukato pomedzi smreky a hore po koľajnici naspäť.",
   "A v každom vozíku sedí jeden z vás.",
-  "Je nás osemtisícšesťsto a pri deväťtisícpäťsto staviame klzisko.",
+  "Je nás osemtisícsedemsto a pri deväťtisícpäťsto staviame klzisko.",
   "Napíš farbu bundy do komentu a zajtra sa vezieš aj ty."
  ],
  "segs": [
   {
    "shot": "bobTop",
    "cap": [
-    "Chceli ste *BOBOVÚ DRÁHU*? 🎢",
-    "tak *TU JE!*"
+    "Hlasovali ste → *VYHRALA* 🎢",
+    "*BOBOVÁ DRÁHA* je tu!"
    ],
    "y": 560
   },
   {
    "shot": "bobHut",
    "cap": [
-    "Písali ste to *vy* 👇"
+    "🗳️ *34* hlasov boby",
+    "🏒 *29* hokej – tesné!"
    ],
    "y": 520,
    "ov": "comments"
@@ -54,8 +55,8 @@
   {
    "shot": "evWide",
    "cap": [
-    "*8683* followerov",
-    "pri *9500* = ⛸️ *KLZISKO*"
+    "*8 703* followerov",
+    "pri *9 500* = ⛸️ *KLZISKO*"
    ],
    "y": 620,
    "ov": "goal"
@@ -84,13 +85,14 @@
    "Muže tam být bobová dráha?"
   ],
   [
-   "dominikanec.kanec.lol",
-   "Tyrkysově chromová boby"
+   "viktoriehejdukova",
+   "1 bobova draha"
   ],
   [
-   "matylda.poloczkova",
-   "A muzu tam byt s konem za kterym budu mit zaprahnute boby"
+   "chvapilt",
+   "Dráha"
   ]
  ],
- "note": "KONCEPT – zverejniť až keď bobová dráha vyhrá hlasovanie hlasuj2211 (29.11.); aktualizuj čísla."
+ "voice": "voice_bobdraha",
+ "out": "reel_bobdraha"
 }
