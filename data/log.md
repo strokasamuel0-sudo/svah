@@ -353,3 +353,12 @@
 - ElevenLabs: ~8 500 kreditov.
 - 🟡 KUKLY: bez zmeny – objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), nové dopyty 0, víťazka e_kov.acova – treba adresu.
 - POSLEDNÝ_KOMENT_TS: 2026-11-23T22:15:00Z
+
+## 23.11. ~23:40 – 23:55 – nočný autopilot (beh prišiel 20 min po Samuelovom večernom behu)
+- Kontrola: IG 8788 followerov. Nové komenty od 22:15Z: 1 – bielik_m „1“ (hlas v uzavretom hlasovaní, už je v dátach) → followers.json bez zmeny (lyžiari 3264 · čakáreň 5532 · chatky 139 · roly 164 · 12 zjazdoviek).
+- DM: nič nové (vika len poďakovanie), žiadosti o správy 0. Strediská: nič nové. KUKLA: 0 nových dopytov.
+- Popisy: 12 najnovších reelov má popis ✅ (overené cez /api/v1/media/<id>/info/).
+- VIDEO v tomto behu NEVYŠLO: splnene2311 vyšiel pred ~30 min – druhý reel by mu kradol dosah. Novinka v hre dnes = výsledok hlasovania (bobová dráha, ráno). Na zajtra: nové HLASOVANIE (hokej 29 hl. vs. vírivka vs. horská dráha / krúžok) – hlasovacie reely ťahajú komenty najviac.
+- Storky pre Samuela: storka_splnene2311.png (pozri nový reel), storka_klzisko711.png (ešte 711 do klziska).
+- 🟡 KUKLY: bez zmeny – s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), víťazka e_kov.acova – treba adresu.
+- POSLEDNÝ_KOMENT_TS: 2026-11-23T22:23:32Z
