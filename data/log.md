@@ -344,3 +344,12 @@
 - 🟡 KUKLY: objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno). Nové dopyty: 0. Víťazka e_kov.acova – treba adresu.
 - Scheduled nočný beh stále pozastavený (device_absent).
 - POSLEDNÝ_KOMENT_TS: 2026-11-23T06:20:00Z
+
+## 23.11. ~23:15 – 23:30 – Samuel: večerný beh
+- SYNC (komenty od 23.11. 06:20Z – len 5, tichý deň): +3 lyžiari – ultrasslovansupporter (modrá), _.jajisqq._ (tyrkysová), postavavaclav (svietivo oranžová #FF7A00). jakub_karkas len hlas „večerný hokej“ (ostáva v čakárni). Čakáreň +48 (API followerov vrátilo 199). IG 8789. Lyžiari 3264 · čakáreň 5532 · chatky 139.
+- DM (podpísané): Aneta – „inštruktorka môžem byť len ja“ → potvrdené, krúžok v zozname. buckoigor – „dajte vírivku aj obrovský hotel“ → zapísané, rozhoduje hlasovanie. Žiadosti o správu: 0. vika – len poďakovanie.
+- 🎬 REEL `splnene2311` ZVEREJNENÝ (DgGcfRsNn2F, 27 s, hlas Brian, Pôvodné): napísali ste → splnené: modrá (ultrasslovansupporter), tyrkysová (_.jajisqq._), svietivo oranžová (postavavaclav) → 8 789 / pri 9 500 klzisko → CTA. POPIS overený cez API ✅. (Starý `splnene2211` s číslom 8623 sa nezverejnil – nahradený týmto.)
+- Výkon (23.11. večer): hlasuj2211 3182 zhliadnutí / 82 komentov (!), ludia2111/„Toto nie je hra“ 2435 / 27, bobdraha 1281 / 2. → Hlasovacie reely ťahajú komenty najviac. Návrh na zajtra: nové hlasovanie (hokej 29 hlasov vs. vírivka vs. horská dráha / krúžok).
+- ElevenLabs: ~8 500 kreditov.
+- 🟡 KUKLY: bez zmeny – objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), nové dopyty 0, víťazka e_kov.acova – treba adresu.
+- POSLEDNÝ_KOMENT_TS: 2026-11-23T22:15:00Z
