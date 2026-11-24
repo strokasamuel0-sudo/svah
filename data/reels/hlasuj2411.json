@@ -1,0 +1,83 @@
+{
+ "align": "cust",
+ "focus": "buckoigor152",
+ "voice": "voice_hlasuj2411",
+ "out": "reel_hlasuj2411",
+ "boardN": 8825,
+ "sents": [
+  "Nové hlasovanie! Ty rozhodneš, čo na svahu pribudne.",
+  "Číslo jeden: vírivka pri chate. Nápad od Igora.",
+  "Číslo dva: krytý skatepark, aby sa dalo jazdiť aj v zime.",
+  "Číslo tri: večerný hokej. Minule skončil tesne druhý!",
+  "Vyhrá to, čo bude mať v komentároch najviac hlasov.",
+  "Napíš jedna, dva alebo tri, daj follow a víťaz tu bude do týždňa."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "*NOVÉ HLASOVANIE* 🗳️",
+    "čo pribudne na svahu?"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "tagCam",
+   "tag": "buckoigor152",
+   "dist": 15,
+   "cap": [
+    "*1️⃣ VÍRIVKA* 🛁",
+    "pri chate – nápad od Igora"
+   ],
+   "y": 1350,
+   "comment": [
+    "buckoigor152",
+    "Dajte vírivku aj obrovský hotel"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "tagCam",
+   "tag": "fifowesely",
+   "dist": 15,
+   "cap": [
+    "*2️⃣ KRYTÝ SKATEPARK* 🛹",
+    "jazdí sa aj v zime"
+   ],
+   "y": 1350
+  },
+  {
+   "shot": "glowFront",
+   "cap": [
+    "*3️⃣ VEČERNÝ HOKEJ* 🏒",
+    "minule tesne 2. (29 hlasov)"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "vyhrá *najviac hlasov*",
+    "v komentároch 💬"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "napíš *1, 2 alebo 3* 👇",
+    "a daj *follow*"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Napíš *1 · 2 · 3* 👇",
+   "víťaz do týždňa!"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
