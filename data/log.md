@@ -362,3 +362,12 @@
 - Storky pre Samuela: storka_splnene2311.png (pozri nový reel), storka_klzisko711.png (ešte 711 do klziska).
 - 🟡 KUKLY: bez zmeny – s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), víťazka e_kov.acova – treba adresu.
 - POSLEDNÝ_KOMENT_TS: 2026-11-23T22:23:32Z
+
+## 24.11. ~22:25 – 22:40 – Samuel: nočný beh
+- SYNC (komenty od 23.11. 22:23Z – 31 nových, takmer všetky pod splnene2311 → formát „splnené farby“ funguje: 2 546 zhliadnutí / 35 komentov za 23 h): +21 lyžiarov – markikongi (burgundy), young_frankoooo (svietivo žltá), kht._casper (pastelovo ružová), littlebro_simon (hráškovo zelená), frantisekbros, honzum13 (červená), samuel_.cz._ (tmavofialová), sanulkaa123456 (biela), larin._kaa._ (svetloružová), ejlinkaakkt4 (ružová), vladislavvanicek3, t_vojtovic_ (modrá), laura.ulicna369 (najsvetlejšia žltá), paulomxn1_tv1 (čierna), passatb51234 („svietiaca čierna“ → čierna), traxik_13 (sage), ondrejkndrac (slabo modrá), tade7ok7 (biela + čierne nohavice), miso_galet (tmavomodrá), phencek (krikľavo zelená), dafikdaf (chce „pew pew kocku“ na hlavu – nevieme, dostal modrú; NÁPAD: doplnky na hlavu). Úpravy 2: evelingorolova1580 sýto ružová, zuzumar10 svetlomodrá bunda + svetloružové nohavice + svetlofialová čapica (chcela mix). Čakáreň +45. IG 8825. Lyžiari 3285 · čakáreň 5569 · chatky 139.
+- Komenty: m4tusko4 „KUKLA“ → cena (20 € / limitka 30 € + poštovné cca 2 €, objednávka cez DM). „Daj follow“ (nesledujú): arkelyova, bruno_franko, mgsigma3, __misha_el__ – IG ich uverejnil ako hlavné komenty s @ (nie vlákno). d8jv2_82 – IG po 5. rovnakej odpovedi ďalší koment NEPUSTIL (asi anti-spam) → nevynucované.
+- DM: prijaté 2 žiadosti – voj.tik1045 (poslal meme reel) → návod ako sa dostať na svah; Park Finder (parkfinder.sk, maturitná práca – app na parkovanie, ponúka spoluprácu/spoločnú propagáciu) → zdvorilo „pozriem sa a ozvem sa“ → ROZHODNE SAMUEL. samsa – spam (WhatsApp kanál), bez odpovede.
+- 🎬 REEL `hlasuj2411` ZVEREJNENÝ (DgI7kHrtMRt, 29 s, hlas Brian, Pôvodné): NOVÉ HLASOVANIE 1 vírivka pri chate (buckoigor152) · 2 krytý skatepark (fifowesely) · 3 večerný hokej (minule 29 hl.). POPIS overený cez API ✅. ⚠️ Spočítať hlasy pod DgI7kHrtMRt cca 28.–30.11. a víťaza postaviť + reel.
+- ElevenLabs: ~7 970 kreditov.
+- 🟡 KUKLY: nový dopyt m4tusko4 (cena poslaná v komente). Objednávky s adresou bez zmeny 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno). Víťazka e_kov.acova – treba adresu.
+- POSLEDNÝ_KOMENT_TS: 2026-11-24T21:25:00Z
