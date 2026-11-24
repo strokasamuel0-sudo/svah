@@ -371,3 +371,13 @@
 - ElevenLabs: ~7 970 kreditov.
 - 🟡 KUKLY: nový dopyt m4tusko4 (cena poslaná v komente). Objednávky s adresou bez zmeny 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno). Víťazka e_kov.acova – treba adresu.
 - POSLEDNÝ_KOMENT_TS: 2026-11-24T21:25:00Z
+
+## 24.11. ~23:05 – 23:25 – nočný autopilot (beh prišiel ~40 min po Samuelovom nočnom behu)
+- Kontrola: IG 8825 followerov (bez zmeny). Nové komenty od 21:25Z: 3 – hlasy pod hlasuj2411: rottervita „2“ (bez voľby farby → ostáva v čakárni), vikin.lajfik „3“ (už na svahu); michal_srutek „tak čo tá policajná stanica?“ (sleduje, polícia = míľnik 14000 – bez odpovede, pravidlo neodpisovať). followers.json bez zmeny (lyžiari 3285 · čakáreň 5569 · chatky 139 · 12 zjazdoviek).
+- DM: nič nové na odpísanie (samsa spam, vika/Nelka len reakcie), žiadosti o správy 0. Park Finder – čaká na Samuela. Strediská: nič nové.
+- Popisy: 8 najnovších reelov má popis ✅ (overené cez /api/v1/media/<id>/info/).
+- VIDEO v tomto behu NEVYŠLO: hlasuj2411 vyšiel pred ~40 min – druhý reel by mu kradol dosah počas hlasovania. Novinka v hre dnes = nové hlasovanie (vírivka / skatepark / hokej).
+- Storky pre Samuela: storka_hlasuj2411.png (hlasuj 1/2/3), storka_klzisko675.png (ešte 675 do klziska).
+- Hlasovanie hlasuj2411 (DgI7kHrtMRt) zatiaľ: 1× „2“, 1× „3“ – spočítať 28.–30.11.
+- 🟡 KUKLY: bez zmeny – s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu (bez odpovede v DM), víťazka e_kov.acova – treba adresu.
+- POSLEDNÝ_KOMENT_TS: 2026-11-24T22:04:23Z (1795557863)
