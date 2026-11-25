@@ -2445,7 +2445,7 @@ window.__jumpDemo={ start:(tap=.975)=>{ startJump(-1,{demo:true}); JG.demoTap=ta
 window.__dbg2={select:(i,f)=>select(i,f),people,showAll,startJump,JG,stepJump};
 /* ---------- 🎢 BOBOVÁ JAZDA (nová hra, 25. 11.) – zjazd po bobovej dráhe na čas, brzdi v zákrutách ---------- */
 const BG={on:false};
-const BOB_KEY='svah_bob_best', BOB_LIM=13.5;
+const BOB_KEY='svah_bob_best', BOB_LIM=30;
 function bgBest(){ try{ const v=parseFloat(localStorage.getItem(BOB_KEY)); return v>0?v:0; }catch(e){ return 0; } }
 let BOBT=null;
 function bobTrack(){ if(BOBT) return BOBT; const Q=WORLD.bob; if(!Q) return null; const C=Q.C, df=C.downFrac, Lt=C.getLength(), Ld=Lt*df, N=900, P=[], T=[], K=[], S=[];
@@ -2454,7 +2454,7 @@ function bobTrack(){ if(BOBT) return BOBT; const Q=WORLD.bob; if(!Q) return null
   for(let r=0;r<2;r++){ const K2=K.slice(); for(let i=2;i<N-1;i++) K[i]=(K2[i-2]+K2[i-1]+K2[i]+K2[i+1]+K2[i+2])/5; }
   BOBT={C,df,Ld,N,ds,P,T,K,S}; return BOBT; }
 function bobIdx(d){ const B=BOBT; return Math.max(0,Math.min(B.N,Math.round(d/B.ds))); }
-function bobLook(d,v){ const B=BOBT; let m=0; const end=d+Math.max(14,v*1.5); for(let x=d;x<=end;x+=B.ds*2){ const k=Math.abs(B.K[bobIdx(x)]); if(k>m) m=k; } return m; }
+function bobLook(d,v){ const B=BOBT; let m=0; const end=d+Math.max(14,v*2.2); for(let x=d;x<=end;x+=B.ds*2){ const k=Math.abs(B.K[bobIdx(x)]); if(k>m) m=k; } return m; }
 function mkBobCart(p){ const L=c=>new THREE.MeshLambertMaterial({color:c}), w=new THREE.Group(), cm=L(p&&p.c?p.c:'#F26B21');
   w.add(new THREE.Mesh(new THREE.BoxGeometry(1.5,.55,2.4).translate(0,.35,0),cm)); const nose=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,.55,10,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateY(Math.PI/2),cm); nose.position.set(0,.35,1.2); w.add(nose);
   w.add(new THREE.Mesh(new THREE.BoxGeometry(1.3,.9,.25).translate(0,.9,-1.05),L('#2B2D31')), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18).translate(.55,.85,.7),L('#2B2D31')), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18).translate(-.55,.85,.7),L('#2B2D31')));
@@ -2467,7 +2467,7 @@ function startBob(pIdx, opts={}){
   if(!opts.demo){ try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'boby-start',title:'Bobová jazda – štart',event:true}); }catch(e){} }
   const cart=mkBobCart(p); scene.add(cart);
   for(const q of WORLD.bob.carts) q.g.visible=false;
-  Object.assign(BG,{on:true,p,cart,phase:'count',cnt:opts.demo?(opts.cnt||0.01):3.2,d:opts.d0||2,v:opts.v0||3,t:0,brake:false,over:0,danger:0,roll:0,crash:false,crT:0,cv:null,res:null,last:performance.now(),demo:!!opts.demo,nb:!!opts.nb,aiK:opts.aiK||.8,camP:new THREE.Vector3(),camQ:new THREE.Vector3(),camInit:false,best:bgBest(),maxV:0});
+  Object.assign(BG,{on:true,p,cart,phase:'count',cnt:opts.demo?(opts.cnt||0.01):3.2,d:opts.d0||2,v:opts.v0||8,t:0,brake:false,over:0,danger:0,roll:0,crash:false,crT:0,cv:null,res:null,last:performance.now(),demo:!!opts.demo,nb:!!opts.nb,aiK:opts.aiK||.8,camP:new THREE.Vector3(),camQ:new THREE.Vector3(),camInit:false,best:bgBest(),maxV:0});
   bobPlace();
   if(!opts.demo){
     gameCrowd(false); $('card').style.display='none'; $('top').style.display='none'; $('labels').style.display='none'; $('cta').style.display='none';
@@ -2502,16 +2502,16 @@ function stepBob(now){
   if(G.phase==='ride'){
     G.t+=dt; const i=bobIdx(G.d), k=B.K[i];
     if(G.demo){ const m=bobLook(G.d,G.v); G.brake=!G.nb && G.v*G.v*m>BOB_LIM*G.aiK; }
-    const acc=-9.81*B.S[i]*1.15 - .0042*G.v*G.v - .25 - (G.brake?7.5:0);
-    G.v=Math.max(G.brake?2.5:3,Math.min(32,G.v+acc*dt)); G.maxV=Math.max(G.maxV,G.v); G.d+=G.v*dt;
+    const acc=-9.81*B.S[i]*2 - .003*G.v*G.v - .25 - (G.brake?14:0);
+    G.v=Math.max(G.brake?6.4:8,Math.min(40,G.v+acc*dt)); G.maxV=Math.max(G.maxV,G.v); G.d+=G.v*dt;
     const aL=G.v*G.v*Math.abs(k); G.danger=aL/BOB_LIM; const tr=Math.sign(k)*Math.min(1.25,G.danger)*.42; G.roll+=(tr-G.roll)*Math.min(1,dt*8);
     if(G.danger>1){ G.over+=dt*(1+(G.danger-1)*4); } else G.over=Math.max(0,G.over-dt*2);
     if(G.over>.32){ G.crash=true; G.phase='crash'; const T=B.T[i]; G.cv=new THREE.Vector3(T.x*G.v-Math.sign(k)*T.z*G.v*.6,4.5,T.z*G.v+Math.sign(k)*T.x*G.v*.6); G.spin=Math.sign(k)||1; if(!G.demo) jgEl('bHint').textContent='Ups! Príliš rýchlo do zákruty 💥'; }
-    else { bobPlace(); if(G.d>=B.Ld-3){ G.d=B.Ld-3; bobFinish(); } }
+    else { bobPlace(); if(G.d>=B.Ld*.95){ bobFinish(); } }
     if(!G.demo){ jgEl('bSpd').textContent=Math.round(G.v*3.6)+' km/h'; jgEl('bTime').textContent=G.t.toFixed(1).replace('.',',')+' s'; const dg=Math.min(1,G.danger); jgEl('bG').style.width=(dg*100)+'%'; jgEl('bG').style.background=G.danger>1?'#C8102E':G.danger>.75?'#F2B705':'#2E9E5B'; jgEl('bGo').classList.toggle('on',G.brake); }
   }
   if(G.phase==='crash'){ G.crT+=dt; const R=G.cart; G.cv.y-=9.81*dt; R.position.addScaledVector(G.cv,dt); const gy=groundAt(R.position.x,R.position.z)+.4; if(R.position.y<gy){ R.position.y=gy; G.cv.multiplyScalar(.55); G.cv.y=Math.abs(G.cv.y)*.35; } R.rotation.z+=G.spin*dt*5; R.rotation.x+=dt*2.2; if(G.crT>.9&&!G.res) bobFinish(); }
-  if(G.phase==='out'&&!G.crash){ G.v=Math.max(0,G.v-dt*9); G.d=Math.min(B.Ld-.5,G.d+G.v*dt); bobPlace(); }
+  if(G.phase==='out'&&!G.crash){ G.v=Math.max(0,G.v-dt*9); G.d=Math.min(B.Ld*.975,G.d+G.v*dt); bobPlace(); }
   /* kamera – za vozíkom */
   const R=G.cart, i=bobIdx(G.d), T=B.T[i], tp=_bv1, tq=_bv2;
   if(G.phase==='crash'||(G.phase==='out'&&G.crash)){ tp.copy(R.position).add(new THREE.Vector3(-T.x*14+T.z*8,7,-T.z*14-T.x*8)); tq.copy(R.position); }
