@@ -393,3 +393,21 @@
 - ElevenLabs: ~7 600 kreditov.
 - 🟡 KUKLY: bez nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu, e_kov.acova – treba adresu.
 - POSLEDNÝ_KOMENT_TS: 2026-11-25T17:30:00Z
+
+## 25.11. ~21:50 – 23:20 – nočný autopilot
+- ÚPLNÝ SYNC: 48 príspevkov, 5 909 komentov vrátane odpovedí. Nové od 17:30Z len 4 (tichý večer). IG 8 849 → 8 850 followerov.
+- followers.json: +2 lyžiari – anicka.s_dance5 (fialová, snowboard), lindusq_0 (chce na svah bez farby → ružová; nápad: tunel na zjazdovke) · čakáreň +3 (filip86509, emi_cek222, junior_janik – najnovší followeri bez komentu). Lyžiari 3 289 · čakáreň 5 599 · chatky 139 · 13 zjazdoviek. Odhlásení sa nekontrolovali (API vracia len najnovších ~100).
+- TIP: follow sa dá overiť cez `/api/v1/friendships/40406379974/followers/?count=12&search_surface=follow_list_page&query=<meno>` (friendships/show vracia HTML).
+- „Daj follow“ odpovede (UI permalink + Odpovedať + Uverejniť): kalina.kristian (zeleno-čierna), teodor13501 (lyže). Obaja nesledujú → po follow pridať.
+- DM: nič nové na odpoveď (voj.tik1045 „Ok“, Park Finder „Ďakujem, jasné, budem…“ – rozhoduje Samuel). Žiadosti o správy: 0. Strediská: nič nové.
+- ❄️ NOVINKA (beta→index): SNEŽNÉ DELÁ NA VŠETKÝCH ZJAZDOVKÁCH – prianie stan.peduzzi (od 4. 11., 2×) + jantolak_simon_. 3 delá na každej zjazdovke (13 zjazdoviek = 39 diel, delá sledujú zákruty cA), tabuľa „❄️ ZASNEŽOVANIE · nápad @stan.peduzzi“ pri zjazdovke 3, zasnežovači (rola snow) rozdelení po zjazdovkách. WORLD.guns = [{g,P,C,ri,s}]. Nové zábery `snowGun` (pri dele, parametre seg sgI/sgA/sgW/sgR/sgH/sgQ) a `snowGuns` (celkový). Konzola bez chýb.
+- 🎬 REEL A `snehdela2511` ZVEREJNENÝ (DgLdge2t37G, 28,6 s, hlas Brian, Pôvodné, ?den): „Jeden z vás prosí od 4. novembra“ + koment stan.peduzzi → snežné delá na všetkých zjazdovkách → 13 zjazdoviek · 39 diel → @stan.peduzzi je zasnežovač → 8 849 / pri 9 500 klzisko → „Čo postavíme ďalej? + farba bundy“. POPIS overený cez API ✅ (436 znakov).
+- REEL B nevyšiel: dnes už vyšli 2 reely (bobhra2511 18:33, snehdela2511 22:09) – tretí by kradol dosah. Na zajtra téma B: rekordy Bobovej jazdy / Skokov alebo „označ kamoša“.
+- Storky pre Samuela: storka_snehdela.png (pozri nový reel), storka_hlasuj_vedie.png (hlasovanie – vedie hokej).
+- 🗳️ Hlasovanie DgI7kHrtMRt: bez nových hlasov od 17:30Z (3 hokej 17 · 1 vírivka 6 · 2 skatepark 5). Uzavrieť 28.–30.11.
+- Nápady z komentov: tunel na zjazdovke (lindusq_0), skokanky + lanovka (už sú), polícia (michal_srutek – míľnik 14000).
+- MÍĽNIKY: 9 500 ⛸️ klzisko (chýba ~650) → 11 000 🧖 wellness → 12 500 🛍️ obchodné centrum → 14 000 👮 polícia + 🍫 čokoládovňa.
+- Rebríček Zjazd na čas / Skoky: bez nových časov.
+- 🟡 KUKLY: 0 nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu (bez odpovede), víťazka e_kov.acova – treba adresu.
+- ElevenLabs: ~7 350 kreditov.
+- POSLEDNÝ_KOMENT_TS: 2026-11-25T19:31:58Z (1795635118)
