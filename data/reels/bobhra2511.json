@@ -45,17 +45,18 @@
   },
   {
    "shot": "bobPlay",
-   "bd": 40,
+   "bd": 45,
    "bv": 22,
    "nb": 1,
    "cap": [
     "inak *VYLETÍŠ* 💥"
    ],
    "y": 1560,
-   "ov": "bobHud"
+   "ov": "bobHud",
+   "lead": 0.5
   },
   {
-   "shot": "bobSide",
+   "shot": "bobHut",
    "cap": [
     "Kto má *najlepší čas*? ⏱",
     "napíš ho do komentu 👇"
