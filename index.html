@@ -543,7 +543,7 @@ const ROLE_TXT = {
   hotel:{ name:'personál hotela Svah', short:'🏨', icon:'🏨', place:'Hotel Svah' },
   lift:{ name:'vlekár', short:'🎫', icon:'🎫', place:'Dolná stanica vleku' },
   mascot:{ name:'vianočný maskot', short:'⛄', icon:'⛄', place:'Pri hoteli Svah' },
-  snow:{ name:'zasnežovač', short:'❄️', icon:'❄️', place:'Snežné delá pri zjazdovke 1' },
+  snow:{ name:'zasnežovač', short:'❄️', icon:'❄️', place:'Snežné delá na všetkých zjazdovkách' },
   coach:{ name:'tréner skokov', short:'🏂', icon:'🏂', place:'Snowpark' },
   skuter:{ name:'jazdec na snežnom skútri', short:'🛷', icon:'🛷', place:'Pod svahom' },
   police:{ name:'policajt na svahu', short:'👮', icon:'👮', place:'Pri hoteli Svah' },
@@ -559,7 +559,7 @@ function roleLive(p){
   if (p.role==='rescue') return heliState(t).flying ? 'letí vrtuľníkom na vrchol' : 'pohotovosť pri heliporte';
   if (p.role==='hotel') return 'víta hostí v hoteli';
   if (p.role==='lift') return 'obsluhuje vlek';
-  if (p.role==='snow') return 'zasnežuje zjazdovku 1 ❄️';
+  if (p.role==='snow') return 'zasnežuje zjazdovky ❄️';
   if (p.role==='coach') return 'učí skoky v snowparku';
   if (p.role==='skuter') return 'jazdí na snežnom skútri pod svahom';
   if (p.role==='police') return 'dohliada na poriadok na svahu 👮';
@@ -774,16 +774,20 @@ function buildWorld(){
         new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,3.4,6).translate(x,2.4,5.2),dark), new THREE.Mesh(new THREE.ConeGeometry(1.8,.9,8).translate(x,4.3,5.2),um)); }
     g.scale.setScalar(1.6); scene.add(g); WORLD.cafe=g;
     const s=makeSign(['☕ KAVIAREŇ','splnené pri 2000 followeroch'],'#6D4C41','#fff',768,200); s.scale.multiplyScalar(.3); s.position.set(P.x,P.y+21,P.z); scene.add(s); }
-  // ❄️ snežné delá + zasnežovači
-  { const R=RUNS[0], gm=new THREE.MeshLambertMaterial({color:'#9aa3ad'}), ym=new THREE.MeshLambertMaterial({color:'#F2B705'}), sm=new THREE.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.5,depthWrite:false});
-    WORLD.sprays=[];
-    [.3,.55,.8].forEach((s,k)=>{ const P=runPt(R,s,-(R.LL+6),new THREE.Vector3()), C=runPt(R,s,0,new THREE.Vector3()); const g=new THREE.Group(); g.position.copy(P);
-      const base=new THREE.Mesh(new THREE.CylinderGeometry(.5,.8,1.4,8).translate(0,.7,0),gm);
-      const tube=new THREE.Mesh(new THREE.CylinderGeometry(.95,.7,2.6,12),ym); tube.rotation.x=1.0; tube.position.set(0,2.3,.7);
-      const spray=new THREE.Mesh(new THREE.ConeGeometry(4.5,16,12,1,true).rotateX(-Math.PI/2).translate(0,0,8),sm); spray.position.set(0,3.1,1.6); spray.rotation.x=-.35;
-      g.add(base,tube,spray); g.lookAt(C.x,P.y,C.z); scene.add(g); WORLD.sprays.push(spray); });
-    ROLES.snow.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=[.3,.55,.8][k%3]+.006*Math.floor(k/3);
-      runPt(R,s+.006,-(R.LL+4),V2); const C=runPt(R,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); }); }
+  // ❄️ snežné delá + zasnežovači – od 25.11. na VŠETKÝCH zjazdovkách (prianie stan.peduzzi)
+  { const gm=new THREE.MeshLambertMaterial({color:'#9aa3ad'}), ym=new THREE.MeshLambertMaterial({color:'#F2B705'}), sm=new THREE.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.5,depthWrite:false});
+    WORLD.sprays=[]; WORLD.guns=[];
+    const gunLat=(R,s)=>{ const cA=R.cA||0; const cv=cA?-cA*.5*(1-Math.cos(6.283185307*((cA%2)+1)*s)):0; return -(R.LL+6)+cv; };
+    RUNS.forEach((R,ri)=>{ const SS=ri===0?[.3,.55,.8]:[.28,.52,.76];
+      SS.forEach((s,k)=>{ const P=runPt(R,s,gunLat(R,s),new THREE.Vector3()), C=runPt(R,s,0,new THREE.Vector3()); const g=new THREE.Group(); g.position.copy(P);
+        const base=new THREE.Mesh(new THREE.CylinderGeometry(.5,.8,1.4,8).translate(0,.7,0),gm);
+        const tube=new THREE.Mesh(new THREE.CylinderGeometry(.95,.7,2.6,12),ym); tube.rotation.x=1.0; tube.position.set(0,2.3,.7);
+        const spray=new THREE.Mesh(new THREE.ConeGeometry(4.5,16,12,1,true).rotateX(-Math.PI/2).translate(0,0,8),sm.clone()); spray.position.set(0,3.1,1.6); spray.rotation.x=-.35;
+        g.add(base,tube,spray); g.lookAt(C.x,P.y,C.z); scene.add(g); WORLD.sprays.push(spray); WORLD.guns.push({g,P:P.clone(),C:C.clone(),ri,s}); }); });
+    { const R=RUNS[Math.min(2,RUNS.length-1)], P=runPt(R,.5,gunLat(R,.5)-10,new THREE.Vector3());
+      const sg=makeSign(['❄️ ZASNEŽOVANIE','na všetkých zjazdovkách · nápad @stan.peduzzi'],'#1E5AA8','#fff',900,200); sg.scale.multiplyScalar(.3); sg.position.set(P.x,P.y+14,P.z); scene.add(sg); WORLD.gunSign=sg; }
+    ROLES.snow.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const R=RUNS[k%RUNS.length], s=(k%RUNS.length===0?.3:.28)+.006*Math.floor(k/RUNS.length);
+      runPt(R,s+.006,gunLat(R,s+.006)+2,V2); const C=runPt(R,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); }); }
   // 🏂 tréner v snowparku
   ROLES.coach.forEach((u,k)=>{ const p=people.find(q=>q.u===u&&q.kind==='role'); if(!p) return; const s=.2+.07*(k%10)+.012*Math.floor(k/10);
     runPt(FS,s,(k%2?1:-1)*(FS.LL+9),V2); const C=runPt(FS,s,0,new THREE.Vector3()); add(p.i,V2,Math.atan2(C.x-V2.x,C.z-V2.z),false,p.c); });
@@ -3050,6 +3054,9 @@ async function startReel2(SC){
   SH.xcRide=(t,T,k)=>{ const X=WORLD.xc; if(!X) return SH.xc(t,T,k); const g0=X.xs[CP.xI||0].g, P=g0.position.clone(), d=V(0,0,1).applyQuaternion(g0.quaternion); d.y=0; d.normalize(); const sd=V(-d.z,0,d.x); return { p:P.clone().addScaledVector(d,-(CP.xB||12)).addScaledVector(sd,CP.xS||.01).add(V(0,CP.xU||6,0)), q:P.clone().addScaledVector(d,14).add(V(0,1,0)) }; };
   SH.fire=(t,T,k)=>{ const F=WORLD.fire; if(!F) return SH.crowdWide(t,T,k); const C=F.S, R=ROAD[F.k0], a0=Math.atan2(R.z-C.z,R.x-C.x)+(CP.fA||.6), a=a0-.12*t*(CP.fW||1), Rr=(CP.fR||58)-10*k; const p=V(C.x+Math.cos(a)*Rr,0,C.z+Math.sin(a)*Rr); p.y=F.hA(p.x,p.z)+(CP.fH||32); return { p, q:C.clone().add(V(0,CP.fQ||10,0)) }; };
   SH.fireTruck=(t,T,k)=>{ const F=WORLD.fire; if(!F) return SH.crowdWide(t,T,k); const P=F.truck.position.clone(), d=V(Math.sin(F.truck.rotation.y),0,Math.cos(F.truck.rotation.y)), sd=V(-d.z,0,d.x); const p=P.clone().addScaledVector(d,CP.ftF||28).addScaledVector(sd,CP.ftS||12); p.y=F.hA(p.x,p.z)+(CP.ftU||7); return { p, q:P.clone().add(V(0,2.5,0)) }; };
+  const sgP=(n,d)=>(curSeg&&curSeg[n]!=null)?curSeg[n]:(CP[n]!=null?CP[n]:d);
+  SH.snowGun=(t,T,k)=>{ const GS=WORLD.guns; if(!GS||!GS.length) return SH.crowdWide(t,T,k); const G=GS[Math.min(GS.length-1,sgP('sgI',7))]; const P=G.P, d=V(G.C.x-P.x,0,G.C.z-P.z).normalize(), sd=V(-d.z,0,d.x); const a=sgP('sgA',2.6)+sgP('sgW',.5)*k, r=sgP('sgR',13)-3*k; const p=P.clone().addScaledVector(d,Math.cos(a)*r).addScaledVector(sd,Math.sin(a)*r); p.y=Math.max(groundAt(p.x,p.z),P.y)+sgP('sgH',5); return { p, q:P.clone().addScaledVector(d,sgP('sgQ',14)).add(V(0,3,0)) }; };
+  SH.snowGuns=(t,T,k)=>{ const GS=WORLD.guns; if(!GS||!GS.length) return SH.crowdWide(t,T,k); const c=V(0,0,0); GS.forEach(g=>c.add(g.P)); c.multiplyScalar(1/GS.length); const a=Math.atan2(c.z,c.x)+sgP('sgsA',0)+sgP('sgsW',.12)*k, r=Math.hypot(c.x,c.z)+sgP('sgsR',420)-60*k; const p=V(Math.cos(a)*r,0,Math.sin(a)*r); p.y=groundAt(p.x,p.z)+sgP('sgsH',170)-30*k; return { p, q:c.clone().add(V(0,-20,0)) }; };
   SH.bufet=(t,T,k)=>{ const B=WORLD.bufet; if(!B) return SH.crowdWide(t,T,k); const C=B.S, a0=Math.atan2(-C.z,-C.x)+(CP.bA||.7), a=a0-(CP.bW||.25)*k, r=(CP.bR||46)-8*k; const p=V(C.x+Math.cos(a)*r,0,C.z+Math.sin(a)*r); p.y=Math.max(groundAt(p.x,p.z),C.y)+(CP.bH||16); return { p, q:C.clone().add(V(0,CP.bQ||5,0)) }; };
   SH.bufetFront=(t,T,k)=>{ const B=WORLD.bufet; if(!B) return SH.crowdWide(t,T,k); const C=B.S, d=V(B.front.x-C.x,0,B.front.z-C.z).normalize(), sd=V(-d.z,0,d.x); const p=C.clone().addScaledVector(d,(CP.bfF||36)-6*k).addScaledVector(sd,(CP.bfS||-14)+8*k); p.y=C.y+(CP.bfU||9); return { p, q:C.clone().addScaledVector(d,3).add(V(0,CP.bfQ||5,0)) }; };
   SH.lodge=(t,T,k)=>{ const Q=WORLD.lodge; if(!Q) return SH.crowdWide(t,T,k); const C=Q.S, a0=Math.atan2(-C.z,-C.x)+(CP.lA||.5), a=a0-(CP.lW||.1)*t, r=(CP.lR||120)-14*k; const p=V(C.x+Math.cos(a)*r,0,C.z+Math.sin(a)*r); p.y=Math.max(groundAt(p.x,p.z),C.y)+(CP.lH||38); return { p, q:C.clone().add(V(0,CP.lQ||14,0)) }; };
