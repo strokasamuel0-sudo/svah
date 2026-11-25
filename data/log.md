@@ -381,3 +381,15 @@
 - Hlasovanie hlasuj2411 (DgI7kHrtMRt) zatiaľ: 1× „2“, 1× „3“ – spočítať 28.–30.11.
 - 🟡 KUKLY: bez zmeny – s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu (bez odpovede v DM), víťazka e_kov.acova – treba adresu.
 - POSLEDNÝ_KOMENT_TS: 2026-11-24T22:04:23Z (1795557863)
+
+## 25.11. ~16:00 – 18:40 – Samuel: nová hra + video + bežný beh
+- 🎮 NOVÁ HRA „🎢 Bobová jazda“ (index + beta): zjazd vozíkom po bobovej dráhe na čas, hráč drží BRZDA (tlačidlo / medzerník), lišta „G-sila v zákrute“ – v červenej >0,3 s = vyletí z dráhy (pád, % dráhy). Výsledok s menom → 📸 Uložiť jazdu (photoCard), rekord v localStorage `svah_bob_best`. Menu 🎮 Hry (prvá, NOVÉ) + tlačidlo „🎢 Boby“ v karte lyžiara, `?boby` autoštart. GoatCounter: boby-start / boby-ciel / boby-pad. Fyzika: BOB_LIM 30, gravitácia ×2, brzda 14 m/s², cieľ na 95 % zjazdovej časti (koniec slučky má ostrú otočku). AI demo (aiK .92) príde dolu za ~42 s, max ~83 km/h; bez brzdy vyletí na 12 %. Demo API `window.__bobDemo`, reel záber `bobPlay` (seg params bd/bv/nb/lead/aiK) + overlay `bobHud`.
+- 🎬 REEL `bobhra2511` ZVEREJNENÝ (DgLEuqoN5qC, 24 s, hlas Brian, Pôvodné): NOVÁ HRA → jazda ~100 km/h → brzdi pred zákrutou → bez brzdy vyletíš 💥 → kto má najlepší čas (do komentu) → hraj zadarmo. Vozík s lyžiarom elca_novak. POPIS overený cez API ✅ (preklep „zjde“ opravený pred zverejnením).
+- SYNC (komenty od 24.11. 21:25Z – 36, takmer všetko hlasy): +2 lyžiari – n.postalkova (ružová s kvietkami → #F7A8C8), nik.to195 (zelená); obaja boli v čakárni. Čakáreň +29. IG 8847. Lyžiari 3287 · čakáreň 5596.
+- 🗳️ PRIEBEŽNE hlasovanie DgI7kHrtMRt (1 891 zhliadnutí / 34 komentov, unikátni, posledný hlas): 3 hokej **17** · 1 vírivka 6 · 2 skatepark 5. Uzavrieť ~28.–30.11.
+- michal_srutek sa pýta „tak čo tá policajná stanica?“ – NÁPAD čaká (neodpovedané, pravidlo).
+- DM: voj.tik1045 „Ok“, nič nové na odpoveď; žiadosti 0.
+- Pozn.: `friendships/show` vracia HTML (nefunguje) → follow status cez zoznam followerov / čakáreň.
+- ElevenLabs: ~7 600 kreditov.
+- 🟡 KUKLY: bez nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu, e_kov.acova – treba adresu.
+- POSLEDNÝ_KOMENT_TS: 2026-11-25T17:30:00Z
