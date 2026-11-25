@@ -1,0 +1,67 @@
+{
+ "align": "chair",
+ "voice": "voice_dedko2611",
+ "out": "reel_dedko2611",
+ "boardN": 8847,
+ "sents": [
+  "Dedko z vleku prichádza!",
+  "Pozor, toto nie je starý pán. Je to kukla s jeho tvárou.",
+  "Na svahu ťa nikto nespozná a celý vlek sa bude smiať.",
+  "Pripravujeme ju za približne pätnásť eur.",
+  "Chceš takú? Napíš do komentárov DEDKO a budeš medzi prvými."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "img": "data/kukly/kukla-dedko-lyziar.jpg",
+   "cap": [
+    "*DEDKO* z vleku",
+    "prichádza 👴🎿"
+   ],
+   "y": 1640
+  },
+  {
+   "shot": "crowdWide",
+   "img": "data/kukly/kukla-dedko.jpg",
+   "cap": [
+    "Nie je to dedko –",
+    "je to *KUKLA* 😂"
+   ],
+   "y": 1640
+  },
+  {
+   "shot": "slope2",
+   "cap": [
+    "Nikto ťa nespozná 🥸",
+    "celý vlek sa smeje"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "crowdWide",
+   "img": "data/kukly/kukla-dedko-lyziar.jpg",
+   "cap": [
+    "cca *15 €*",
+    "*pripravujeme* 🔜"
+   ],
+   "y": 1640
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Chceš takú?",
+    "Napíš *DEDKO* 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Napíš *DEDKO* do komentu 👇",
+   "cca 15 € · pripravujeme"
+  ],
+  [
+   "obrázky: AI vizualizácia – návrh"
+  ]
+ ]
+}
