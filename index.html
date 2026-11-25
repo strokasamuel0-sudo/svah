@@ -171,6 +171,24 @@
   #jRes small{display:block;margin-top:6px;font-size:12px;color:#5b6573}
   #jEnd .gacts button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:var(--blue);color:#fff;cursor:pointer}
   #jEnd #jQuit{background:#e9edf2;color:var(--ink)}
+  #bgame{display:none;position:fixed;inset:0;z-index:30;pointer-events:none}
+  #bgame .jtop{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:rgba(255,255,255,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;padding:8px 18px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.22);min-width:230px}
+  #bSpd{display:block;font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;color:#1E5AA8}
+  #bHint{display:block;font-size:14px;font-weight:800}
+  #bgame .jtop small{font-size:11px;color:#5b6573;font-variant-numeric:tabular-nums}
+  #bgame .bgbar{position:absolute;left:50%;transform:translateX(-50%);top:calc(122px + env(safe-area-inset-top,0px));width:min(320px,70vw);height:16px;border-radius:9px;background:rgba(255,255,255,.55);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);overflow:hidden}
+  #bG{display:block;height:100%;width:0;background:#2E9E5B;transition:width .08s linear}
+  #bgame .bglab{position:absolute;left:50%;transform:translateX(-50%);top:calc(142px + env(safe-area-inset-top,0px));font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+  #bGo{pointer-events:auto;position:absolute;left:50%;transform:translateX(-50%);bottom:calc(26px + env(safe-area-inset-bottom,0px));width:170px;height:96px;border-radius:48px;border:0;background:linear-gradient(135deg,#1E5AA8,#0FA3B1);color:#fff;font-size:26px;font-weight:900;box-shadow:0 10px 26px rgba(30,90,168,.45);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
+  #bGo small{display:block;font-size:10px;font-weight:700;opacity:.85}
+  #bGo.on{background:linear-gradient(135deg,#F26B21,#C8102E);transform:translateX(-50%) scale(.95)}
+  #bEnd{display:none;pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:22px;padding:20px 22px;flex-direction:column;gap:12px;align-items:center;box-shadow:0 20px 60px rgba(0,0,0,.35);min-width:270px;text-align:center}
+  #bRes b{font-size:48px;display:block;color:#1E5AA8;font-weight:900}
+  #bRes span{font-size:14px;color:#3b4350;display:block;font-weight:700}
+  #bRes small{display:block;margin-top:6px;font-size:12px;color:#5b6573;max-width:280px}
+  #bRes em{display:block;font-style:normal;font-size:12px;font-weight:800;color:#5b6573}
+  #bEnd .gacts button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:var(--blue);color:#fff;cursor:pointer}
+  #bEnd #bQuit{background:#e9edf2;color:var(--ink)}
   .search svg{z-index:2}
   #bQ{padding:8px 10px}
   .jcont{margin-top:10px;background:linear-gradient(135deg,#fff4d6,#ffe1e1);border-radius:12px;padding:8px 10px;font-size:12px;font-weight:700;color:#7a2a00;max-width:300px}
@@ -231,15 +249,16 @@
   </div>
   <div class="comment" id="cComment"></div>
   <div class="hint" id="cHint"></div>
-  <div class="acts"><button id="bPhoto">📸 Moja fotka</button><button id="bShare">📤 Pošli kamošovi</button><button id="bJump">🎿 Skoky</button><button id="bRace">⏱ Zjazd na čas</button><button id="bRun">🔀 Zmeniť svah</button></div>
+  <div class="acts"><button id="bPhoto">📸 Moja fotka</button><button id="bShare">📤 Pošli kamošovi</button><button id="bJump">🎿 Skoky</button><button id="bBob">🎢 Boby</button><button id="bRace">⏱ Zjazd na čas</button><button id="bRun">🔀 Zmeniť svah</button></div>
   <div id="runPick"></div>
 </div>
 <div id="game"><div class="gtop"><b id="gTime">3</b><small>← → / ťukaj šípky / nakloň mobil · Esc koniec</small></div><button id="gL" class="gbtn" aria-label="doľava">◀</button><button id="gR" class="gbtn" aria-label="doprava">▶</button><div id="gEnd"><div id="gRes"></div><div class="gacts"><button id="gShot">📸 Uložiť výsledok</button><button id="gAgain">↻ Znova</button><button id="gQuit">Koniec</button></div></div></div>
-<div id="gamesMenu"><div class="gmh">🎮 Hry na svahu</div><button id="gmJump"><span>🎿</span><b>Skoky na mostíku<i>NOVÉ</i></b><small>Načasuj odraz, udrž rovnováhu, dopadni telemarkom</small></button><button id="gmRace"><span>⏱</span><b>Zjazd na čas</b><small>Prejdi bránky čo najrýchlejšie</small></button></div>
+<div id="gamesMenu"><div class="gmh">🎮 Hry na svahu</div><button id="gmBob"><span>🎢</span><b>Bobová jazda<i>NOVÉ</i></b><small>Zjazd po bobovej dráhe na čas – brzdi pred zákrutami, inak vyletíš</small></button><button id="gmJump"><span>🎿</span><b>Skoky na mostíku</b><small>Načasuj odraz, udrž rovnováhu, dopadni telemarkom</small></button><button id="gmRace"><span>⏱</span><b>Zjazd na čas</b><small>Prejdi bránky čo najrýchlejšie</small></button></div>
 <div id="jgame"><div class="jtop"><b id="jDist">0,0 m</b><span id="jHint">Priprav sa…</span><small><span id="jWind"></span> · <span id="jBest"></span></small></div>
   <div class="jbal"><i id="jBal"></i></div>
   <button id="jL" class="gbtn" aria-label="vľavo">◀</button><button id="jGo">ODRAZ<small>ťukni / medzerník</small></button><button id="jR" class="gbtn" aria-label="vpravo">▶</button>
   <div id="jEnd"><div id="jRes"></div><div class="gacts"><button id="jShot">📸 Uložiť skok</button><button id="jAgain">↻ Znova</button><button id="jQuit">Koniec</button></div></div></div>
+<div id="bgame"><div class="jtop"><b id="bSpd">0 km/h</b><span id="bHint">Priprav sa…</span><small><span id="bTime">0,0 s</span> · <span id="bBest"></span></small></div><div class="bgbar"><i id="bG"></i></div><div class="bglab">G-sila v zákrute – v červenej vyletíš</div><button id="bGo">BRZDA<small>drž prst / medzerník</small></button><div id="bEnd"><div id="bRes"></div><div class="gacts"><button id="bShot">📸 Uložiť jazdu</button><button id="bAgain">↻ Znova</button><button id="bQuit">Koniec</button></div></div></div>
 <div id="demo">UKÁŽKA · vymyslené mená</div>
 <div id="err"></div>
 
@@ -2416,11 +2435,100 @@ if(jgContest()){ const c=document.createElement('div'); c.className='gmcont'; c.
   jgEl('gmJump').onclick=()=>{ box.style.display='none'; jgStartUI(); };
   jgEl('gmRace').onclick=()=>{ box.style.display='none'; if(selected<0||people[selected].kind!=='ski'){ const i=people.findIndex(p=>p.kind==='ski'&&p.u!==OWNER.u&&!p.run.ev); if(i>=0) select(i,false); } $('bRace').onclick(); };
   jgEl('bJump').onclick=()=>jgStartUI();
+  jgEl('gmBob').onclick=()=>{ box.style.display='none'; startBob(selected); };
+  jgEl('bBob').onclick=()=>startBob(selected);
+  if(params.has('boby')) setTimeout(()=>startBob(selected),1400);
   document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#gamesMenu')&&!e.target.closest('#bGames')) box.style.display='none'; });
   if(params.has('skoky')) setTimeout(()=>jgStartUI(),1200);
 }
 window.__jumpDemo={ start:(tap=.975)=>{ startJump(-1,{demo:true}); JG.demoTap=tap; JG.fixedDt=1/30; JG.wind=1.2; }, step:(n=1)=>{ for(let k=0;k<n;k++) stepJump(performance.now()); return {phase:JG.phase,x:JG.x,res:JG.res}; }, end:()=>endJump() };
 window.__dbg2={select:(i,f)=>select(i,f),people,showAll,startJump,JG,stepJump};
+/* ---------- 🎢 BOBOVÁ JAZDA (nová hra, 25. 11.) – zjazd po bobovej dráhe na čas, brzdi v zákrutách ---------- */
+const BG={on:false};
+const BOB_KEY='svah_bob_best', BOB_LIM=30;
+function bgBest(){ try{ const v=parseFloat(localStorage.getItem(BOB_KEY)); return v>0?v:0; }catch(e){ return 0; } }
+let BOBT=null;
+function bobTrack(){ if(BOBT) return BOBT; const Q=WORLD.bob; if(!Q) return null; const C=Q.C, df=C.downFrac, Lt=C.getLength(), Ld=Lt*df, N=900, P=[], T=[], K=[], S=[];
+  for(let i=0;i<=N;i++){ const s=df*i/N; P.push(C.getPointAt(s)); T.push(C.getTangentAt(s).normalize()); }
+  const ds=Ld/N; for(let i=0;i<=N;i++){ const a=T[Math.max(0,i-2)], b=T[Math.min(N,i+2)]; const ha=Math.atan2(a.z,a.x), hb=Math.atan2(b.z,b.x); let dh=hb-ha; while(dh>Math.PI) dh-=2*Math.PI; while(dh<-Math.PI) dh+=2*Math.PI; const span=(Math.min(N,i+2)-Math.max(0,i-2))*ds; K.push(dh/span); S.push(T[i].y); }
+  for(let r=0;r<2;r++){ const K2=K.slice(); for(let i=2;i<N-1;i++) K[i]=(K2[i-2]+K2[i-1]+K2[i]+K2[i+1]+K2[i+2])/5; }
+  BOBT={C,df,Ld,N,ds,P,T,K,S}; return BOBT; }
+function bobIdx(d){ const B=BOBT; return Math.max(0,Math.min(B.N,Math.round(d/B.ds))); }
+function bobLook(d,v){ const B=BOBT; let m=0; const end=d+Math.max(14,v*2.2); for(let x=d;x<=end;x+=B.ds*2){ const k=Math.abs(B.K[bobIdx(x)]); if(k>m) m=k; } return m; }
+function mkBobCart(p){ const L=c=>new THREE.MeshLambertMaterial({color:c}), w=new THREE.Group(), cm=L(p&&p.c?p.c:'#F26B21');
+  w.add(new THREE.Mesh(new THREE.BoxGeometry(1.5,.55,2.4).translate(0,.35,0),cm)); const nose=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,.55,10,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateY(Math.PI/2),cm); nose.position.set(0,.35,1.2); w.add(nose);
+  w.add(new THREE.Mesh(new THREE.BoxGeometry(1.3,.9,.25).translate(0,.9,-1.05),L('#2B2D31')), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18).translate(.55,.85,.7),L('#2B2D31')), new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18).translate(-.55,.85,.7),L('#2B2D31')));
+  const gr=buildRacer(p||{c:'#C8102E',ti:0,pcHex:'#22262d',hcHex:'#F2B705',scHex:'#1E5AA8'}); gr.children.slice(-2).forEach(o=>{ if(o.geometry&&o.geometry.parameters&&o.geometry.parameters.depth>1.2) o.visible=false; }); gr.scale.set(1,.7,1); gr.position.set(0,.45,-.2); gr.rotation.x=-.25; w.add(gr);
+  const inner=new THREE.Group(); inner.add(w); w.scale.setScalar(1.3); return inner; }
+function startBob(pIdx, opts={}){
+  const B=bobTrack(); if(!B){ toast('Bobová dráha sa ešte stavia…'); return; }
+  if(GAME.on) endGame(); if(JG.on) endJump(); if(BG.on) endBob();
+  const p = pIdx>=0 && people[pIdx] && (people[pIdx].kind==='ski'||people[pIdx].kind==='role') ? people[pIdx] : null;
+  if(!opts.demo){ try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:'boby-start',title:'Bobová jazda – štart',event:true}); }catch(e){} }
+  const cart=mkBobCart(p); scene.add(cart);
+  for(const q of WORLD.bob.carts) q.g.visible=false;
+  Object.assign(BG,{on:true,p,cart,phase:'count',cnt:opts.demo?(opts.cnt||0.01):3.2,d:opts.d0||2,v:opts.v0||8,t:0,brake:false,over:0,danger:0,roll:0,crash:false,crT:0,cv:null,res:null,last:performance.now(),demo:!!opts.demo,nb:!!opts.nb,aiK:opts.aiK||.8,camP:new THREE.Vector3(),camQ:new THREE.Vector3(),camInit:false,best:bgBest(),maxV:0});
+  bobPlace();
+  if(!opts.demo){
+    gameCrowd(false); $('card').style.display='none'; $('top').style.display='none'; $('labels').style.display='none'; $('cta').style.display='none';
+    jgEl('bgame').style.display='block'; jgEl('bEnd').style.display='none'; jgEl('bHint').textContent='Priprav sa…'; jgEl('bSpd').textContent='0 km/h';
+    jgEl('bBest').textContent=BG.best?'Tvoj rekord: '+BG.best.toFixed(2).replace('.',',')+' s':'Dolu čo najrýchlejšie';
+    controls.enabled=false;
+  }
+}
+function endBob(){
+  if(!BG.on) return; BG.on=false; scene.remove(BG.cart); if(WORLD.bob) for(const q of WORLD.bob.carts) q.g.visible=true;
+  if(!BG.demo){ gameCrowd(true); jgEl('bgame').style.display='none'; $('top').style.display=''; $('labels').style.display=''; controls.enabled=true; if(selected>=0) select(selected,false); else { $('cta').style.display='block'; showAll(); } }
+}
+const _bv1=new THREE.Vector3(), _bv2=new THREE.Vector3();
+function bobPlace(){ const G=BG, B=BOBT, i=bobIdx(G.d), P=B.P[i], T=B.T[i]; const R=G.cart;
+  if(G.crash){ return; }
+  R.position.set(P.x,P.y+.35,P.z); _bv1.set(P.x+T.x,P.y+.35+T.y,P.z+T.z); R.lookAt(_bv1); R.children[0].rotation.z=G.roll; }
+function bobFinish(){
+  const G=BG; G.phase='out'; const rec=!G.crash && (!G.best || G.t<G.best); if(rec&&!G.demo){ try{ localStorage.setItem(BOB_KEY,String(G.t)); }catch(e){} }
+  G.res={t:G.t,crash:G.crash,d:G.d,pct:Math.min(100,Math.round(G.d/BOBT.Ld*100)),rec,best:rec?G.t:G.best,maxV:G.maxV};
+  if(G.demo) return;
+  try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:G.crash?'boby-pad':'boby-ciel',title:G.crash?'Bobová jazda – vyletel':'Bobová jazda – cieľ',event:true}); }catch(e){}
+  setTimeout(()=>{ if(!BG.on) return; const R=jgEl('bRes'); R.innerHTML='';
+    const b=document.createElement('b'); b.textContent=G.crash?'💥 '+G.res.pct+' %':G.t.toFixed(2).replace('.',',')+' s'; const s=document.createElement('span');
+    s.textContent=G.crash?'Vyletel si zo zákruty! Prešiel si '+G.res.pct+' % dráhy.':(rec?'🏆 Nový rekord! · ':(G.res.best?'Rekord '+G.res.best.toFixed(2).replace('.',',')+' s · ':''))+'max. '+Math.round(G.maxV*3.6)+' km/h';
+    const tip=document.createElement('small'); tip.textContent=G.crash?'Pred zákrutou pribrzdi – keď ručička G-sily ide do červenej, vyletíš.':'Skús brzdiť kratšie a neskôr – každá desatinka sa ráta.';
+    if(G.p){ const nm=document.createElement('em'); nm.className='jname'; nm.textContent='@'+G.p.u+' · '+new Date().toLocaleString('sk-SK',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}); R.append(nm); }
+    R.append(b,s,tip); jgEl('bEnd').style.display='flex'; },G.crash?1300:700);
+}
+function stepBob(now){
+  const G=BG, B=BOBT; let dt=Math.min(.05,(now-G.last)/1000); G.last=now; if(G.demo&&G.fixedDt) dt=G.fixedDt;
+  if(G.phase==='count'){ G.cnt-=dt; if(!G.demo) jgEl('bHint').textContent=G.cnt>.3?'Štart o '+Math.ceil(G.cnt-.3)+' …':'ŠTART!'; if(G.cnt<=0){ G.phase='ride'; if(!G.demo) jgEl('bHint').textContent='Drž BRZDU pred zákrutou!'; } }
+  if(G.phase==='ride'){
+    G.t+=dt; const i=bobIdx(G.d), k=B.K[i];
+    if(G.demo){ const m=bobLook(G.d,G.v); G.brake=!G.nb && G.v*G.v*m>BOB_LIM*G.aiK; }
+    const acc=-9.81*B.S[i]*2 - .003*G.v*G.v - .25 - (G.brake?14:0);
+    G.v=Math.max(G.brake?6.4:8,Math.min(40,G.v+acc*dt)); G.maxV=Math.max(G.maxV,G.v); G.d+=G.v*dt;
+    const aL=G.v*G.v*Math.abs(k); G.danger=aL/BOB_LIM; const tr=Math.sign(k)*Math.min(1.25,G.danger)*.42; G.roll+=(tr-G.roll)*Math.min(1,dt*8);
+    if(G.danger>1){ G.over+=dt*(1+(G.danger-1)*4); } else G.over=Math.max(0,G.over-dt*2);
+    if(G.over>.32){ G.crash=true; G.phase='crash'; const T=B.T[i]; G.cv=new THREE.Vector3(T.x*G.v-Math.sign(k)*T.z*G.v*.6,4.5,T.z*G.v+Math.sign(k)*T.x*G.v*.6); G.spin=Math.sign(k)||1; if(!G.demo) jgEl('bHint').textContent='Ups! Príliš rýchlo do zákruty 💥'; }
+    else { bobPlace(); if(G.d>=B.Ld*.95){ bobFinish(); } }
+    if(!G.demo){ jgEl('bSpd').textContent=Math.round(G.v*3.6)+' km/h'; jgEl('bTime').textContent=G.t.toFixed(1).replace('.',',')+' s'; const dg=Math.min(1,G.danger); jgEl('bG').style.width=(dg*100)+'%'; jgEl('bG').style.background=G.danger>1?'#C8102E':G.danger>.75?'#F2B705':'#2E9E5B'; jgEl('bGo').classList.toggle('on',G.brake); }
+  }
+  if(G.phase==='crash'){ G.crT+=dt; const R=G.cart; G.cv.y-=9.81*dt; R.position.addScaledVector(G.cv,dt); const gy=groundAt(R.position.x,R.position.z)+.4; if(R.position.y<gy){ R.position.y=gy; G.cv.multiplyScalar(.55); G.cv.y=Math.abs(G.cv.y)*.35; } R.rotation.z+=G.spin*dt*5; R.rotation.x+=dt*2.2; if(G.crT>.9&&!G.res) bobFinish(); }
+  if(G.phase==='out'&&!G.crash){ G.v=Math.max(0,G.v-dt*9); G.d=Math.min(B.Ld*.975,G.d+G.v*dt); bobPlace(); }
+  /* kamera – za vozíkom */
+  const R=G.cart, i=bobIdx(G.d), T=B.T[i], tp=_bv1, tq=_bv2;
+  if(G.phase==='crash'||(G.phase==='out'&&G.crash)){ tp.copy(R.position).add(new THREE.Vector3(-T.x*14+T.z*8,7,-T.z*14-T.x*8)); tq.copy(R.position); }
+  else if(G.phase==='out'){ tp.copy(R.position).add(new THREE.Vector3(T.x*10+T.z*9,4,T.z*10-T.x*9)); tq.copy(R.position).add(new THREE.Vector3(0,1,0)); }
+  else { const j=bobIdx(G.d+16), Pj=B.P[j]; tp.copy(R.position).addScaledVector(T,-9.5); tp.y+=4.2; tq.set(Pj.x,Pj.y+.6,Pj.z); }
+  if(!G.camInit){ G.camP.copy(tp); G.camQ.copy(tq); G.camInit=true; } else { const a=1-Math.pow(.004,dt); G.camP.lerp(tp,a); G.camQ.lerp(tq,Math.min(1,a*1.5)); }
+  const gC=groundAt(G.camP.x,G.camP.z)+1.5; if(G.camP.y<gC) G.camP.y=gC;
+  if(!G.demo){ camera.position.copy(G.camP); camera.lookAt(G.camQ); controls.target.copy(G.camQ); }
+}
+addEventListener('keydown',e=>{ if(!BG.on||BG.demo) return; if(e.key===' '||e.key==='ArrowDown'||e.key==='s'){ e.preventDefault(); BG.brake=true; } if(e.key==='Escape') endBob(); });
+addEventListener('keyup',e=>{ if(!BG.on||BG.demo) return; if(e.key===' '||e.key==='ArrowDown'||e.key==='s') BG.brake=false; });
+{ const el=jgEl('bGo'); el.addEventListener('pointerdown',e=>{ e.preventDefault(); if(BG.on&&!BG.demo) BG.brake=true; }); for(const ev of ['pointerup','pointerleave','pointercancel']) el.addEventListener(ev,()=>{ if(BG.on&&!BG.demo) BG.brake=false; }); }
+jgEl('bAgain').onclick=()=>{ const p=BG.p; endBob(); startBob(p?p.i:-1); };
+jgEl('bQuit').onclick=endBob;
+jgEl('bShot').onclick=async()=>{ const r=BG.res; if(!r) return; if(!BG.p){ toast('Najprv sa nájdi na svahu – potom bude jazda na tvoje meno 🙂',2600); return; } const b=await photoCard(BG.p.i,r.crash?'Bobová dráha: vyletel som na '+r.pct+' % 💥':'Bobová dráha: '+r.t.toFixed(2).replace('.',',')+' s · '+new Date().toLocaleDateString('sk-SK')); shareImage(b,'svah-boby-'+BG.p.u+'.jpg'); };
+window.__bobDemo={ start:(o={})=>{ startBob(-1,Object.assign({demo:true},o)); BG.fixedDt=1/30; }, step:(n=1)=>{ for(let k=0;k<n;k++) stepBob(0); return {phase:BG.phase,d:BG.d,v:BG.v,t:BG.t,danger:BG.danger,res:BG.res}; }, end:()=>endBob(), BG, track:()=>bobTrack() };
+
 /* 🏗️ mostík – detailnejšia stavba (konštrukcia, stopy, tabule so vzdialenosťou, rozhodcovská veža, svetlá) */
 (()=>{ const J=WORLD.jump; if(!J||!J.JP) return; const G=new THREE.Group(); G.name='jumpDeco';
   const steel=new THREE.MeshStandardMaterial({color:'#5d6b7a',roughness:.38,metalness:.7}), dark=new THREE.MeshStandardMaterial({color:'#2a3340',roughness:.6,metalness:.3}),
@@ -2508,6 +2616,7 @@ function loop(now){
   updateDetail(nearRuns);
   if(GAME.on){ stepGame(now); }
   else if(JG.on){ stepJump(now); }
+  else if(BG.on){ stepBob(now); }
   else if(flying&&!JG.on){
     const k=Math.min(1,(now-flying.start)/flying.dur), e=ease(k);
     if(selected>=0){ flying.t1.set(positions[selected*3],positions[selected*3+1]+1.5,positions[selected*3+2]); flying.p1.copy(flying.t1).add(followOff); }
@@ -2519,7 +2628,7 @@ function loop(now){
     if(d.lengthSq()<400){ camera.position.add(d); controls.target.add(d); }
     lastSel.copy(cur);
   }
-  if(!GAME.on&&!JG.on) controls.update();
+  if(!GAME.on&&!JG.on&&!BG.on) controls.update();
   const g=groundAt(camera.position.x,camera.position.z)+4;
   if(camera.position.y<g) camera.position.y=g;
   const sp=snow.geometry.attributes.position.array;
@@ -3124,6 +3233,21 @@ async function startReel2(SC){
     const bw=520, bx=x-bw/2, by=y+110; const gr=g.createLinearGradient(bx,0,bx+bw,0); [['#C8102E',0],['#F2B705',.22],['#2E9E5B',.38],['#2E9E5B',.62],['#F2B705',.78],['#C8102E',1]].forEach(([c,o])=>gr.addColorStop(o,c));
     g.fillStyle=gr; g.beginPath(); g.roundRect(bx,by,bw,22,11); g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
     const mx=x+Math.max(-1,Math.min(1,JG.b))*bw*.46; g.fillStyle='#fff'; g.beginPath(); g.roundRect(mx-10,by-12,20,46,8); g.fill(); g.restore(); }
+  /* 🎬 25. 11. – hra Bobová jazda */
+  let bLastTau=-1, bSeg=-1;
+  SH.bobPlay=(t,T,k)=>{ let j=0; for(let i=0;i<NSEG;i++) if(t>=bounds[i]) j=i; const s=SC.segs[j]||{}; const tau=Math.max(0,t-(bounds[j]||0)+(s.lead||0));
+    if(!BG.on||!BG.demo||j!==bSeg||tau<bLastTau){ if(BG.on) endBob(); startBob(SC.bobWho?people.findIndex(p=>p.u===SC.bobWho):-1,{demo:true,d0:s.bd||2,v0:s.bv||3,nb:!!s.nb,aiK:s.aiK||SC.bobAiK||.8,cnt:s.cnt||0.01}); BG.fixedDt=1/30; BG.simT=0; bSeg=j; stepBob(0); BG.simT=1/30; }
+    bLastTau=tau; while(BG.simT<tau){ stepBob(0); BG.simT+=1/30; }
+    return { p:BG.camP.clone(), q:BG.camQ.clone() }; };
+  function bobHud(segT){ if(!BG.on) return; const al=Math.min(1,segT/.25); g.save(); g.globalAlpha=al;
+    const x=W/2, y=430; g.fillStyle='rgba(255,255,255,.93)'; g.beginPath(); g.roundRect(x-250,y-70,500,150,36); g.fill();
+    g.fillStyle='#1E5AA8'; g.font='800 84px '+FONT; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText(BG.crash?'💥':Math.round(BG.v*3.6)+' km/h',x,y-8);
+    g.fillStyle='#22262d'; g.font='700 30px '+FONT; const ph=BG.crash?'vyletel zo zákruty!':BG.phase==='out'?'cieľ · '+BG.t.toFixed(2).replace('.',',')+' s':BG.brake?'🛑 BRZDÍ':'⏱ '+BG.t.toFixed(1).replace('.',',')+' s'; g.fillText(ph,x,y+50);
+    const bw=520, bx=x-bw/2, by=y+110, dg=Math.min(1,BG.danger); g.fillStyle='rgba(255,255,255,.7)'; g.beginPath(); g.roundRect(bx,by,bw,26,13); g.fill();
+    g.fillStyle=BG.danger>1?'#C8102E':BG.danger>.75?'#F2B705':'#2E9E5B'; if(dg>.02){ g.beginPath(); g.roundRect(bx,by,bw*dg,26,13); g.fill(); }
+    g.strokeStyle='#fff'; g.lineWidth=5; g.beginPath(); g.roundRect(bx,by,bw,26,13); g.stroke();
+    g.fillStyle='#fff'; g.font='800 24px '+FONT; g.textAlign='left'; g.fillText('G-sila v zákrute',bx+4,by+52); g.restore(); }
   function overlay(t,T){
     const gr=g.createLinearGradient(0,960,0,H2); gr.addColorStop(0,'rgba(10,20,35,0)'); gr.addColorStop(1,'rgba(10,20,35,.45)'); g.fillStyle=gr; g.fillRect(0,960,W,H2-960);
     board();
@@ -3141,6 +3265,7 @@ async function startReel2(SC){
       if(s.ov==='gameHud'||(/^game/.test(s.shot)&&s.ov!=='none'&&!s.ov)) gameHud(t,segT);
       if(s.ov==='tapRace') tapRace(segT);
       if(s.ov==='jumpHud') jumpHud(segT);
+      if(s.ov==='bobHud') bobHud(segT);
       capDraw(s.cap,s.y||1250,86,segT);
     } else {
       const al=Math.min(1,segT/0.3); g.fillStyle='rgba(10,18,30,'+(0.38*al)+')'; g.fillRect(0,0,W,H2); board();
