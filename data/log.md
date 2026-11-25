@@ -411,3 +411,10 @@
 - 🟡 KUKLY: 0 nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), m4tusko4 dostal cenu (bez odpovede), víťazka e_kov.acova – treba adresu.
 - ElevenLabs: ~7 350 kreditov.
 - POSLEDNÝ_KOMENT_TS: 2026-11-25T19:31:58Z (1795635118)
+
+## 26.11. ~00:00 – 00:15 – Samuel: štart testu kukly DEDKO
+- 🧓 TEST ZÁUJMU kukla „DEDKO“ (26. 11. – 3. 12.) – pravidlá, počítanie a zoznam záujemcov v **data/dedko_test.md** (čítať pri KAŽDOM večernom behu!). Iba meranie záujmu, žiadny predaj/platby.
+- 🎬 REEL `dedko2611` ZVEREJNENÝ (DgLq_KhNaXc, 21 s, hlas Brian, vlastná titulka): dedko z vleku → je to KUKLA → nikto ťa nespozná → cca 15 € pripravujeme → napíš DEDKO. Vizuály Higgsfield (AI vizualizácia – návrh, aj v popise). POPIS overený cez API ✅. Samuel chcel zverejniť hneď (nie až 26. večer).
+- Pozor: v Chrome boli otvorené Higgsfield + ElevenLabs od inej session (obrázky z 23:47) – Samuel potvrdil, že test robím ja; iná session nech DEDKO reel NEROBÍ.
+- Stories 1–3 (anketa, otázka, pripomienka) pripravené ako obrázky a poslané Samuelovi – zverejňuje sám.
+- IG 8861.
