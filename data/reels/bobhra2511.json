@@ -1,0 +1,83 @@
+{
+ "align": "cust",
+ "voice": "voice_bobhra2511",
+ "out": "reel_bobhra2511",
+ "boardN": 8825,
+ "bobWho": "elca_novak",
+ "bobAiK": 0.92,
+ "sents": [
+  "Na svahu followerov je nová hra. Bobová jazda!",
+  "Rútiš sa dolu po bobovej dráhe skoro stovkou.",
+  "Pred zákrutou musíš pribrzdiť.",
+  "Inak vyletíš z dráhy!",
+  "Kto zíde dolu najrýchlejšie? Napíš svoj čas do komentu.",
+  "Hraj zadarmo, odkaz máš v bio. Daj follow a jazdíš so svojím lyžiarom."
+ ],
+ "segs": [
+  {
+   "shot": "bobTop",
+   "cap": [
+    "*NOVÁ HRA* 🎢",
+    "bobová jazda"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "bobPlay",
+   "bd": 2,
+   "bv": 8,
+   "lead": 1.2,
+   "cap": [
+    "letíš skoro *100 km/h* 🔥"
+   ],
+   "y": 1560,
+   "ov": "bobHud"
+  },
+  {
+   "shot": "bobPlay",
+   "bd": 95,
+   "bv": 20,
+   "cap": [
+    "pred zákrutou *BRZDI* 🛑"
+   ],
+   "y": 1560,
+   "ov": "bobHud"
+  },
+  {
+   "shot": "bobPlay",
+   "bd": 40,
+   "bv": 22,
+   "nb": 1,
+   "cap": [
+    "inak *VYLETÍŠ* 💥"
+   ],
+   "y": 1560,
+   "ov": "bobHud"
+  },
+  {
+   "shot": "bobSide",
+   "cap": [
+    "Kto má *najlepší čas*? ⏱",
+    "napíš ho do komentu 👇"
+   ],
+   "y": 560
+  },
+  {
+   "shot": "gfxLodge",
+   "cap": [
+    "Hraj *zadarmo* 👇",
+    "svahfollowerov.online"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Tvoj *čas* do komentu ⏱",
+   "follow = jazdíš so svojím lyžiarom"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
