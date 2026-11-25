@@ -13,13 +13,92 @@
   "Čo postavíme ďalej? Napíš to do komentára. A farbu bundy pridaj tiež."
  ],
  "segs": [
-  {"shot": "snowGun", "sgI": 7, "cap": ["Jeden z vás *prosí*", "od *4. novembra* 🙏"], "y": 1450, "comment": ["stan.peduzzi", "Mohl by jste mi rozšířit snežne dělá na dalši sjezdovki ?"], "cy": 420},
-  {"shot": "snowGuns", "cap": ["❄️ *SNEŽNÉ DELÁ*", "na *VŠETKÝCH* zjazdovkách"], "y": 1450},
-  {"shot": "snowGun", "sgI": 13, "sgA": 0.6, "sgW": -0.6, "sgR": 20, "sgH": 6, "cap": ["*13* zjazdoviek · *39* diel", "sneh ide *nonstop* ❄️"], "y": 1450},
-  {"shot": "tagCam", "tag": "stan.peduzzi", "dist": 14, "cap": ["@stan.peduzzi", "je *zasnežovač* 👷"], "y": 1400},
-  {"shot": "evWide", "cap": ["*8 849* followerov", "pri *9 500* = ⛸️ *KLZISKO*"], "y": 620, "ov": "goal"},
-  {"shot": "lodge", "cap": ["Čo postavíme *ďalej*? 👇", "+ *farbu bundy* do komentu"], "y": 1400}
+  {
+   "shot": "snowGun",
+   "sgI": 7,
+   "cap": [
+    "Jeden z vás *prosí*",
+    "od *4. novembra* 🙏"
+   ],
+   "y": 1000,
+   "comment": [
+    "stan.peduzzi",
+    "Mohl by jste mi rozšířit snežne dělá na dalši sjezdovki ?"
+   ],
+   "cy": 420,
+   "sgA": 2.6,
+   "sgW": 0.5,
+   "sgR": 13,
+   "sgH": 5,
+   "sgQ": 14
+  },
+  {
+   "shot": "snowGun",
+   "sgI": 20,
+   "sgA": 2.2,
+   "sgW": 0.6,
+   "sgR": 18,
+   "sgH": 8,
+   "sgQ": 14,
+   "cap": [
+    "❄️ *SNEŽNÉ DELÁ*",
+    "na *VŠETKÝCH* zjazdovkách"
+   ],
+   "y": 1000
+  },
+  {
+   "shot": "snowGun",
+   "sgI": 31,
+   "sgA": 3.4,
+   "sgW": -0.5,
+   "sgR": 15,
+   "sgH": 6,
+   "cap": [
+    "*13* zjazdoviek · *39* diel",
+    "sneh ide *nonstop* ❄️"
+   ],
+   "y": 1000,
+   "sgQ": 14
+  },
+  {
+   "shot": "tagCam",
+   "tag": "stan.peduzzi",
+   "dist": 14,
+   "cap": [
+    "@stan.peduzzi",
+    "je *zasnežovač* 👷"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8 849* followerov",
+    "pri *9 500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Čo postavíme *ďalej*? 👇",
+    "+ *farbu bundy* do komentu"
+   ],
+   "y": 1400
+  }
  ],
- "end": [["Napíš *nápad* + *farbu bundy* 👇", "zajtra si na svahu aj ty!"], ["svahfollowerov.online · odkaz v bio"]],
- "goal": [9500, "Do klziska ⛸️"]
+ "end": [
+  [
+   "Napíš *nápad* + *farbu bundy* 👇",
+   "zajtra si na svahu aj ty!"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ],
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ]
 }
