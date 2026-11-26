@@ -24,9 +24,11 @@ Súhrn: unikátni ľudia (komentáre + DM), anketa zo stories (dodá Samuel), v�
 | dátum | unikátni (komenty) | DM | spolu | reel zhliadnutia / lajky / komenty |
 |---|---|---|---|---|
 | 26. 11. 00:10 | 0 | 0 | 0 | práve zverejnený |
+| 26. 11. 23:15 | 2 | 0 | **2** | 1 029 / 16 / 4 (po ~23 h) |
 
 ## Zoznam ľudí so záujmom (účet · kde · čo napísal · kedy)
-_(zatiaľ nikto)_
+1. adam638933 · koment DgLq_KhNaXc · „Dedko“ · 26. 11. ~06:54
+2. iva_na542 · koment DgLq_KhNaXc · „Dedko“ · 26. 11. ~07:14
 
 ## Iné reakcie / otázky / námietky
-_(zatiaľ nič)_
+- 26. 11.: pod DEDKO reelom ďalšie 2 komenty mimo témy (_r.majerech_ chce byť vedúci ratrakárov, kamika_kaja farba bundy). Žiadne otázky na cenu/doručenie. DM o kukle: 0.

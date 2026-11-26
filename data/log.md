@@ -418,3 +418,17 @@
 - Pozor: v Chrome boli otvorené Higgsfield + ElevenLabs od inej session (obrázky z 23:47) – Samuel potvrdil, že test robím ja; iná session nech DEDKO reel NEROBÍ.
 - Stories 1–3 (anketa, otázka, pripomienka) pripravené ako obrázky a poslané Samuelovi – zverejňuje sám.
 - IG 8861.
+
+## 26.11. ~22:55 – 23:20 – Samuel: nočný beh
+- ⚠️ Instagram bol v Chrome prihlásený na OSOBNÝ @s_stroka.vid → prepnuté cez „Prepnúť účty“ na svah.followerov (bez hesla). Na osobnom účte sa nič nerobilo. Pred akciou vždy skontroluj účet!
+- SYNC (komenty od 25.11. 19:32Z – len 11, tichý deň): +2 lyžiarky – kamika_kaja (ružová, lyže), terezkqqq_nejjj (ružová bunda + zelené lyže, cez DM žiadosť). Čakáreň +8. IG 8 895. Lyžiari 3 291 · čakáreň 5 606.
+- 🚜 NOVINKA (beta→index): **_r.majerech_ = VEDÚCI RATRAKÁROV** (písal „Deň 1“, „Deň 2…“ čo chce byť hlavný vedúci). Pridaný do roles.ratrak, `RATRAK_CHIEF` – riadi každú 2. jazdu ratraku, v karte „👑 VEDÚCI RATRAKÁROV“, tabuľa nad garážou „🚜 GARÁŽ RATRAKU · 👑 vedúci ratrakárov: @_r.majerech_“.
+- 🎬 REEL `ratrak2611` ZVEREJNENÝ (DgOJluNN-iw, 27 s, hlas Brian, Pôvodné, ?den): Deň 1/Deň 2 komenty → chce byť vedúci → od dnes šéfuje garáži → každú 2. jazdu riadi sám → 8 895 / 9 500 klzisko → „čím chceš byť“. POPIS overený cez API ✅. Pozn.: `focus` v skripte nesmie byť rola (bez trate) → chyba „reading 'x'“; použité elca_novak.
+- „Daj follow“ (vlákno, permalink /p/CODE/c/PK/ + Odpovedať + Uverejniť): simonajanosoa (fialová snowboard), maximoros32 (modrá) – oba pod DgLdge2t37G.
+- DM: terezkqqq_nejjj žiadosť prijatá + odpísané (pridaná). stanislav peduzzi „Děkuju moc“ – bez odpovede. Iné nič.
+- 🧓 DEDKO TEST (data/dedko_test.md): reel DgLq_KhNaXc 1 029 zhliadnutí / 16 ♥ / 4 komenty; záujem 2 (adam638933, iva_na542 – „Dedko“), DM 0.
+- Nápady: reštaurácia + chce byť vedúci (kubix_cz_0), oddelený zjazd pre snowboardy (lbadovska), ubytovanie (maximil1an_marko), viac chát s reštikou (maximoros32).
+- 🗳️ Hlasovanie DgI7kHrtMRt: bez nových hlasov (hokej 17 · vírivka 6 · skatepark 5). Uzavrieť 28.–30. 11.
+- 🟡 KUKLY: 0 nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), e_kov.acova – treba adresu.
+- ElevenLabs: ~7 050 kreditov.
+- POSLEDNÝ_KOMENT_TS: 2026-11-26T22:05:00Z
