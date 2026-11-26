@@ -1,0 +1,91 @@
+{
+ "align": "cust",
+ "focus": "_r.majerech_",
+ "voice": "voice_ratrak2611",
+ "out": "reel_ratrak2611",
+ "boardN": 8895,
+ "sents": [
+  "Jeden z vás nám píše každý deň. Deň jeden, deň dva…",
+  "Chce byť hlavným vedúcim ratrakárov.",
+  "Tak dobre. Od dnes šéfuješ celej garáži ratraku!",
+  "A každú druhú jazdu ratraku riadi on sám.",
+  "Je nás osemtisícosemstodeväťdesiatpäť a pri deväťtisícpäťsto staviame klzisko.",
+  "Aj ty chceš rolu na svahu? Napíš do komentára, čím chceš byť."
+ ],
+ "segs": [
+  {
+   "shot": "tagCam",
+   "tag": "_r.majerech_",
+   "dist": 14,
+   "cap": [
+    "Jeden z vás píše",
+    "*každý deň* 📩"
+   ],
+   "y": 1400,
+   "comment": [
+    "_r.majerech_",
+    "Deň 1 čo píšem aby som sa mohol stať vedúcim ratrakárov❄️"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "tagCam",
+   "tag": "_r.majerech_",
+   "dist": 9,
+   "cap": [
+    "chce byť",
+    "*VEDÚCI RATRAKÁROV* 🚜"
+   ],
+   "y": 1400,
+   "comment": [
+    "_r.majerech_",
+    "Deň 2 čo píšem aby som sa stal hlavným vedúcim ratrakárov❄️"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "ratrak",
+   "cap": [
+    "👑 od dnes *ŠÉFUJE*",
+    "garáži ratraku"
+   ],
+   "y": 1250
+  },
+  {
+   "shot": "tagCam",
+   "tag": "_r.majerech_",
+   "dist": 22,
+   "cap": [
+    "každú *2. jazdu*",
+    "riadi sám 🚜"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8 895* followerov",
+    "pri *9 500* = ⛸️ *KLZISKO*"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Chceš *rolu* na svahu?",
+    "napíš čím chceš byť 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Napíš *čím chceš byť* 👇",
+   "+ farbu bundy"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
