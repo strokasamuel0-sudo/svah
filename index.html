@@ -552,9 +552,11 @@ const ROLE_TXT = {
   fire:{ name:'hasič', short:'🚒', icon:'🚒', place:'Hasičská stanica' },
   sled:{ name:'správca sánkarskej dráhy', short:'🛷', icon:'🛷', place:'Sánkarská dráha' },
 };
-function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); return c.length ? c[st.session % c.length] : ''; }
+const RATRAK_CHIEF='_r.majerech_'; /* vedúci ratrakárov – prianie z 25.–26. 11. (Deň 1, Deň 2…) */
+function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); if(!c.length) return ''; if(c.includes(RATRAK_CHIEF)&&st.session%2===0) return RATRAK_CHIEF; const o=c.filter(u=>u!==RATRAK_CHIEF); return o.length?o[Math.floor(st.session/2)%o.length]:c[0]; }
 function roleLive(p){
   const t = (Date.now()/1000)%86400;
+  if (p.role==='ratrak'&&p.u===RATRAK_CHIEF){ const st=groomState(t); return '👑 VEDÚCI RATRAKÁROV · '+(st.active&&groomDriver(st)===p.u?'práve sám upravuje '+(st.run.w===2?'snowpark':'zjazdovku '+st.run.label):'riadi garáž ratraku'); }
   if (p.role==='ratrak'){ const st=groomState(t); if(st.active && groomDriver(st)===p.u) return 'práve upravuje '+(st.run.w===2?'snowpark':'zjazdovku '+st.run.label); return st.active?'čaká v garáži, teraz jazdí kolega':'ďalšia jazda o '+hhmm(st.next); }
   if (p.role==='rescue') return heliState(t).flying ? 'letí vrtuľníkom na vrchol' : 'pohotovosť pri heliporte';
   if (p.role==='hotel') return 'víta hostí v hoteli';
@@ -640,6 +642,7 @@ function buildWorld(){
     const tr2=tr1.clone(); tr2.position.x=1.5;
     const beacon=new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),new THREE.MeshBasicMaterial({color:'#ffb000'})); beacon.position.set(0,3.7,.6);
     rg.add(body,cab,blade,tiller,tr1,tr2,beacon); rg.scale.setScalar(1.6); scene.add(rg); WORLD.ratrak=rg; WORLD.beacon=beacon;
+    { const sg=makeSign(['🚜 GARÁŽ RATRAKU','👑 vedúci ratrakárov: @_r.majerech_'],'#F26B21','#fff',900,200); sg.scale.multiplyScalar(.3); sg.position.set(P.x,P.y+12,P.z); scene.add(sg); WORLD.chiefSign=sg; }
   }
   // čakáreň – pódium, reproduktory, žiarovky, tabuľa
   {
