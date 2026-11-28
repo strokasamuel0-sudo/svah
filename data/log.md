@@ -432,3 +432,18 @@
 - 🟡 KUKLY: 0 nových dopytov. Objednávky s adresou 2 (l.lhotska Veľký úsmev 20 €, misa_cz77 Úsmev – chýba meno), e_kov.acova – treba adresu.
 - ElevenLabs: ~7 050 kreditov.
 - POSLEDNÝ_KOMENT_TS: 2026-11-26T22:05:00Z
+
+## 28.11. ~04:10 – 04:30 – Samuel: večerný (nočný) beh
+- 27. 11. neprebehol žiadny beh. IG účet skontrolovaný – svah.followerov ✅.
+- SYNC (komenty od 26.11. 22:05Z – 12): +2 lyžiari – janca8493 (svetlozelená), belan_janko (čierna). Čakáreň +67. IG 8 917. Lyžiari 3 293 · čakáreň 5 671.
+- 🎭 ROLY (na otázku „čím chceš byť“ z ratrak reelu): anicka.s_dance5 → rescue (horská služba), simon.buric → rescue, misa_cz77 → snow (zasnežovač/opravár diel), ten_tomeek → lift (vlekár/kontrola lanoviek). adr1._.nn (DM) → coach + `ROLE_CHIEF` „👑 HLAVNÝ TRÉNER FREESTYLE“ (index+beta).
+- Nevyhovené/čaká: nelcis_puncik krasokorčuliarka (až bude klzisko), ofk_martinek „Rolu“, rich89756ard „A co ja“ (bez konkrétnej roly), maximil1an_marko „Deň 2 ubytovňa“ (nápad).
+- „Daj follow“ (vlákno): martin150off16 (chce byť veliteľ hasičov), _ta_ja_znam_ (vedúci stavby klziska).
+- DM: adr1._.nn (chce byť hlavný tréner freestyle + vo videu) → splnené + odpísané. Žiadosti 0.
+- 🎬 REEL `roly2811` ZVEREJNENÝ (DgRRnayNpBA, 28 s, hlas Brian, Pôvodné, ?den): čím chcete byť → splnené: adr1._.nn hlavný tréner, anicka horská služba, misa zasnežovač + ten_tomeek vlekár → 8 917 / do klziska < 600 → „čím chceš byť ty“. POPIS overený cez API ✅.
+- Výkon: ratrak2611 (DgOJluNN-iw) 2 116 / 54 ♥ / 10 komentov – formát „splnené prianie/rola“ znovu najlepší.
+- 🧓 DEDKO TEST: bez zmeny – 2 záujemcovia (adam638933, iva_na542), DM 0; reel 1 158 / 16 / 4. (data/dedko_test.md)
+- 🗳️ Hlasovanie DgI7kHrtMRt: hokej 17 · vírivka 6 · skatepark 5 – uzavrieť 29.–30. 11. (hokej vedie s veľkým náskokom).
+- 🟡 KUKLY: 0 nových. Objednávky s adresou 2 (l.lhotska 20 €, misa_cz77 – chýba meno), e_kov.acova – treba adresu.
+- ElevenLabs: ~6 400 kreditov.
+- POSLEDNÝ_KOMENT_TS: 2026-11-28T03:10:00Z

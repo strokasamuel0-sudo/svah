@@ -25,6 +25,7 @@ Súhrn: unikátni ľudia (komentáre + DM), anketa zo stories (dodá Samuel), v�
 |---|---|---|---|---|
 | 26. 11. 00:10 | 0 | 0 | 0 | práve zverejnený |
 | 26. 11. 23:15 | 2 | 0 | **2** | 1 029 / 16 / 4 (po ~23 h) |
+| 28. 11. 04:25 | 2 | 0 | **2** | 1 158 / 16 / 4 (27. 11. žiadny beh; reel zastal) |
 
 ## Zoznam ľudí so záujmom (účet · kde · čo napísal · kedy)
 1. adam638933 · koment DgLq_KhNaXc · „Dedko“ · 26. 11. ~06:54
@@ -32,3 +33,4 @@ Súhrn: unikátni ľudia (komentáre + DM), anketa zo stories (dodá Samuel), v�
 
 ## Iné reakcie / otázky / námietky
 - 26. 11.: pod DEDKO reelom ďalšie 2 komenty mimo témy (_r.majerech_ chce byť vedúci ratrakárov, kamika_kaja farba bundy). Žiadne otázky na cenu/doručenie. DM o kukle: 0.
+- 27.–28. 11.: žiadne nové DEDKO komenty ani DM. Pre porovnanie: ratrak reel (DgOJluNN-iw) 2 116 zhliadnutí / 54 ♥ / 10 komentov za rovnaký čas.
