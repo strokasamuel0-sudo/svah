@@ -1,0 +1,95 @@
+{
+ "align": "cust",
+ "focus": "elca_novak",
+ "voice": "voice_roly2811",
+ "out": "reel_roly2811",
+ "boardN": 8917,
+ "goal": [
+  9500,
+  "Do klziska ⛸️"
+ ],
+ "sents": [
+  "Pýtali sme sa vás, čím chcete byť na svahu. Tu sú vaše nové roly!",
+  "Adrián je od dnes hlavný tréner freestyle v snowparku.",
+  "Anička je v horskej službe a zachraňuje lyžiarov.",
+  "Míša má na starosti snežné delá a Tomáš kontroluje vlek.",
+  "Je nás osemtisícdeväťstosedemnásť a do klziska chýba menej ako šesťsto!",
+  "Čím chceš byť ty? Napíš to do komentára a daj follow."
+ ],
+ "segs": [
+  {
+   "shot": "crowdWide",
+   "cap": [
+    "Čím chcete byť? 🤔",
+    "→ *SPLNENÉ* ✅"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "tagCam",
+   "tag": "adr1._.nn",
+   "dist": 13,
+   "cap": [
+    "@adr1._.nn",
+    "👑 *HLAVNÝ TRÉNER FREESTYLE*"
+   ],
+   "y": 1400
+  },
+  {
+   "shot": "tagCam",
+   "tag": "anicka.s_dance5",
+   "dist": 13,
+   "cap": [
+    "@anicka.s_dance5",
+    "🚁 *HORSKÁ SLUŽBA*"
+   ],
+   "y": 1400,
+   "comment": [
+    "anicka.s_dance5",
+    "Deň 1 záchranár"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "tagCam",
+   "tag": "misa_cz77",
+   "dist": 13,
+   "cap": [
+    "❄️ *ZASNEŽOVAČ* @misa_cz77",
+    "🎫 *VLEKÁR* @ten_tomeek"
+   ],
+   "y": 1400,
+   "comment": [
+    "ten_tomeek",
+    "Chcel by som kontrolovať lanovky"
+   ],
+   "cy": 420
+  },
+  {
+   "shot": "evWide",
+   "cap": [
+    "*8 917* followerov",
+    "do ⛸️ *KLZISKA* chýba < 600"
+   ],
+   "y": 620,
+   "ov": "goal"
+  },
+  {
+   "shot": "lodge",
+   "cap": [
+    "Čím chceš byť *ty*?",
+    "napíš do komentu 👇"
+   ],
+   "y": 1400
+  }
+ ],
+ "end": [
+  [
+   "Napíš *čím chceš byť* 👇",
+   "+ farbu bundy"
+  ],
+  [
+   "svahfollowerov.online · odkaz v bio"
+  ]
+ ]
+}
