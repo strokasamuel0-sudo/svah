@@ -554,7 +554,9 @@ const ROLE_TXT = {
 };
 const RATRAK_CHIEF='_r.majerech_'; /* vedúci ratrakárov – prianie z 25.–26. 11. (Deň 1, Deň 2…) */
 function groomDriver(st){ const c=ROLES.ratrak.filter(u=>roleOf.get(u)==='ratrak'); if(!c.length) return ''; if(c.includes(RATRAK_CHIEF)&&st.session%2===0) return RATRAK_CHIEF; const o=c.filter(u=>u!==RATRAK_CHIEF); return o.length?o[Math.floor(st.session/2)%o.length]:c[0]; }
-function roleLive(p){
+const ROLE_CHIEF={'adr1._.nn':'👑 HLAVNÝ TRÉNER FREESTYLE'}; /* prianie z DM 27. 11. */
+function roleLive(p){ const t0=roleLive0(p), c=ROLE_CHIEF[p.u]; return c?c+' · '+t0:t0; }
+function roleLive0(p){
   const t = (Date.now()/1000)%86400;
   if (p.role==='ratrak'&&p.u===RATRAK_CHIEF){ const st=groomState(t); return '👑 VEDÚCI RATRAKÁROV · '+(st.active&&groomDriver(st)===p.u?'práve sám upravuje '+(st.run.w===2?'snowpark':'zjazdovku '+st.run.label):'riadi garáž ratraku'); }
   if (p.role==='ratrak'){ const st=groomState(t); if(st.active && groomDriver(st)===p.u) return 'práve upravuje '+(st.run.w===2?'snowpark':'zjazdovku '+st.run.label); return st.active?'čaká v garáži, teraz jazdí kolega':'ďalšia jazda o '+hhmm(st.next); }
